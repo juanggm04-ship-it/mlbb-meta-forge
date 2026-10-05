@@ -23,6 +23,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Generate hero pages and sitemap
+        run: python scripts/generate_heroes.py
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload static site
