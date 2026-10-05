@@ -1,0 +1,33 @@
+name: Sync public MLBB meta snapshot
+
+on:
+  schedule:
+    - cron: '30 23 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: meta-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Fetch and validate public meta data
+        run: python scripts/sync_public_meta.py
+      - name: Commit snapshot only when changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/live-meta.json
+          if git diff --cached --quiet; then
+            echo "No meta changes to commit"
+          else
+            git commit -m "chore: refresh validated MLBB meta snapshot"
+            git push
+          fi
