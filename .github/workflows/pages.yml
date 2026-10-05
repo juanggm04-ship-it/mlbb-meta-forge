@@ -35,6 +35,8 @@ jobs:
         run: python scripts/style_turn_draft.py
       - name: Enhance homepage and draft sharing
         run: python scripts/enhance_home_ux.py
+      - name: Add full turn draft sharing
+        run: python scripts/share_turn_draft.py
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload static site
