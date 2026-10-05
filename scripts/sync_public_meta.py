@@ -1,9 +1,10 @@
 from pathlib import Path
-import json, urllib.request, datetime, re
+import json, urllib.request, datetime, re, shutil
 
 RANKINGS_URL='https://mlbbdex.com/api/v1/rankings'
 PATCHES_URL='https://mlbbdex.com/api/v1/patches'
 OUT=Path('data/live-meta.json')
+PREV=Path('data/previous-meta.json')
 
 ALIASES={
     'name':['name','hero_name','hero','title'],
@@ -104,7 +105,11 @@ def main():
         'heroes':heroes,
     }
     OUT.parent.mkdir(parents=True,exist_ok=True)
-    OUT.write_text(json.dumps(out,ensure_ascii=False,indent=2),encoding='utf-8')
-    print(f'Wrote {len(heroes)} validated heroes; patch={patch}; updated={updated}')
+    new_text=json.dumps(out,ensure_ascii=False,indent=2)
+    old_text=OUT.read_text(encoding='utf-8') if OUT.exists() else None
+    if old_text and old_text != new_text:
+        shutil.copyfile(OUT,PREV)
+    OUT.write_text(new_text,encoding='utf-8')
+    print(f'Wrote {len(heroes)} validated heroes; patch={patch}; updated={updated}; previous={PREV.exists()}')
 
 if __name__=='__main__':main()
