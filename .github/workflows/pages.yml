@@ -25,6 +25,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Generate hero pages and sitemap
         run: python scripts/generate_heroes.py
+      - name: Inject Draft Coach
+        run: python scripts/inject_draft_coach.py
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload static site
