@@ -33,6 +33,8 @@ jobs:
         run: python scripts/inject_turn_draft.py
       - name: Style competitive turn draft
         run: python scripts/style_turn_draft.py
+      - name: Enhance homepage and draft sharing
+        run: python scripts/enhance_home_ux.py
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload static site
