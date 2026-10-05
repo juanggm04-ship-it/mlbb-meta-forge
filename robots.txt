@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://juanggm04-ship-it.github.io/mlbb-meta-forge/sitemap.xml
