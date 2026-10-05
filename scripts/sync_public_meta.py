@@ -1,10 +1,12 @@
 from pathlib import Path
-import json, urllib.request, datetime, re, shutil
+import json, urllib.request, datetime, shutil
 
 RANKINGS_URL='https://mlbbdex.com/api/v1/rankings'
 PATCHES_URL='https://mlbbdex.com/api/v1/patches'
 OUT=Path('data/live-meta.json')
 PREV=Path('data/previous-meta.json')
+HISTORY=Path('data/meta-history.json')
+MAX_POINTS=24
 
 ALIASES={
     'name':['name','hero_name','hero','title'],
@@ -28,8 +30,7 @@ def norm_pct(v):
         if not s:return None
         v=float(s)
     else:v=float(v)
-    if 0 <= v <= 1.0:
-        v*=100
+    if 0 <= v <= 1.0:v*=100
     return round(v,2)
 
 def pick_field(d, aliases):
@@ -41,8 +42,7 @@ def pick_field(d, aliases):
 
 def name_from_record(rec):
     v=pick_field(rec,ALIASES['name'])
-    if isinstance(v,dict):
-        v=pick_field(v,ALIASES['name'])
+    if isinstance(v,dict):v=pick_field(v,ALIASES['name'])
     return str(v).strip() if v else None
 
 def extract_records(payload):
@@ -65,51 +65,60 @@ def latest_patch(payload):
         return str(first)
     return None
 
+def load_history():
+    try:
+        data=json.loads(HISTORY.read_text(encoding='utf-8')) if HISTORY.exists() else {'snapshots':[]}
+        return data if isinstance(data,dict) and isinstance(data.get('snapshots'),list) else {'snapshots':[]}
+    except Exception:
+        return {'snapshots':[]}
+
+def append_history(out):
+    hist=load_history()
+    key=f"{out.get('updated')}|{out.get('patch')}"
+    snapshots=[s for s in hist['snapshots'] if f"{s.get('updated')}|{s.get('patch')}"!=key]
+    snapshots.append({
+        'updated':out.get('updated'),
+        'patch':out.get('patch'),
+        'fetched_at':out.get('fetched_at'),
+        'heroes':[{'name':h['name'],'wr':h.get('wr'),'ban':h.get('ban'),'pick':h.get('pick')} for h in out['heroes']]
+    })
+    hist={'snapshots':snapshots[-MAX_POINTS:]}
+    HISTORY.write_text(json.dumps(hist,ensure_ascii=False,indent=2),encoding='utf-8')
+    return len(hist['snapshots'])
+
 def main():
     rankings=fetch_json(RANKINGS_URL)
     patches=fetch_json(PATCHES_URL)
     rows=extract_records(rankings)
-    if len(rows)<100:
-        raise RuntimeError(f'Validation failed: only {len(rows)} ranking rows')
+    if len(rows)<100:raise RuntimeError(f'Validation failed: only {len(rows)} ranking rows')
     heroes=[]
     for rec in rows:
         if not isinstance(rec,dict):continue
         name=name_from_record(rec)
         if not name:continue
-        try: wr=norm_pct(pick_field(rec,ALIASES['wr']))
-        except: wr=None
-        try: ban=norm_pct(pick_field(rec,ALIASES['ban']))
-        except: ban=None
-        try: pick=norm_pct(pick_field(rec,ALIASES['pick']))
-        except: pick=None
-        tier=pick_field(rec,ALIASES['tier'])
-        date=pick_field(rec,ALIASES['date'])
+        try:wr=norm_pct(pick_field(rec,ALIASES['wr']))
+        except:wr=None
+        try:ban=norm_pct(pick_field(rec,ALIASES['ban']))
+        except:ban=None
+        try:pick=norm_pct(pick_field(rec,ALIASES['pick']))
+        except:pick=None
+        tier=pick_field(rec,ALIASES['tier']); date=pick_field(rec,ALIASES['date'])
         if wr is None or not 30<=wr<=80:continue
         if ban is not None and not 0<=ban<=100:continue
         if pick is not None and not 0<=pick<=100:continue
         heroes.append({'name':name,'wr':wr,'ban':ban,'pick':pick,'tier':str(tier) if tier else None,'date':str(date) if date else None})
-    if len(heroes)<100:
-        raise RuntimeError(f'Validation failed: only {len(heroes)} valid hero records')
+    if len(heroes)<100:raise RuntimeError(f'Validation failed: only {len(heroes)} valid hero records')
     patch=latest_patch(patches)
     dates=[h['date'] for h in heroes if h.get('date')]
     updated=max(dates) if dates else datetime.date.today().isoformat()
     source=rankings.get('source') if isinstance(rankings,dict) else None
-    out={
-        'updated':updated,
-        'patch':patch,
-        'fetched_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),
-        'provider':'MLBBDex public API',
-        'provider_url':'https://mlbbdex.com/api-doc',
-        'source':source,
-        'total':len(heroes),
-        'heroes':heroes,
-    }
+    out={'updated':updated,'patch':patch,'fetched_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'provider':'MLBBDex public API','provider_url':'https://mlbbdex.com/api-doc','source':source,'total':len(heroes),'heroes':heroes}
     OUT.parent.mkdir(parents=True,exist_ok=True)
     new_text=json.dumps(out,ensure_ascii=False,indent=2)
     old_text=OUT.read_text(encoding='utf-8') if OUT.exists() else None
-    if old_text and old_text != new_text:
-        shutil.copyfile(OUT,PREV)
+    if old_text and old_text != new_text:shutil.copyfile(OUT,PREV)
     OUT.write_text(new_text,encoding='utf-8')
-    print(f'Wrote {len(heroes)} validated heroes; patch={patch}; updated={updated}; previous={PREV.exists()}')
+    points=append_history(out)
+    print(f'Wrote {len(heroes)} validated heroes; patch={patch}; updated={updated}; previous={PREV.exists()}; history_points={points}')
 
 if __name__=='__main__':main()
