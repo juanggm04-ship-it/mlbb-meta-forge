@@ -37,7 +37,8 @@ function enhancePool(){
 function buildTimeline(){
  const statusText=document.getElementById('turnStatus').textContent;
  const seq=[]; ['BAN 1','BAN 2','BAN 3','PICK 1','PICK 2','PICK 3','BAN 4','BAN 5','PICK 4','PICK 5'].forEach(x=>{seq.push(['BLUE',x]);seq.push(['RED',x])});
- timeline.innerHTML=seq.map(([s,t])=>`<div class="timeline-step ${s.toLowerCase()}">${s[0]} · ${t}</div>`).join('');
+ const next=seq.map(([s,t])=>`<div class="timeline-step ${s.toLowerCase()}">${s[0]} · ${t}</div>`).join('');
+ if(timeline.innerHTML!==next)timeline.innerHTML=next;
  const steps=[...timeline.children]; let currentIndex=steps.findIndex(el=>statusText.startsWith(el.textContent.replace('B ·','BLUE ·').replace('R ·','RED ·')));
  if(currentIndex<0){const normalized=statusText.replace('BLUE','B').replace('RED','R');currentIndex=steps.findIndex(el=>normalized.startsWith(el.textContent))}
  if(currentIndex<0&&statusText.includes('Draft completo'))currentIndex=steps.length;
@@ -46,17 +47,24 @@ function buildTimeline(){
 }
 function highlightRec(){
  const recs=[...document.querySelectorAll('#turnRecs .turn-rec')];recs.forEach((x,i)=>x.classList.toggle('primary-rec',i===0));
- const first=recs[0];
+ const first=recs[0]; let next='';
  if(first&&first.textContent.trim()!=='Draft completo'){
    const side=document.getElementById('turnStatus').textContent.startsWith('RED')?'Red':'Blue';
-   highlight.innerHTML=`<small>RECOMENDACIÓN PRINCIPAL · ${side}</small><strong>${first.textContent.trim()}</strong><span>Mejor encaje editorial disponible para el turno actual dentro del pool rastreado.</span>`;
+   next=`<small>RECOMENDACIÓN PRINCIPAL · ${side}</small><strong>${first.textContent.trim()}</strong><span>Mejor encaje editorial disponible para el turno actual dentro del pool rastreado.</span>`;
  }else if(document.getElementById('turnStatus').textContent.includes('Draft completo')){
-   highlight.innerHTML='<small>DRAFT COMPLETO</small><strong>Secuencia terminada</strong><span>Revisa composición, matchups y estructura antes de reiniciar.</span>';
+   next='<small>DRAFT COMPLETO</small><strong>Secuencia terminada</strong><span>Revisa composición, matchups y estructura antes de reiniciar.</span>';
  }
+ if(next&&highlight.innerHTML!==next)highlight.innerHTML=next;
 }
-const observer=new MutationObserver(()=>{enhanceSlots();enhancePool();buildTimeline();highlightRec()});
-observer.observe(root,{childList:true,subtree:true,characterData:true});
-setTimeout(()=>{enhanceSlots();enhancePool();buildTimeline();highlightRec()},50);
+function refresh(){enhanceSlots();enhancePool();buildTimeline();highlightRec()}
+let queued=false;
+function scheduleRefresh(){if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;refresh()})}
+const observer=new MutationObserver(scheduleRefresh);
+['blueSlots','redSlots','turnHeroes','turnRecs','turnStatus'].forEach(id=>{
+ const el=document.getElementById(id);
+ if(el)observer.observe(el,{childList:true,subtree:true,characterData:true,attributes:id==='turnHeroes'});
+});
+setTimeout(refresh,50);
 })();
 </script>'''
 html=html.replace('</body>',js+'</body>')
