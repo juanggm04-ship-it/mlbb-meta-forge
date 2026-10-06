@@ -1,0 +1,1079 @@
+{
+  "updated": "2026-10-06",
+  "patch": "2.2.16",
+  "fetched_at": "2026-10-06T23:53:54.904879+00:00",
+  "provider": "MLBBDex public API",
+  "provider_url": "https://mlbbdex.com/api-doc",
+  "source": {
+    "name": "Mobile Legends Wiki",
+    "url": "https://mobilelegends.fandom.com",
+    "license": "CC BY-SA"
+  },
+  "total": 133,
+  "heroes": [
+    {
+      "name": "Hirara",
+      "wr": 53.34,
+      "ban": 66.43,
+      "pick": 62.0,
+      "tier": "S+",
+      "date": null
+    },
+    {
+      "name": "Belerick",
+      "wr": 52.48,
+      "ban": 56.62,
+      "pick": 1.7,
+      "tier": "S+",
+      "date": null
+    },
+    {
+      "name": "Masha",
+      "wr": 59.27,
+      "ban": 28.95,
+      "pick": 62.0,
+      "tier": "S+",
+      "date": null
+    },
+    {
+      "name": "Marcel",
+      "wr": 58.06,
+      "ban": 32.27,
+      "pick": 27.0,
+      "tier": "S+",
+      "date": null
+    },
+    {
+      "name": "Eudora",
+      "wr": 51.33,
+      "ban": 58.64,
+      "pick": 1.94,
+      "tier": "S+",
+      "date": null
+    },
+    {
+      "name": "Aulus",
+      "wr": 59.78,
+      "ban": 23.27,
+      "pick": 1.07,
+      "tier": "S+",
+      "date": null
+    },
+    {
+      "name": "Rafaela",
+      "wr": 59.5,
+      "ban": 16.74,
+      "pick": 1.25,
+      "tier": "S+",
+      "date": null
+    },
+    {
+      "name": "Gloo",
+      "wr": 53.77,
+      "ban": 39.2,
+      "pick": 76.0,
+      "tier": "S+",
+      "date": null
+    },
+    {
+      "name": "Estes",
+      "wr": 53.14,
+      "ban": 38.33,
+      "pick": 68.0,
+      "tier": "S+",
+      "date": null
+    },
+    {
+      "name": "Lukas",
+      "wr": 52.93,
+      "ban": 31.21,
+      "pick": 99.0,
+      "tier": "S+",
+      "date": null
+    },
+    {
+      "name": "Paquito",
+      "wr": 50.22,
+      "ban": 41.68,
+      "pick": 1.65,
+      "tier": "S+",
+      "date": null
+    },
+    {
+      "name": "Floryn",
+      "wr": 54.31,
+      "ban": 12.85,
+      "pick": 1.05,
+      "tier": "S+",
+      "date": null
+    },
+    {
+      "name": "Sun",
+      "wr": 52.3,
+      "ban": 20.84,
+      "pick": 1.76,
+      "tier": "S+",
+      "date": null
+    },
+    {
+      "name": "Carmilla",
+      "wr": 53.71,
+      "ban": 13.01,
+      "pick": 1.15,
+      "tier": "S+",
+      "date": null
+    },
+    {
+      "name": "Minotaur",
+      "wr": 55.03,
+      "ban": 7.11,
+      "pick": 1.02,
+      "tier": "S+",
+      "date": null
+    },
+    {
+      "name": "Obsidia",
+      "wr": 53.57,
+      "ban": 12.07,
+      "pick": 2.06,
+      "tier": "S+",
+      "date": null
+    },
+    {
+      "name": "Argus",
+      "wr": 55.62,
+      "ban": 1.37,
+      "pick": 57.0,
+      "tier": "S",
+      "date": null
+    },
+    {
+      "name": "Saber",
+      "wr": 49.56,
+      "ban": 21.89,
+      "pick": 96.0,
+      "tier": "S",
+      "date": null
+    },
+    {
+      "name": "Khufra",
+      "wr": 54.51,
+      "ban": 1.82,
+      "pick": 30.0,
+      "tier": "S",
+      "date": null
+    },
+    {
+      "name": "Atlas",
+      "wr": 51.79,
+      "ban": 11.86,
+      "pick": 95.0,
+      "tier": "S",
+      "date": null
+    },
+    {
+      "name": "Popol and Kupa",
+      "wr": 54.29,
+      "ban": 31.0,
+      "pick": 45.0,
+      "tier": "S",
+      "date": null
+    },
+    {
+      "name": "Kaja",
+      "wr": 49.52,
+      "ban": 19.3,
+      "pick": 57.0,
+      "tier": "S",
+      "date": null
+    },
+    {
+      "name": "Diggie",
+      "wr": 53.34,
+      "ban": 3.25,
+      "pick": 18.0,
+      "tier": "S",
+      "date": null
+    },
+    {
+      "name": "Lolita",
+      "wr": 53.99,
+      "ban": 18.0,
+      "pick": 7.0,
+      "tier": "S",
+      "date": null
+    },
+    {
+      "name": "Valir",
+      "wr": 53.51,
+      "ban": 1.93,
+      "pick": 97.0,
+      "tier": "S",
+      "date": null
+    },
+    {
+      "name": "Hanabi",
+      "wr": 52.14,
+      "ban": 5.77,
+      "pick": 2.7,
+      "tier": "S",
+      "date": null
+    },
+    {
+      "name": "Hanzo",
+      "wr": 49.6,
+      "ban": 15.26,
+      "pick": 47.0,
+      "tier": "S",
+      "date": null
+    },
+    {
+      "name": "Barats",
+      "wr": 52.05,
+      "ban": 5.03,
+      "pick": 76.0,
+      "tier": "S",
+      "date": null
+    },
+    {
+      "name": "Bruno",
+      "wr": 52.98,
+      "ban": 28.0,
+      "pick": 43.0,
+      "tier": "S",
+      "date": null
+    },
+    {
+      "name": "Edith",
+      "wr": 52.85,
+      "ban": 22.0,
+      "pick": 33.0,
+      "tier": "A",
+      "date": null
+    },
+    {
+      "name": "Gord",
+      "wr": 52.75,
+      "ban": 58.0,
+      "pick": 63.0,
+      "tier": "A",
+      "date": null
+    },
+    {
+      "name": "Minsitthar",
+      "wr": 51.39,
+      "ban": 5.25,
+      "pick": 62.0,
+      "tier": "A",
+      "date": null
+    },
+    {
+      "name": "Irithel",
+      "wr": 52.54,
+      "ban": 26.0,
+      "pick": 41.0,
+      "tier": "A",
+      "date": null
+    },
+    {
+      "name": "Alice",
+      "wr": 51.18,
+      "ban": 5.51,
+      "pick": 82.0,
+      "tier": "A",
+      "date": null
+    },
+    {
+      "name": "Benedetta",
+      "wr": 52.46,
+      "ban": 30.0,
+      "pick": 38.0,
+      "tier": "A",
+      "date": null
+    },
+    {
+      "name": "Kadita",
+      "wr": 51.46,
+      "ban": 4.24,
+      "pick": 91.0,
+      "tier": "A",
+      "date": null
+    },
+    {
+      "name": "Ling",
+      "wr": 52.14,
+      "ban": 83.0,
+      "pick": 73.0,
+      "tier": "A",
+      "date": null
+    },
+    {
+      "name": "Hilda",
+      "wr": 50.46,
+      "ban": 7.38,
+      "pick": 57.0,
+      "tier": "A",
+      "date": null
+    },
+    {
+      "name": "Yve",
+      "wr": 52.26,
+      "ban": 4.0,
+      "pick": 5.0,
+      "tier": "A",
+      "date": null
+    },
+    {
+      "name": "Kagura",
+      "wr": 51.91,
+      "ban": 1.16,
+      "pick": 72.0,
+      "tier": "A",
+      "date": null
+    },
+    {
+      "name": "Fredrinn",
+      "wr": 51.72,
+      "ban": 1.84,
+      "pick": 53.0,
+      "tier": "A",
+      "date": null
+    },
+    {
+      "name": "Guinevere",
+      "wr": 51.47,
+      "ban": 2.62,
+      "pick": 84.0,
+      "tier": "A",
+      "date": null
+    },
+    {
+      "name": "Zhask",
+      "wr": 51.99,
+      "ban": 36.0,
+      "pick": 34.0,
+      "tier": "A",
+      "date": null
+    },
+    {
+      "name": "Angela",
+      "wr": 49.71,
+      "ban": 9.22,
+      "pick": 1.79,
+      "tier": "A",
+      "date": null
+    },
+    {
+      "name": "Badang",
+      "wr": 50.33,
+      "ban": 5.93,
+      "pick": 1.52,
+      "tier": "A",
+      "date": null
+    },
+    {
+      "name": "Zetian",
+      "wr": 50.81,
+      "ban": 3.89,
+      "pick": 1.54,
+      "tier": "A",
+      "date": null
+    },
+    {
+      "name": "Faramis",
+      "wr": 51.57,
+      "ban": 29.0,
+      "pick": 9.0,
+      "tier": "A",
+      "date": null
+    },
+    {
+      "name": "Miya",
+      "wr": 49.61,
+      "ban": 7.85,
+      "pick": 2.83,
+      "tier": "A",
+      "date": null
+    },
+    {
+      "name": "Natan",
+      "wr": 51.49,
+      "ban": 14.0,
+      "pick": 30.0,
+      "tier": "A",
+      "date": null
+    },
+    {
+      "name": "Brody",
+      "wr": 50.82,
+      "ban": 2.52,
+      "pick": 1.04,
+      "tier": "A",
+      "date": null
+    },
+    {
+      "name": "Yi Sun-shin",
+      "wr": 49.67,
+      "ban": 6.98,
+      "pick": 1.31,
+      "tier": "A",
+      "date": null
+    },
+    {
+      "name": "Silvanna",
+      "wr": 51.01,
+      "ban": 1.61,
+      "pick": 96.0,
+      "tier": "A",
+      "date": null
+    },
+    {
+      "name": "Beatrix",
+      "wr": 51.19,
+      "ban": 43.0,
+      "pick": 71.0,
+      "tier": "A",
+      "date": null
+    },
+    {
+      "name": "Natalia",
+      "wr": 50.83,
+      "ban": 1.29,
+      "pick": 26.0,
+      "tier": "A",
+      "date": null
+    },
+    {
+      "name": "Cyclops",
+      "wr": 51.05,
+      "ban": 26.0,
+      "pick": 63.0,
+      "tier": "A",
+      "date": null
+    },
+    {
+      "name": "Cecilion",
+      "wr": 51.0,
+      "ban": 13.0,
+      "pick": 64.0,
+      "tier": "A",
+      "date": null
+    },
+    {
+      "name": "Bane",
+      "wr": 50.87,
+      "ban": 17.0,
+      "pick": 26.0,
+      "tier": "A",
+      "date": null
+    },
+    {
+      "name": "Clint",
+      "wr": 50.66,
+      "ban": 80.0,
+      "pick": 72.0,
+      "tier": "A",
+      "date": null
+    },
+    {
+      "name": "Novaria",
+      "wr": 49.71,
+      "ban": 4.18,
+      "pick": 1.43,
+      "tier": "A",
+      "date": null
+    },
+    {
+      "name": "Terizla",
+      "wr": 50.68,
+      "ban": 18.0,
+      "pick": 33.0,
+      "tier": "A",
+      "date": null
+    },
+    {
+      "name": "Sora",
+      "wr": 49.99,
+      "ban": 2.89,
+      "pick": 56.0,
+      "tier": "A",
+      "date": null
+    },
+    {
+      "name": "Akai",
+      "wr": 50.33,
+      "ban": 1.33,
+      "pick": 34.0,
+      "tier": "A",
+      "date": null
+    },
+    {
+      "name": "Aldous",
+      "wr": 50.51,
+      "ban": 59.0,
+      "pick": 44.0,
+      "tier": "A",
+      "date": null
+    },
+    {
+      "name": "Khaleed",
+      "wr": 50.59,
+      "ban": 8.0,
+      "pick": 12.0,
+      "tier": "A",
+      "date": null
+    },
+    {
+      "name": "Leomord",
+      "wr": 50.41,
+      "ban": 49.0,
+      "pick": 30.0,
+      "tier": "A",
+      "date": null
+    },
+    {
+      "name": "X.Borg",
+      "wr": 50.0,
+      "ban": 1.65,
+      "pick": 54.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Moskov",
+      "wr": 50.23,
+      "ban": 28.0,
+      "pick": 93.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Zhuxin",
+      "wr": 50.17,
+      "ban": 30.0,
+      "pick": 18.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Ixia",
+      "wr": 50.03,
+      "ban": 73.0,
+      "pick": 75.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Julian",
+      "wr": 49.99,
+      "ban": 85.0,
+      "pick": 72.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Aamon",
+      "wr": 49.58,
+      "ban": 2.27,
+      "pick": 65.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Lesley",
+      "wr": 48.28,
+      "ban": 7.46,
+      "pick": 1.87,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Vale",
+      "wr": 50.1,
+      "ban": 19.0,
+      "pick": 51.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Vexana",
+      "wr": 49.63,
+      "ban": 1.13,
+      "pick": 1.54,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Xavier",
+      "wr": 49.86,
+      "ban": 11.0,
+      "pick": 51.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Suyou",
+      "wr": 49.63,
+      "ban": 95.0,
+      "pick": 77.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Odette",
+      "wr": 49.75,
+      "ban": 40.0,
+      "pick": 64.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Nolan",
+      "wr": 49.06,
+      "ban": 2.86,
+      "pick": 100.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Lylia",
+      "wr": 49.57,
+      "ban": 38.0,
+      "pick": 50.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Selena",
+      "wr": 48.79,
+      "ban": 3.5,
+      "pick": 1.36,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Ruby",
+      "wr": 49.54,
+      "ban": 28.0,
+      "pick": 36.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Layla",
+      "wr": 49.2,
+      "ban": 89.0,
+      "pick": 1.1,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Yu Zhong",
+      "wr": 49.08,
+      "ban": 73.0,
+      "pick": 58.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Gusion",
+      "wr": 48.16,
+      "ban": 4.28,
+      "pick": 1.41,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Cici",
+      "wr": 48.94,
+      "ban": 89.0,
+      "pick": 45.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Uranus",
+      "wr": 49.07,
+      "ban": 37.0,
+      "pick": 35.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Yin",
+      "wr": 48.75,
+      "ban": 1.63,
+      "pick": 48.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Claude",
+      "wr": 49.09,
+      "ban": 23.0,
+      "pick": 78.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Thamuz",
+      "wr": 48.7,
+      "ban": 1.63,
+      "pick": 86.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Roger",
+      "wr": 48.86,
+      "ban": 11.0,
+      "pick": 29.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Lapu-Lapu",
+      "wr": 48.62,
+      "ban": 30.0,
+      "pick": 34.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Johnson",
+      "wr": 48.18,
+      "ban": 1.99,
+      "pick": 78.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Karrie",
+      "wr": 48.42,
+      "ban": 1.02,
+      "pick": 57.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Melissa",
+      "wr": 48.25,
+      "ban": 1.68,
+      "pick": 45.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Lunox",
+      "wr": 48.61,
+      "ban": 17.0,
+      "pick": 24.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Joy",
+      "wr": 48.59,
+      "ban": 19.0,
+      "pick": 15.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Harley",
+      "wr": 47.67,
+      "ban": 3.77,
+      "pick": 77.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Aurora",
+      "wr": 48.44,
+      "ban": 37.0,
+      "pick": 60.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Hayabusa",
+      "wr": 47.94,
+      "ban": 2.15,
+      "pick": 99.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Wanwan",
+      "wr": 48.45,
+      "ban": 11.0,
+      "pick": 14.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Kimmy",
+      "wr": 48.39,
+      "ban": 30.0,
+      "pick": 64.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Phoveus",
+      "wr": 48.29,
+      "ban": 54.0,
+      "pick": 25.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Freya",
+      "wr": 48.05,
+      "ban": 1.47,
+      "pick": 57.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Nana",
+      "wr": 47.35,
+      "ban": 3.96,
+      "pick": 2.13,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Alpha",
+      "wr": 48.07,
+      "ban": 70.0,
+      "pick": 1.21,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Karina",
+      "wr": 47.5,
+      "ban": 2.94,
+      "pick": 79.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Esmeralda",
+      "wr": 47.61,
+      "ban": 2.28,
+      "pick": 88.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Helcurt",
+      "wr": 46.77,
+      "ban": 5.64,
+      "pick": 58.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Hylos",
+      "wr": 47.97,
+      "ban": 26.0,
+      "pick": 29.0,
+      "tier": "B",
+      "date": null
+    },
+    {
+      "name": "Dyrroth",
+      "wr": 47.65,
+      "ban": 1.36,
+      "pick": 1.67,
+      "tier": "C",
+      "date": null
+    },
+    {
+      "name": "Chang'e",
+      "wr": 47.86,
+      "ban": 34.0,
+      "pick": 72.0,
+      "tier": "C",
+      "date": null
+    },
+    {
+      "name": "Luo Yi",
+      "wr": 47.86,
+      "ban": 9.0,
+      "pick": 19.0,
+      "tier": "C",
+      "date": null
+    },
+    {
+      "name": "Arlott",
+      "wr": 47.57,
+      "ban": 29.0,
+      "pick": 39.0,
+      "tier": "C",
+      "date": null
+    },
+    {
+      "name": "Martis",
+      "wr": 47.3,
+      "ban": 39.0,
+      "pick": 55.0,
+      "tier": "C",
+      "date": null
+    },
+    {
+      "name": "Pharsa",
+      "wr": 47.27,
+      "ban": 18.0,
+      "pick": 35.0,
+      "tier": "C",
+      "date": null
+    },
+    {
+      "name": "Jawhead",
+      "wr": 47.19,
+      "ban": 28.0,
+      "pick": 32.0,
+      "tier": "C",
+      "date": null
+    },
+    {
+      "name": "Baxia",
+      "wr": 46.99,
+      "ban": 10.0,
+      "pick": 5.0,
+      "tier": "C",
+      "date": null
+    },
+    {
+      "name": "Alucard",
+      "wr": 46.81,
+      "ban": 35.0,
+      "pick": 72.0,
+      "tier": "C",
+      "date": null
+    },
+    {
+      "name": "Chip",
+      "wr": 46.84,
+      "ban": 24.0,
+      "pick": 4.0,
+      "tier": "C",
+      "date": null
+    },
+    {
+      "name": "Grock",
+      "wr": 46.71,
+      "ban": 69.0,
+      "pick": 34.0,
+      "tier": "C",
+      "date": null
+    },
+    {
+      "name": "Balmond",
+      "wr": 46.46,
+      "ban": 41.0,
+      "pick": 65.0,
+      "tier": "C",
+      "date": null
+    },
+    {
+      "name": "Harith",
+      "wr": 46.33,
+      "ban": 5.0,
+      "pick": 15.0,
+      "tier": "C",
+      "date": null
+    },
+    {
+      "name": "Tigreal",
+      "wr": 44.35,
+      "ban": 5.66,
+      "pick": 1.89,
+      "tier": "C",
+      "date": null
+    },
+    {
+      "name": "Valentina",
+      "wr": 45.55,
+      "ban": 17.0,
+      "pick": 18.0,
+      "tier": "C",
+      "date": null
+    },
+    {
+      "name": "Zilong",
+      "wr": 45.47,
+      "ban": 45.0,
+      "pick": 63.0,
+      "tier": "C",
+      "date": null
+    },
+    {
+      "name": "Mathilda",
+      "wr": 45.01,
+      "ban": 17.0,
+      "pick": 14.0,
+      "tier": "C",
+      "date": null
+    },
+    {
+      "name": "Kalea",
+      "wr": 44.91,
+      "ban": 33.0,
+      "pick": 20.0,
+      "tier": "C",
+      "date": null
+    },
+    {
+      "name": "Chou",
+      "wr": 44.1,
+      "ban": 3.46,
+      "pick": 1.28,
+      "tier": "C",
+      "date": null
+    },
+    {
+      "name": "Gatotkaca",
+      "wr": 44.69,
+      "ban": 30.0,
+      "pick": 55.0,
+      "tier": "C",
+      "date": null
+    },
+    {
+      "name": "Granger",
+      "wr": 42.78,
+      "ban": 1.49,
+      "pick": 1.43,
+      "tier": "C",
+      "date": null
+    },
+    {
+      "name": "Lancelot",
+      "wr": 42.52,
+      "ban": 43.0,
+      "pick": 54.0,
+      "tier": "C",
+      "date": null
+    },
+    {
+      "name": "Franco",
+      "wr": 41.15,
+      "ban": 3.24,
+      "pick": 93.0,
+      "tier": "C",
+      "date": null
+    },
+    {
+      "name": "Fanny",
+      "wr": 41.48,
+      "ban": 1.81,
+      "pick": 67.0,
+      "tier": "C",
+      "date": null
+    }
+  ]
+}
