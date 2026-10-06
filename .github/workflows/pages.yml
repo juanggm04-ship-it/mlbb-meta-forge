@@ -51,6 +51,10 @@ jobs:
         run: python scripts/enhance_meta_trends.py
       - name: Generate global trends page
         run: python scripts/generate_trends_page.py
+      - name: Add homepage watchlist
+        run: python scripts/inject_watchlist.py
+      - name: Add watchlist controls across surfaces
+        run: python scripts/enhance_watchlist_surfaces.py
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload static site
