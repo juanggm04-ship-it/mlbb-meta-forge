@@ -44,12 +44,12 @@ function snapshot(){
    const src=side==='blue'?B:R, hero=src[type][slot];
    if(hero)hist.push({side,type,slot,hero}); else break;
  }
- return {first,history:hist,ts:Date.now(),patch:DATA?.patch||''};
+ return {first,history:hist,ts:Date.now(),patch:(typeof DATA!=='undefined'&&DATA?.patch)||''};
 }
 function loadSaved(){try{return JSON.parse(localStorage.getItem(STORE)||'[]')}catch{return []}}
 function writeSaved(x){localStorage.setItem(STORE,JSON.stringify(x.slice(0,8)))}
 function encode(obj){return btoa(unescape(encodeURIComponent(JSON.stringify({f:obj.first,h:obj.history.map(x=>x.hero)})))).replace(/=+$/,'').replace(/\+/g,'-').replace(/\//g,'_')}
-function decode(s){try{const raw=s.replace(/-/g,'+').replace(/_/g,'/');const pad=raw+'==='.slice((raw.length+3)%4);return JSON.parse(decodeURIComponent(escape(atob(pad))))}catch{return null}}
+function decode(s){try{const raw=s.replace(/-/g,'+').replace(/_/g,'/');const pad=raw+'='.repeat((4-raw.length%4)%4);return JSON.parse(decodeURIComponent(escape(atob(pad))))}catch{return null}}
 function renderSaved(){
  const box=document.getElementById('turnSavedDrafts'); if(!box)return;
  const arr=loadSaved();
