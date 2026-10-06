@@ -72,12 +72,30 @@ def load_history():
     except Exception:
         return {'snapshots':[]}
 
+def semantic_view(snapshot):
+    if not isinstance(snapshot,dict):return None
+    heroes=[]
+    for h in snapshot.get('heroes',[]):
+        heroes.append({
+            'name':h.get('name'),
+            'wr':h.get('wr'),
+            'ban':h.get('ban'),
+            'pick':h.get('pick'),
+            'tier':h.get('tier')
+        })
+    return {
+        'patch':snapshot.get('patch'),
+        'source_updated':snapshot.get('source_updated'),
+        'heroes':heroes
+    }
+
 def append_history(out):
     hist=load_history()
-    key=f"{out.get('updated')}|{out.get('patch')}"
-    snapshots=[s for s in hist['snapshots'] if f"{s.get('updated')}|{s.get('patch')}"!=key]
+    snapshots=hist['snapshots'][:]
     snapshots.append({
         'updated':out.get('updated'),
+        'source_updated':out.get('source_updated'),
+        'freshness_basis':out.get('freshness_basis'),
         'patch':out.get('patch'),
         'fetched_at':out.get('fetched_at'),
         'heroes':[{'name':h['name'],'wr':h.get('wr'),'ban':h.get('ban'),'pick':h.get('pick')} for h in out['heroes']]
@@ -108,17 +126,43 @@ def main():
         if pick is not None and not 0<=pick<=100:continue
         heroes.append({'name':name,'wr':wr,'ban':ban,'pick':pick,'tier':str(tier) if tier else None,'date':str(date) if date else None})
     if len(heroes)<100:raise RuntimeError(f'Validation failed: only {len(heroes)} valid hero records')
+
     patch=latest_patch(patches)
     dates=[h['date'] for h in heroes if h.get('date')]
-    updated=max(dates) if dates else datetime.date.today().isoformat()
+    source_updated=max(dates) if dates else None
+    fetched_at=datetime.datetime.now(datetime.timezone.utc).isoformat()
+    fetched_date=fetched_at[:10]
+    # `updated` stays for backwards compatibility. `freshness_basis` makes its meaning explicit.
+    updated=source_updated or fetched_date
+    freshness_basis='source' if source_updated else 'fetched'
     source=rankings.get('source') if isinstance(rankings,dict) else None
-    out={'updated':updated,'patch':patch,'fetched_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'provider':'MLBBDex public API','provider_url':'https://mlbbdex.com/api-doc','source':source,'total':len(heroes),'heroes':heroes}
+    out={
+        'updated':updated,
+        'source_updated':source_updated,
+        'freshness_basis':freshness_basis,
+        'patch':patch,
+        'fetched_at':fetched_at,
+        'provider':'MLBBDex public API',
+        'provider_url':'https://mlbbdex.com/api-doc',
+        'source':source,
+        'total':len(heroes),
+        'heroes':heroes
+    }
+
     OUT.parent.mkdir(parents=True,exist_ok=True)
-    new_text=json.dumps(out,ensure_ascii=False,indent=2)
-    old_text=OUT.read_text(encoding='utf-8') if OUT.exists() else None
-    if old_text and old_text != new_text:shutil.copyfile(OUT,PREV)
-    OUT.write_text(new_text,encoding='utf-8')
-    points=append_history(out)
-    print(f'Wrote {len(heroes)} validated heroes; patch={patch}; updated={updated}; previous={PREV.exists()}; history_points={points}')
+    old=None
+    if OUT.exists():
+        try:old=json.loads(OUT.read_text(encoding='utf-8'))
+        except Exception:old=None
+    semantic_changed=semantic_view(old)!=semantic_view(out)
+    if old and semantic_changed:
+        shutil.copyfile(OUT,PREV)
+    OUT.write_text(json.dumps(out,ensure_ascii=False,indent=2),encoding='utf-8')
+
+    if semantic_changed or not HISTORY.exists():
+        points=append_history(out)
+    else:
+        points=len(load_history()['snapshots'])
+    print(f'Wrote {len(heroes)} validated heroes; patch={patch}; source_updated={source_updated}; freshness={freshness_basis}; semantic_changed={semantic_changed}; previous={PREV.exists()}; history_points={points}')
 
 if __name__=='__main__':main()
