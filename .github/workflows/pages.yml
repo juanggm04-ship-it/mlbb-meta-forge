@@ -43,6 +43,8 @@ jobs:
         run: python scripts/share_turn_draft.py
       - name: Add post-draft analysis
         run: python scripts/inject_post_draft_analysis.py
+      - name: Normalize shared editorial runtime
+        run: python scripts/normalize_editorial_runtime.py
       - name: Add data health panel
         run: python scripts/inject_data_health.py
       - name: Add meta changes panel
