@@ -33,6 +33,8 @@ jobs:
         run: python scripts/generate_heroes.py
       - name: Generate full live roster
         run: python scripts/generate_live_roster.py
+      - name: Add live roster leaders
+        run: python scripts/enhance_live_roster.py
       - name: Add per-hero trend panels
         run: python scripts/inject_hero_trends.py
       - name: Inject Draft Coach
