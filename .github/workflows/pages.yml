@@ -31,6 +31,8 @@ jobs:
         run: python scripts/apply_live_meta.py
       - name: Generate hero pages and sitemap
         run: python scripts/generate_heroes.py
+      - name: Generate full live roster
+        run: python scripts/generate_live_roster.py
       - name: Add per-hero trend panels
         run: python scripts/inject_hero_trends.py
       - name: Inject Draft Coach
