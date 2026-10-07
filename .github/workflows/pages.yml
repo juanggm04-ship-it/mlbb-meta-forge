@@ -81,6 +81,8 @@ jobs:
         run: python scripts/inject_meta_score.py
       - name: Add Meta Score history
         run: python scripts/inject_meta_score_history.py
+      - name: Add per-hero Meta Score breakdown
+        run: python scripts/inject_hero_meta_score.py
       - name: Add global hero search
         run: python scripts/inject_global_hero_search.py
       - name: Add live versus editorial provenance
