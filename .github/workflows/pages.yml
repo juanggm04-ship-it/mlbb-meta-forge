@@ -67,6 +67,8 @@ jobs:
         run: python scripts/inject_watchlist.py
       - name: Add watchlist controls across surfaces
         run: python scripts/enhance_watchlist_surfaces.py
+      - name: Add full live Watchlist controls
+        run: python scripts/enhance_live_watchlist.py
       - name: Add watchlist pulse
         run: python scripts/inject_watchlist_pulse.py
       - name: Add personalized onboarding
