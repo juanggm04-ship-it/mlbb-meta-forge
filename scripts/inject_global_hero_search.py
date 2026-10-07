@@ -17,7 +17,6 @@ if CORE.exists():
     profiles=core.get('profiles',{})
     if isinstance(profiles,dict): editorial.update(profiles.keys())
 
-# Fallback to generated editorial folders if the core schema changes.
 if not editorial and Path('heroes').exists():
     editorial={p.parent.name for p in Path('heroes').glob('*/index.html')}
 
@@ -30,16 +29,8 @@ for h in heroes:
     name=h.get('name')
     if not name: continue
     slug=slugify(name)
-    # editorial may be keyed by hero name; generated-folder fallback is slug based.
     has_editorial=(name in editorial) or (slug in editorial)
-    items.append({
-        'name':name,
-        'slug':slug,
-        'wr':h.get('wr'),
-        'ban':h.get('ban'),
-        'pick':h.get('pick'),
-        'editorial':bool(has_editorial),
-    })
+    items.append({'name':name,'slug':slug,'wr':h.get('wr'),'ban':h.get('ban'),'pick':h.get('pick'),'editorial':bool(has_editorial)})
 items.sort(key=lambda x:x['name'].lower())
 DATA=json.dumps(items,ensure_ascii=False,separators=(',',':')).replace('</','<\\/')
 
@@ -62,7 +53,7 @@ function render(){
   visible=HEROES.filter(h=>!q||norm(h.name).includes(q)).slice(0,18);
   active=0;
   if(!visible.length){results.innerHTML='<div class="ghs-empty">No encontré ese héroe en el snapshot live.</div>';return;}
-  results.innerHTML=visible.map((h,i)=>`<a class="ghs-row" data-active="${i===0?1:0}" href="${ROOT}roster/${h.slug}/"><div><div class="ghs-name">${h.name}</div><div class="ghs-meta">Ficha estadística live${h.editorial?' · análisis editorial disponible':''}</div></div><div class="ghs-stats"><span class="ghs-stat">WR ${pct(h.wr)}</span><span class="ghs-stat">BAN ${pct(h.ban)}</span><span class="ghs-stat">PICK ${pct(h.pick)}</span>${h.editorial?'<span class="ghs-editorial">EDITORIAL</span>':''}</div></a>`).join('');
+  results.innerHTML=visible.map((h,i)=>`<a class="ghs-row" data-active="${i===0?1:0}" href="${ROOT}stats/heroes/${h.slug}/"><div><div class="ghs-name">${h.name}</div><div class="ghs-meta">Ficha estadística live${h.editorial?' · análisis editorial disponible':''}</div></div><div class="ghs-stats"><span class="ghs-stat">WR ${pct(h.wr)}</span><span class="ghs-stat">BAN ${pct(h.ban)}</span><span class="ghs-stat">PICK ${pct(h.pick)}</span>${h.editorial?'<span class="ghs-editorial">EDITORIAL</span>':''}</div></a>`).join('');
 }
 function openSearch(){if(!dlg.open)dlg.showModal();input.value='';render();setTimeout(()=>input.focus(),0)}
 function closeSearch(){if(dlg.open)dlg.close()}
@@ -70,7 +61,7 @@ function move(dir){if(!visible.length)return;active=(active+dir+visible.length)%
 document.querySelectorAll('[data-global-hero-search]').forEach(b=>b.addEventListener('click',openSearch));
 $('#globalHeroSearchClose')?.addEventListener('click',closeSearch);
 input.addEventListener('input',render);
-input.addEventListener('keydown',e=>{if(e.key==='ArrowDown'){e.preventDefault();move(1)}else if(e.key==='ArrowUp'){e.preventDefault();move(-1)}else if(e.key==='Enter'&&visible.length){e.preventDefault();location.href=ROOT+'roster/'+visible[active].slug+'/'}else if(e.key==='Escape'){closeSearch()}});
+input.addEventListener('keydown',e=>{if(e.key==='ArrowDown'){e.preventDefault();move(1)}else if(e.key==='ArrowUp'){e.preventDefault();move(-1)}else if(e.key==='Enter'&&visible.length){e.preventDefault();location.href=ROOT+'stats/heroes/'+visible[active].slug+'/'}else if(e.key==='Escape'){closeSearch()}});
 document.addEventListener('keydown',e=>{const tag=(e.target?.tagName||'').toLowerCase();const typing=['input','textarea','select'].includes(tag)||e.target?.isContentEditable;if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openSearch()}else if(!typing&&e.key==='/'&&!dlg.open){e.preventDefault();openSearch()}});
 dlg.addEventListener('click',e=>{if(e.target===dlg)closeSearch()});
 })();
@@ -79,27 +70,17 @@ dlg.addEventListener('click',e=>{if(e.target===dlg)closeSearch()});
 BUTTON='''<button class="ghs-launch" type="button" data-global-hero-search aria-label="Buscar entre todos los héroes">⌕ Buscar héroe <span class="ghs-kbd">Ctrl K</span></button>'''
 DIALOG='''<dialog id="globalHeroSearch" class="ghs-dialog" aria-label="Buscar héroe"><div class="ghs-head"><div class="ghs-top"><input id="globalHeroSearchInput" class="ghs-input" type="search" autocomplete="off" placeholder="Escribe un héroe…" aria-label="Nombre del héroe"><button id="globalHeroSearchClose" class="ghs-close" type="button" aria-label="Cerrar">✕</button></div><div class="ghs-help">Busca en el roster live completo. Enter abre la ficha estadística. Usa ↑ ↓ para moverte.</div></div><div id="globalHeroSearchResults" class="ghs-results" role="listbox"></div><div class="ghs-foot"><b>LIVE</b> = estadísticas del snapshot · <b>EDITORIAL</b> = además tiene análisis curado de Meta Forge</div></dialog>'''
 
-TARGETS={
-    Path('index.html'):'./',
-    Path('trends/index.html'):'../',
-    Path('my-meta/index.html'):'../',
-    Path('roster/index.html'):'../',
-}
+TARGETS={Path('index.html'):'./',Path('trends/index.html'):'../',Path('my-meta/index.html'):'../',Path('roster/index.html'):'../'}
 changed=0
 for path,root in TARGETS.items():
-    if not path.exists():
-        raise RuntimeError(f'Missing global-search target: {path}')
+    if not path.exists(): raise RuntimeError(f'Missing global-search target: {path}')
     html=path.read_text(encoding='utf-8')
-    if 'id="globalHeroSearch"' in html:
-        continue
-    if '</head>' not in html or '</body>' not in html:
-        raise RuntimeError(f'Unexpected HTML structure in {path}')
+    if 'id="globalHeroSearch"' in html: continue
+    if '</head>' not in html or '</body>' not in html: raise RuntimeError(f'Unexpected HTML structure in {path}')
     js=JS_TEMPLATE.replace('__DATA__',DATA).replace('__ROOT__',json.dumps(root))
     html=html.replace('</head>',CSS+'</head>',1)
     html=html.replace('</body>',BUTTON+DIALOG+js+'</body>',1)
     path.write_text(html,encoding='utf-8')
     changed+=1
-
-if changed and changed != len(TARGETS):
-    raise RuntimeError(f'Global hero search injected into only {changed}/{len(TARGETS)} pages')
+if changed and changed != len(TARGETS): raise RuntimeError(f'Global hero search injected into only {changed}/{len(TARGETS)} pages')
 print(f'Global hero search ready for {len(items)} heroes across {len(TARGETS)} surfaces')
