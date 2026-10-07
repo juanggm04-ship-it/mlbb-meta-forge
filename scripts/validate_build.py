@@ -42,6 +42,9 @@ need('TOP 10 EN ALGUNA MÉTRICA' in my_meta,'My Meta Top 10 ranking badge missin
 need('id="trendsMetaScore"' in trends,'Trends Meta Score panel missing')
 need('id="myMetaScore"' in my_meta,'My Meta Meta Score panel missing')
 need('Meta Score estadístico, no tier' in trends and 'Meta Score estadístico, no tier' in my_meta,'Meta Score disclaimer/formula missing on key surfaces')
+need('id="metaScoreHistory"' in trends,'Trends Meta Score history panel missing')
+need('id="myMetaScoreHistory"' in my_meta,'My Meta Score history panel missing')
+need('META SCORE HISTORY' in trends,'Trends Meta Score history label missing')
 
 sitemap=read('sitemap.xml')
 need('/trends/' in sitemap,'Sitemap missing /trends/');need('/my-meta/' in sitemap,'Sitemap missing /my-meta/');need('/roster/' in sitemap,'Sitemap missing /roster/')
@@ -59,20 +62,43 @@ if live.exists():
             if pick is not None:need(isinstance(pick,(int,float)) and 0<=pick<=100,f'Invalid pick for {h.get("name")}')
     except Exception as e:errors.append(f'Cannot validate live-meta.json: {e}')
 
+formula='45% WR percentile + 20% pick percentile + 20% ban percentile + 15% momentum percentile'
+momentum_formula='60% delta WR + 25% delta pick + 15% delta ban'
 score_path=Path('data/meta-score.json')
 need(score_path.exists(),'Meta Score data file missing')
 if score_path.exists():
     try:
         score=json.loads(score_path.read_text(encoding='utf-8'));sheroes=score.get('heroes',[])
         need(len(sheroes)==live_count,f'Meta Score hero count ({len(sheroes)}) does not match live hero count ({live_count})')
-        need(score.get('formula')=='45% WR percentile + 20% pick percentile + 20% ban percentile + 15% momentum percentile','Meta Score formula changed unexpectedly')
-        need(score.get('momentum_formula')=='60% delta WR + 25% delta pick + 15% delta ban','Meta Score momentum formula changed unexpectedly')
+        need(score.get('formula')==formula,'Meta Score formula changed unexpectedly')
+        need(score.get('momentum_formula')==momentum_formula,'Meta Score momentum formula changed unexpectedly')
+        need(score.get('percentile_method')=='average rank for ties','Meta Score is not using tie-aware percentiles')
         ranks=[h.get('rank') for h in sheroes];need(ranks==list(range(1,len(sheroes)+1)),'Meta Score ranks are not contiguous')
         for h in sheroes:
             need(isinstance(h.get('score'),(int,float)) and 0<=h['score']<=100,f'Invalid Meta Score for {h.get("name")}')
             for k in ['wr_pct','pick_pct','ban_pct','momentum_pct']:
                 need(isinstance(h.get(k),(int,float)) and 0<=h[k]<=100,f'Invalid {k} for {h.get("name")}')
     except Exception as e:errors.append(f'Cannot validate meta-score.json: {e}')
+
+score_history_path=Path('data/meta-score-history.json')
+need(score_history_path.exists(),'Meta Score history data file missing')
+if score_history_path.exists():
+    try:
+        sh=json.loads(score_history_path.read_text(encoding='utf-8'));snaps=sh.get('snapshots',[])
+        need(len(snaps)>=1,'Meta Score history contains no snapshots')
+        need(sh.get('formula')==formula,'Meta Score history formula differs from current Meta Score')
+        need(sh.get('momentum_formula')==momentum_formula,'Meta Score history momentum formula differs')
+        need(sh.get('percentile_method')=='average rank for ties','Meta Score history is not tie-aware')
+        for snap in snaps:
+            hs=snap.get('heroes',[])
+            need(len(hs)>=100,'Meta Score historical snapshot has fewer than 100 heroes')
+            ranks=[h.get('rank') for h in hs];need(ranks==list(range(1,len(hs)+1)),'Meta Score historical ranks are not contiguous')
+            for h in hs:need(isinstance(h.get('score'),(int,float)) and 0<=h['score']<=100,f'Invalid historical Meta Score for {h.get("name")}')
+    except Exception as e:errors.append(f'Cannot validate meta-score-history.json: {e}')
+
+core=read('scripts/meta_score_core.py')
+need('average-rank percentiles' in core,'Tie-aware percentile core documentation missing')
+need('while j < total and rows[j][0] == value' in core,'Tie-aware percentile grouping logic missing')
 
 for path in ['scripts/enhance_home_ux.py','scripts/share_turn_draft.py']:
     src=read(path);need("'==='.slice((raw.length+3)%4)" not in src,f'Legacy Base64URL padding bug present in {path}');need("'='.repeat((4-raw.length%4)%4)" in src,f'Correct Base64URL padding missing in {path}')
@@ -96,4 +122,4 @@ if errors:
     print('BUILD VALIDATION FAILED')
     for e in errors:print(f'- {e}')
     sys.exit(1)
-print(f'Build validation passed: {len(hero_pages)} editorial pages, {len(stat_pages)} live-stat pages, Meta Score, My Meta rankings, multidimensional Watchlist Pulse, full live Watchlist, dual Trends, search and provenance present.')
+print(f'Build validation passed: {len(hero_pages)} editorial pages, {len(stat_pages)} live-stat pages, tie-aware Meta Score + history, My Meta rankings, multidimensional Watchlist Pulse, full live Watchlist, dual Trends, search and provenance present.')
