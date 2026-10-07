@@ -14,11 +14,12 @@ def read(path):
 html=read('index.html')
 required_ids=[
     'homeQuickActions','draftLibrary','turnDraft','saveTurnDraft','postDraftAnalysis',
-    'dataHealth','metaChanges','watchlistPanel','watchlistPulse'
+    'dataHealth','metaChanges','watchlistPanel','watchlistPulse','dataProvenance'
 ]
 for item in required_ids:
     need(f'id="{item}"' in html,f'Missing homepage module: #{item}')
 
+need('LIVE STATS' in html and 'EDITORIAL' in html,'Homepage provenance labels missing')
 need('trends/' in html,'Homepage has no link/reference to Trends')
 need('my-meta/' in html,'Homepage has no link/reference to My Meta')
 
@@ -26,6 +27,8 @@ trends=read('trends/index.html')
 my_meta=read('my-meta/index.html')
 need('<title>' in trends and 'Trend' in trends,'Trends page title missing')
 need('<title>' in my_meta and ('Meta' in my_meta or 'meta' in my_meta),'My Meta page title missing')
+need('id="dataProvenance"' in trends,'Trends provenance missing')
+need('id="dataProvenance"' in my_meta,'My Meta provenance missing')
 
 sitemap=read('sitemap.xml')
 need('/trends/' in sitemap,'Sitemap missing /trends/')
@@ -56,9 +59,11 @@ for path in ['scripts/enhance_home_ux.py','scripts/share_turn_draft.py']:
 # Generated hero pages should exist and have at least the original public pool size.
 hero_pages=list(Path('heroes').glob('*/index.html')) if Path('heroes').exists() else []
 need(len(hero_pages)>=30,f'Only {len(hero_pages)} generated hero pages found')
+prov_pages=sum(1 for p in hero_pages if 'id="dataProvenance"' in p.read_text(encoding='utf-8'))
+need(prov_pages==len(hero_pages),f'Data provenance present on only {prov_pages}/{len(hero_pages)} hero pages')
 
 if errors:
     print('BUILD VALIDATION FAILED')
     for e in errors: print(f'- {e}')
     sys.exit(1)
-print(f'Build validation passed: {len(hero_pages)} hero pages, core modules present.')
+print(f'Build validation passed: {len(hero_pages)} hero pages, core modules and provenance present.')
