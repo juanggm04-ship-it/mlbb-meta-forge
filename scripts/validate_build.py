@@ -99,6 +99,9 @@ if score_history_path.exists():
 core=read('scripts/meta_score_core.py')
 need('average-rank percentiles' in core,'Tie-aware percentile core documentation missing')
 need('while j < total and rows[j][0] == value' in core,'Tie-aware percentile grouping logic missing')
+hero_score_src=read('scripts/inject_hero_meta_score.py')
+need('id="heroMetaScore"' in hero_score_src,'Per-hero Meta Score injector ID missing')
+need("metric('Win rate'" in hero_score_src and "metric('Pick rate'" in hero_score_src and "metric('Ban rate'" in hero_score_src and "metric('Momentum'" in hero_score_src,'Per-hero Meta Score component breakdown incomplete')
 
 for path in ['scripts/enhance_home_ux.py','scripts/share_turn_draft.py']:
     src=read(path);need("'==='.slice((raw.length+3)%4)" not in src,f'Legacy Base64URL padding bug present in {path}');need("'='.repeat((4-raw.length%4)%4)" in src,f'Correct Base64URL padding missing in {path}')
@@ -117,9 +120,11 @@ if live.exists():
     need('Meta Score estadístico, no tier' in roster,'Live Roster Meta Score disclaimer/formula missing')
     stat_prov=sum(1 for p in stat_pages if 'id="dataProvenance"' in p.read_text(encoding='utf-8'));need(stat_prov==len(stat_pages),f'Data provenance present on only {stat_prov}/{len(stat_pages)} statistical hero pages')
     stat_watch=sum(1 for p in stat_pages if 'id="liveWatchToggle"' in p.read_text(encoding='utf-8'));need(stat_watch==len(stat_pages),f'Live Watchlist control present on only {stat_watch}/{len(stat_pages)} statistical hero pages')
+    stat_score=sum(1 for p in stat_pages if 'id="heroMetaScore"' in p.read_text(encoding='utf-8'));need(stat_score==len(stat_pages),f'Per-hero Meta Score breakdown present on only {stat_score}/{len(stat_pages)} statistical hero pages')
+    stat_components=sum(1 for p in stat_pages if all(x in p.read_text(encoding='utf-8') for x in ['Win rate','Pick rate','Ban rate','Momentum','El Meta Score no es tier']));need(stat_components==len(stat_pages),f'Complete Meta Score components present on only {stat_components}/{len(stat_pages)} statistical hero pages')
 
 if errors:
     print('BUILD VALIDATION FAILED')
     for e in errors:print(f'- {e}')
     sys.exit(1)
-print(f'Build validation passed: {len(hero_pages)} editorial pages, {len(stat_pages)} live-stat pages, tie-aware Meta Score + history, My Meta rankings, multidimensional Watchlist Pulse, full live Watchlist, dual Trends, search and provenance present.')
+print(f'Build validation passed: {len(hero_pages)} editorial pages, {len(stat_pages)} live-stat pages with per-hero Meta Score breakdown, tie-aware Meta Score + history, My Meta rankings, multidimensional Watchlist Pulse, full live Watchlist, dual Trends, search and provenance present.')
