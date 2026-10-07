@@ -14,7 +14,7 @@ def read(path):
 html=read('index.html')
 required_ids=[
     'homeQuickActions','draftLibrary','turnDraft','saveTurnDraft','postDraftAnalysis',
-    'dataHealth','metaChanges','watchlistPanel','watchlistPulse','dataProvenance'
+    'dataHealth','metaChanges','watchlistPanel','watchlistPulse','dataProvenance','globalHeroSearch'
 ]
 for item in required_ids:
     need(f'id="{item}"' in html,f'Missing homepage module: #{item}')
@@ -30,6 +30,8 @@ need('<title>' in trends and 'Trend' in trends,'Trends page title missing')
 need('<title>' in my_meta and ('Meta' in my_meta or 'meta' in my_meta),'My Meta page title missing')
 need('id="dataProvenance"' in trends,'Trends provenance missing')
 need('id="dataProvenance"' in my_meta,'My Meta provenance missing')
+need('id="globalHeroSearch"' in trends,'Trends global hero search missing')
+need('id="globalHeroSearch"' in my_meta,'My Meta global hero search missing')
 
 sitemap=read('sitemap.xml')
 need('/trends/' in sitemap,'Sitemap missing /trends/')
@@ -53,25 +55,23 @@ if live.exists():
     except Exception as e:
         errors.append(f'Cannot validate live-meta.json: {e}')
 
-# Catch the historical Base64URL padding bug if it is reintroduced.
 for path in ['scripts/enhance_home_ux.py','scripts/share_turn_draft.py']:
     src=read(path)
     need("'==='.slice((raw.length+3)%4)" not in src,f'Legacy Base64URL padding bug present in {path}')
     need("'='.repeat((4-raw.length%4)%4)" in src,f'Correct Base64URL padding missing in {path}')
 
-# Curated editorial hero pages.
 hero_pages=list(Path('heroes').glob('*/index.html')) if Path('heroes').exists() else []
 need(len(hero_pages)>=30,f'Only {len(hero_pages)} generated editorial hero pages found')
 prov_pages=sum(1 for p in hero_pages if 'id="dataProvenance"' in p.read_text(encoding='utf-8'))
 need(prov_pages==len(hero_pages),f'Data provenance present on only {prov_pages}/{len(hero_pages)} editorial hero pages')
 
-# Complete statistical roster whenever a validated live snapshot exists.
 stat_pages=list(Path('stats/heroes').glob('*/index.html')) if Path('stats/heroes').exists() else []
 if live.exists():
     roster=read('roster/index.html')
     need(len(stat_pages)>=100,f'Only {len(stat_pages)} statistical hero pages generated')
     need(len(stat_pages)==live_count,f'Statistical pages ({len(stat_pages)}) do not match live hero count ({live_count})')
     need('id="dataProvenance"' in roster,'Live Roster provenance missing')
+    need('id="globalHeroSearch"' in roster,'Live Roster global hero search missing')
     stat_prov=sum(1 for p in stat_pages if 'id="dataProvenance"' in p.read_text(encoding='utf-8'))
     need(stat_prov==len(stat_pages),f'Data provenance present on only {stat_prov}/{len(stat_pages)} statistical hero pages')
 
@@ -79,4 +79,4 @@ if errors:
     print('BUILD VALIDATION FAILED')
     for e in errors: print(f'- {e}')
     sys.exit(1)
-print(f'Build validation passed: {len(hero_pages)} editorial pages, {len(stat_pages)} live-stat pages, core modules and provenance present.')
+print(f'Build validation passed: {len(hero_pages)} editorial pages, {len(stat_pages)} live-stat pages, global search and provenance present.')
