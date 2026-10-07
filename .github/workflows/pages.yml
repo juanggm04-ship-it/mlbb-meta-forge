@@ -61,8 +61,8 @@ jobs:
         run: python scripts/inject_meta_changes.py
       - name: Add risers fallers and sparklines
         run: python scripts/enhance_meta_trends.py
-      - name: Generate global trends page
-        run: python scripts/generate_trends_page.py
+      - name: Generate dual Trends page
+        run: python scripts/generate_dual_trends.py
       - name: Add homepage watchlist
         run: python scripts/inject_watchlist.py
       - name: Add watchlist controls across surfaces
