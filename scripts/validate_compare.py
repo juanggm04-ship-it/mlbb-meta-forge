@@ -21,6 +21,14 @@ roster=Path('roster/index.html')
 need(roster.exists(),'Live Roster missing')
 if roster.exists():need('href="../compare/"' in roster.read_text(encoding='utf-8'),'Live Roster has no Hero Compare entry')
 
+my_meta=Path('my-meta/index.html')
+need(my_meta.exists(),'My Meta missing')
+if my_meta.exists():
+    text=my_meta.read_text(encoding='utf-8')
+    need('id="myMetaCompare"' in text,'My Meta Watchlist compare panel missing')
+    need('id="mmcA"' in text and 'id="mmcB"' in text,'My Meta compare selectors missing')
+    need("new URL('../compare/'" in text,'My Meta compare routing missing')
+
 sitemap=Path('sitemap.xml')
 need(sitemap.exists(),'Sitemap missing')
 if sitemap.exists():need('/compare/' in sitemap.read_text(encoding='utf-8'),'Sitemap missing /compare/')
@@ -28,9 +36,10 @@ if sitemap.exists():need('/compare/' in sitemap.read_text(encoding='utf-8'),'Sit
 src=Path('scripts/generate_hero_compare.py').read_text(encoding='utf-8')
 need("params.get('a')" in src and "params.get('b')" in src,'Compare URL parameter restore logic missing')
 need("history.replaceState" in src,'Compare shareable URL update logic missing')
+need('quote(name,safe="")' in src,'Per-hero compare links are not URL encoded')
 
 if errors:
     print('HERO COMPARE VALIDATION FAILED')
     for e in errors:print('- '+e)
     sys.exit(1)
-print(f'Hero Compare validation passed: page present, {with_cta}/{len(stat_pages)} stat CTAs, shareable a/b parameters and sitemap entry present.')
+print(f'Hero Compare validation passed: page present, {with_cta}/{len(stat_pages)} stat CTAs, My Meta Watchlist compare, shareable a/b parameters and sitemap entry present.')
