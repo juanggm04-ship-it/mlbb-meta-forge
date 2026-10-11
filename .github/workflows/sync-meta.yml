@@ -11,6 +11,7 @@ on:
       - 'scripts/hero_identity.py'
       - 'scripts/validate_hero_identity.py'
       - 'scripts/validate_sync_contract.py'
+      - 'scripts/validate_workflow_actions.py'
 
 permissions:
   contents: write
@@ -25,7 +26,9 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7.0.1
+      - name: Validate workflow action versions
+        run: python scripts/validate_workflow_actions.py all
       - name: Validate sync contract
         run: python scripts/validate_sync_contract.py
       - name: Fetch and validate public meta data
