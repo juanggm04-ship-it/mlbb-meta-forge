@@ -45,7 +45,17 @@ expected={canonical_for(p,BASE) for p in pages}
 need(urls==expected,f'Sitemap differs from configured indexable set: sitemap={len(urls)}, expected={len(expected)}, missing={sorted(expected-urls)[:3]}, extra={sorted(urls-expected)[:3]}')
 
 for rel in NOINDEX:
+    path=Path(rel)
+    need(path.exists(),f'Configured noindex utility is missing: {rel}')
     need(canonical_for(rel,BASE) not in urls,f'Noindex path leaked into sitemap: {rel}')
+
+not_found=Path('404.html')
+if not_found.exists():
+    text=not_found.read_text(encoding='utf-8')
+    need('RUTA FUERA DEL MAPA' in text,'Branded 404 marker missing')
+    need('Ese enlace no está en el draft.' in text,'Branded 404 message missing')
+    for href in [BASE,BASE+'roster/',BASE+'explore/',BASE+'compare/']:
+        need(f'href="{href}"' in text,f'404 recovery link missing: {href}')
 
 stale=[]
 scan=[p for p in ROOT.rglob('*') if p.is_file() and p.suffix.lower() in {'.html','.xml','.txt','.js','.webmanifest'}]
@@ -62,4 +72,4 @@ if errors:
     print('SITE ORIGIN VALIDATION FAILED')
     for e in errors: print('- '+e)
     sys.exit(1)
-print(f'Site origin validation passed: base={BASE}; custom_domain={CFG.get("custom_domain") or "none"}; cname={cname.exists()}; indexable={len(expected)}; noindex={len(NOINDEX)}; stale_legacy_urls=0.')
+print(f'Site origin validation passed: base={BASE}; custom_domain={CFG.get("custom_domain") or "none"}; cname={cname.exists()}; branded_404={not_found.exists()}; indexable={len(expected)}; noindex={len(NOINDEX)}; stale_legacy_urls=0.')
