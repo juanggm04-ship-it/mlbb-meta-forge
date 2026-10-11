@@ -8,6 +8,8 @@ on:
     paths:
       - '.github/workflows/sync-meta.yml'
       - 'scripts/sync_public_meta.py'
+      - 'scripts/hero_identity.py'
+      - 'scripts/validate_hero_identity.py'
 
 permissions:
   contents: write
@@ -24,7 +26,9 @@ jobs:
         uses: actions/checkout@v4
       - name: Fetch and validate public meta data
         run: python scripts/sync_public_meta.py
-      - name: Commit snapshots only when changed
+      - name: Validate shared hero identity
+        run: python scripts/validate_hero_identity.py
+      - name: Commit validated meta refresh
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
