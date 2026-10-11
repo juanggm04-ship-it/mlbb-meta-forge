@@ -11,7 +11,7 @@ if tr.exists():
         js=r'''<script>
 (()=>{
 const KEY='mf_watchlist_v1';const get=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return []}};const set=v=>localStorage.setItem(KEY,JSON.stringify([...new Set(v)]));
-function sync(){document.querySelectorAll('[data-watch-hero]').forEach(b=>{const on=get().includes(b.dataset.watchHero);b.classList.toggle('active',on);b.textContent=on?'★ Siguiendo':'☆ Seguir'})}
+function sync(){const followed=get();document.querySelectorAll('[data-watch-hero]').forEach(b=>{const on=followed.includes(b.dataset.watchHero),label=on?'★ Siguiendo':'☆ Seguir';b.classList.toggle('active',on);if(b.textContent!==label)b.textContent=label})}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-watch-hero]');if(!b)return;const n=b.dataset.watchHero;const list=get();set(list.includes(n)?list.filter(x=>x!==n):[...list,n]);sync()});
 const obs=new MutationObserver(sync);obs.observe(document.body,{childList:true,subtree:true});sync();
 })();
