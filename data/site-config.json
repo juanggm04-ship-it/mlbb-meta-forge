@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "site_name": "MLBB Meta Forge",
+  "base_url": "https://juanggm04-ship-it.github.io/mlbb-meta-forge/",
+  "legacy_base_urls": [
+    "https://juanggm04-ship-it.github.io/mlbb-meta-forge/"
+  ],
+  "locale": "es",
+  "deployment_target": "github-pages",
+  "custom_domain": null,
+  "noindex_paths": [
+    "offline.html",
+    "404.html",
+    "repair/index.html"
+  ]
+}
