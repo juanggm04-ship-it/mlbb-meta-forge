@@ -9,7 +9,7 @@ compare=Path('compare/index.html')
 need(compare.exists(),'Hero Compare page missing')
 if compare.exists():
     text=compare.read_text(encoding='utf-8')
-    for token in ['id="a"','id="b"','Meta Score','Momentum','Ranking','URLSearchParams','searchParams.set(\'a\'','searchParams.set(\'b\'','Copiar enlace']:
+    for token in ['id="a"','id="b"','Meta Score','Momentum','Ranking','URLSearchParams','searchParams.set(\'a\'','searchParams.set(\'b\'','Copiar enlace','id="swapHeroes"','Por qué cambia el Meta Score','Percentil WR','Percentil Pick','Percentil Ban','Percentil Momentum','avoidSame']:
         need(token in text,f'Hero Compare missing: {token}')
 
 stat_pages=list(Path('stats/heroes').glob('*/index.html')) if Path('stats/heroes').exists() else []
@@ -38,8 +38,12 @@ need("params.get('a')" in src and "params.get('b')" in src,'Compare URL paramete
 need("history.replaceState" in src,'Compare shareable URL update logic missing')
 need('quote(name,safe="")' in src,'Per-hero compare links are not URL encoded')
 
+enhance=Path('scripts/enhance_hero_compare.py').read_text(encoding='utf-8')
+need("metric('Percentil WR'" in enhance and "metric('Percentil Pick'" in enhance and "metric('Percentil Ban'" in enhance and "metric('Percentil Momentum'" in enhance,'Compare score component explanation source incomplete')
+need("swapHeroes" in enhance and "avoidSame" in enhance,'Compare swap/distinct-selection logic missing')
+
 if errors:
     print('HERO COMPARE VALIDATION FAILED')
     for e in errors:print('- '+e)
     sys.exit(1)
-print(f'Hero Compare validation passed: page present, {with_cta}/{len(stat_pages)} stat CTAs, My Meta Watchlist compare, shareable a/b parameters and sitemap entry present.')
+print(f'Hero Compare validation passed: page present, {with_cta}/{len(stat_pages)} stat CTAs, component explanation, swap/distinct selection, My Meta Watchlist compare, shareable a/b parameters and sitemap entry present.')
