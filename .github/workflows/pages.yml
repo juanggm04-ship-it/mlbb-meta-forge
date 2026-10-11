@@ -107,6 +107,8 @@ jobs:
         run: python scripts/enhance_home_product_hub.py
       - name: Add shared product navigation
         run: python scripts/inject_product_shell_nav.py
+      - name: Enhance live hero product pages
+        run: python scripts/enhance_live_hero_pages.py
       - name: Add live versus editorial provenance
         run: python scripts/inject_data_provenance.py
       - name: Validate Hero Compare
@@ -121,6 +123,8 @@ jobs:
         run: python scripts/validate_home_product_hub.py
       - name: Validate shared product navigation
         run: python scripts/validate_product_shell_nav.py
+      - name: Validate live hero product pages
+        run: python scripts/validate_live_hero_product_pages.py
       - name: Validate live roster leaders
         run: python scripts/validate_live_leaders.py
       - name: Validate Meta Score momentum state
