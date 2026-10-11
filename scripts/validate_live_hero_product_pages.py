@@ -1,4 +1,5 @@
 from pathlib import Path
+from urllib.parse import quote
 import json,re,html,sys
 from hero_identity import hero_key
 
@@ -24,7 +25,7 @@ score_by={hero_key(h['name']):h for h in score.get('heroes',[]) if h.get('name')
 editorial={hero_key(h['name']) for h in catalog.get('heroes',[]) if h.get('name')}
 pages=sorted(ROOT.glob('*/index.html'))
 need(len(pages)==133,f'Expected 133 live hero pages, found {len(pages)}')
-editorial_pages=0
+editorial_pages=0;explorer_links=0
 
 for p in pages:
     text=p.read_text(encoding='utf-8')
@@ -32,14 +33,12 @@ for p in pages:
     need(bool(m),f'Hero heading missing in {p}')
     if not m: continue
     name=html.unescape(re.sub(r'<.*?>','',m.group(1))).strip()
-    key=hero_key(name)
-    s=score_by.get(key)
+    key=hero_key(name);s=score_by.get(key)
     need(key in live_by,f'Live identity missing for {name}')
     need(s is not None,f'Meta Score missing for {name}')
     if not s: continue
     is_editorial=key in editorial
     if is_editorial: editorial_pages+=1
-
     need('id="productShellNav"' in text,f'Shared product navigation missing for {name}')
     need('href="../../../roster/" aria-current="page">Roster</a>' in text,f'Roster route not active in shell for {name}')
     need('id="heroProductSummary"' in text,f'Hero product summary missing for {name}')
@@ -50,8 +49,12 @@ for p in pages:
     need('id="heroQuickActions"' in text,f'Quick actions missing for {name}')
     need('id="heroQuickWatch"' in text and 'id="liveWatchToggle"' in text,f'Watchlist proxy/source missing for {name}')
     need('MutationObserver(sync).observe(source' in text,f'Watchlist proxy sync missing for {name}')
-    for token in ['../../../roster/','../../../compare/?a=','../../../trends/','../../../my-meta/','../../../methodology.html']:
+    for token in ['../../../roster/','../../../compare/?a=','../../../explore/?hero=','../../../trends/','../../../my-meta/','../../../methodology.html']:
         need(token in text,f'Hero product route {token} missing for {name}')
+    expected_explorer=f'../../../explore/?hero={quote(name,safe="")}'
+    need(expected_explorer in text,f'Hero-specific Explorer route mismatch for {name}')
+    if expected_explorer in text: explorer_links+=1
+    need('⌁ Ver en Explorer</a>' in text,f'Explorer action label missing for {name}')
     need('id="heroSourceDetails"' in text,f'Collapsed provenance missing for {name}')
     need('id="heroMetaScore"' in text,f'Meta Score detail section missing for {name}')
     need('id="dataProvenance"' in text,f'Global data provenance missing for {name}')
@@ -62,9 +65,10 @@ for p in pages:
         need('Análisis editorial</a>' not in text,f'Invented editorial CTA on stats-only hero {name}')
 
 need(editorial_pages==34,f'Expected 34 editorial-capable live hero pages, found {editorial_pages}')
+need(explorer_links==133,f'Expected 133 exact hero-to-Explorer links, found {explorer_links}')
 if errors:
     print('LIVE HERO PRODUCT VALIDATION FAILED')
     for e in errors[:60]: print('- '+e)
     if len(errors)>60: print(f'- ... and {len(errors)-60} more')
     sys.exit(1)
-print(f'Live hero product validation passed: {len(pages)} pages, {editorial_pages} editorial-capable and {len(pages)-editorial_pages} stats-only, with shared navigation, score hierarchy, Watchlist, Compare, Trends and collapsed provenance.')
+print(f'Live hero product validation passed: {len(pages)} pages, {editorial_pages} editorial-capable, {len(pages)-editorial_pages} stats-only, Explorer links={explorer_links}/133, shared navigation, score hierarchy, Watchlist, Compare, Trends and collapsed provenance.')
