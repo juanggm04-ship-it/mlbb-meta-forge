@@ -103,6 +103,8 @@ jobs:
         run: python scripts/inject_my_meta_compare.py
       - name: Add global hero search
         run: python scripts/inject_global_hero_search.py
+      - name: Add homepage product launchpad
+        run: python scripts/enhance_home_product_hub.py
       - name: Add live versus editorial provenance
         run: python scripts/inject_data_provenance.py
       - name: Validate Hero Compare
@@ -113,6 +115,8 @@ jobs:
         run: python scripts/validate_live_data_contract.py
       - name: Validate methodology
         run: python scripts/validate_methodology.py
+      - name: Validate homepage product launchpad
+        run: python scripts/validate_home_product_hub.py
       - name: Validate live roster leaders
         run: python scripts/validate_live_leaders.py
       - name: Validate Meta Score momentum state
