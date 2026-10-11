@@ -45,6 +45,11 @@ for token,msg in [
     ("'./assets/icon-512.png'",'512 PNG is not precached'),
     ("'./status/'",'Public status page is not precached'),
     ("'./data/build-info.json'",'Machine-readable build info is not precached'),
+    ('function navigationKey(request)','Normalized navigation cache key missing'),
+    ("url.search=''",'Navigation cache key does not strip query parameters'),
+    ("url.hash=''",'Navigation cache key does not strip fragments'),
+    ('cache.put(key,response.clone())','Navigation response is not cached under normalized key'),
+    ('cache.match(key)','Offline navigation does not read normalized key'),
 ]: need(token in sw,msg)
 sha=os.getenv('GITHUB_SHA')
 if sha: need(sha[:12] in sw,'Service worker cache is not tied to current GITHUB_SHA')
@@ -70,4 +75,4 @@ if errors:
     print('PWA VALIDATION FAILED')
     for e in errors: print('- '+e)
     sys.exit(1)
-print(f'PWA validation passed: PNG icons=192/512, status/build-info offline-ready, manifest shortcuts=4; live hero coverage={covered}/133; versioned offline shell and reduced-motion support present.')
+print(f'PWA validation passed: PNG icons=192/512, status/build-info offline-ready, query-normalized navigation cache, live hero coverage={covered}/133 and reduced-motion support present.')
