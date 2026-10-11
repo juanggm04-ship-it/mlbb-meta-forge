@@ -1,5 +1,5 @@
 from pathlib import Path
-import json, urllib.request, datetime
+import json, urllib.request, datetime, re
 from hero_identity import hero_key, index_by_hero_key, semantic_rate_rows
 
 RANKINGS_URL='https://mlbbdex.com/api/v1/rankings'
@@ -66,15 +66,28 @@ def measured_at(payload):
     value=data.get('measuredAt') or data.get('measured_at') or data.get('updatedAt') or data.get('updated_at')
     return str(value).strip() if value else None
 
+def patch_label(item):
+    if isinstance(item,dict):
+        p=pick_field(item,ALIASES['patch']) or item.get('name')
+        return str(p).strip() if p else None
+    return str(item).strip() if item is not None else None
+
+def patch_version_key(label):
+    """Return a numeric version tuple without trusting provider ordering."""
+    if not label:return ()
+    nums=re.findall(r'\d+',str(label))
+    return tuple(int(n) for n in nums[:4])
+
 def latest_patch(payload):
     data=payload_data(payload)
-    if isinstance(data,list) and data:
-        first=data[0]
-        if isinstance(first,dict):
-            p=pick_field(first,ALIASES['patch']) or first.get('name')
-            return str(p) if p else None
-        return str(first)
-    return None
+    if not isinstance(data,list) or not data:return None
+    labels=[patch_label(item) for item in data]
+    labels=[label for label in labels if label]
+    if not labels:return None
+    numeric=[(patch_version_key(label),label) for label in labels if patch_version_key(label)]
+    if numeric:
+        return max(numeric,key=lambda x:(x[0],x[1]))[1]
+    return labels[0]
 
 def load_history():
     try:
