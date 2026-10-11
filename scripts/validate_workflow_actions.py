@@ -3,6 +3,9 @@ import sys
 
 PAGES=Path('.github/workflows/pages.yml')
 SYNC=Path('.github/workflows/sync-meta.yml')
+mode=(sys.argv[1] if len(sys.argv)>1 else 'all').lower()
+if mode not in ('pages','all'):
+    raise SystemExit('Usage: validate_workflow_actions.py [pages|all]')
 errors=[]
 def need(cond,msg):
     if not cond: errors.append(msg)
@@ -17,12 +20,14 @@ required_pages={
     'actions/deploy-pages@v5.0.1':'deploy-pages must use Node 24 v5.0.1',
 }
 for token,msg in required_pages.items(): need(token in pages,msg)
-need('actions/checkout@v7.0.1' in sync,'Meta sync checkout must use verified Node 24 v7.0.1')
 for old in ['actions/checkout@v4','actions/configure-pages@v5','actions/upload-pages-artifact@v3','actions/deploy-pages@v4']:
-    need(old not in pages and old not in sync,f'Legacy action reference still present: {old}')
+    need(old not in pages,f'Legacy Pages action reference still present: {old}')
 need("path: '_site'" in pages,'Pages upload must remain scoped to the validated _site artifact')
+if mode=='all':
+    need('actions/checkout@v7.0.1' in sync,'Meta sync checkout must use verified Node 24 v7.0.1')
+    need('actions/checkout@v4' not in sync,'Legacy checkout@v4 still present in meta sync')
 if errors:
     print('WORKFLOW ACTION CONTRACT FAILED')
     for e in errors: print('- '+e)
     sys.exit(1)
-print('Workflow action contract passed: checkout v7.0.1, configure-pages v6.0.0, upload-pages-artifact v5.0.0 and deploy-pages v5.0.1; _site upload preserved.')
+print(f'Workflow action contract passed ({mode}): Pages uses checkout v7.0.1, configure-pages v6.0.0, upload-pages-artifact v5.0.0 and deploy-pages v5.0.1; _site upload preserved'+('; meta sync checkout v7.0.1.' if mode=='all' else '.'))
