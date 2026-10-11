@@ -52,8 +52,8 @@ make_icon(512,Path('assets/icon-512.png'))
 OFFLINE='''<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#070a12"><link rel="manifest" href="manifest.webmanifest"><title>Sin conexión · Meta Forge</title><style>body{margin:0;min-height:100vh;display:grid;place-items:center;padding:22px;background:#070a12;color:#eef5ff;font-family:system-ui}.box{max-width:620px;padding:28px;border:1px solid #2a3b58;border-radius:24px;background:#0c1422}h1{margin:0 0 10px;font-size:clamp(34px,8vw,62px);letter-spacing:-.05em}p{color:#9bacbf;line-height:1.65}a{display:inline-flex;margin-top:10px;padding:11px 14px;border-radius:12px;background:#51e4ff;color:#07101b;text-decoration:none;font-weight:900}</style></head><body><main class="box"><small>MLBB META FORGE</small><h1>Sin conexión</h1><p>No pudimos llegar a la red. Si ya visitaste una sección, Meta Forge intentará mostrar la copia guardada en este dispositivo.</p><a href="./">Volver al inicio</a></main></body></html>'''
 Path('offline.html').write_text(OFFLINE,encoding='utf-8')
 
-core=['./','./roster/','./trends/','./compare/','./my-meta/','./status/','./methodology.html','./privacy.html','./terms.html','./manifest.webmanifest','./assets/icon.svg','./assets/icon-192.png','./assets/icon-512.png','./data/live-meta.json','./data/meta-score.json','./data/meta-score-history.json','./data/build-info.json','./offline.html']
-required=['index.html','roster/index.html','trends/index.html','compare/index.html','my-meta/index.html','status/index.html','methodology.html','privacy.html','terms.html','manifest.webmanifest','assets/icon.svg','assets/icon-192.png','assets/icon-512.png','data/live-meta.json','data/meta-score.json','data/meta-score-history.json','data/build-info.json','offline.html']
+core=['./','./roster/','./trends/','./compare/','./my-meta/','./status/','./methodology.html','./privacy.html','./terms.html','./manifest.webmanifest','./assets/icon.svg','./assets/icon-192.png','./assets/icon-512.png','./data/live-meta.json','./data/meta-score.json','./data/meta-score-history.json','./data/build-info.json','./data/product-release.json','./offline.html']
+required=['index.html','roster/index.html','trends/index.html','compare/index.html','my-meta/index.html','status/index.html','methodology.html','privacy.html','terms.html','manifest.webmanifest','assets/icon.svg','assets/icon-192.png','assets/icon-512.png','data/live-meta.json','data/meta-score.json','data/meta-score-history.json','data/build-info.json','data/product-release.json','offline.html']
 missing=[p for p in required if not Path(p).exists()]
 if missing:
     raise RuntimeError('PWA core dependencies missing: '+', '.join(missing))
@@ -87,4 +87,4 @@ for path in ROOT.rglob('*.html'):
         text=text.replace('</body>',banner+install+runtime+'</body>',1)
     path.write_text(text,encoding='utf-8')
     count+=1
-print(f'PWA shell built: build={build_sha[:12]}; version={version}; cache={cache_name}; html_pages={count}; core={len(core)}; png_icons=192/512; navigation_query_cache=false')
+print(f'PWA shell built: build={build_sha[:12]}; version={version}; cache={cache_name}; html_pages={count}; core={len(core)}; png_icons=192/512; navigation_query_cache=false; product_release_offline=true')
