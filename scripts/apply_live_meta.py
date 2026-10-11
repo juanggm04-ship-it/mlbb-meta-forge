@@ -1,10 +1,12 @@
 from pathlib import Path
 import json,re
 from hero_identity import hero_key, index_by_hero_key
+from site_config import load_site_config
 
 LIVE=Path('data/live-meta.json')
 INDEX=Path('index.html')
 GEN=Path('scripts/generate_heroes.py')
+SITE=load_site_config()
 
 def main():
     if not LIVE.exists():
@@ -42,8 +44,14 @@ def main():
     html=html[:m.start(1)]+packed+html[m.end(1):]
     INDEX.write_text(html,encoding='utf-8')
 
-    # Teach the hero-page generator to merge the same live rate stats at build time.
+    # Keep the legacy hero-page generator portable: its public origin comes from
+    # the same site config used by SEO, robots and sitemap finalization.
     src=GEN.read_text(encoding='utf-8')
+    src,base_count=re.subn(r"^BASE='[^']*'$",f"BASE={SITE['base_url']!r}",src,count=1,flags=re.M)
+    if base_count!=1:
+        raise RuntimeError(f'Expected one BASE assignment in hero generator, found {base_count}')
+
+    # Teach the hero-page generator to merge the same live rate stats at build time.
     if '# LIVE_META_OVERRIDE' not in src:
         block=r'''
 # LIVE_META_OVERRIDE
@@ -66,7 +74,7 @@ if _live_path.exists():
     PATCH=_live.get('patch') or PATCH
 '''
         src=src.replace('\nBY_NAME={h[0]:h for h in HEROES}',block+'\nBY_NAME={h[0]:h for h in HEROES}',1)
-        GEN.write_text(src,encoding='utf-8')
-    print(f'Applied live rate stats to homepage and hero generator; matched={matched}/34; shared identity keys={len(mapping)}; editorial tiers preserved')
+    GEN.write_text(src,encoding='utf-8')
+    print(f'Applied live rate stats and configured origin to homepage/hero generator; base={SITE["base_url"]}; matched={matched}/34; shared identity keys={len(mapping)}; editorial tiers preserved')
 
 if __name__=='__main__':main()
