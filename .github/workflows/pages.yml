@@ -85,6 +85,8 @@ jobs:
         run: python scripts/enhance_my_meta_rankings.py
       - name: Add Meta Score
         run: python scripts/inject_meta_score.py
+      - name: Enhance Live Roster product cards
+        run: python scripts/enhance_roster_product_cards.py
       - name: Add Meta Score history
         run: python scripts/inject_meta_score_history.py
       - name: Generate methodology page
@@ -125,6 +127,8 @@ jobs:
         run: python scripts/validate_home_product_hub.py
       - name: Validate shared product navigation
         run: python scripts/validate_product_shell_nav.py
+      - name: Validate Live Roster product cards
+        run: python scripts/validate_roster_product_cards.py
       - name: Validate live hero product pages
         run: python scripts/validate_live_hero_product_pages.py
       - name: Validate Meta Score neighbor navigation
