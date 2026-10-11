@@ -40,11 +40,30 @@ if cat_path.exists() and core_path.exists():
                 need(h.get('role')==c['role'],f'Homepage role differs from catalog for {c["name"]}')
                 need(h.get('tier')==c['tier'],f'Homepage tier differs from catalog for {c["name"]}')
 
+for consumer in [Path('scripts/generate_dual_trends.py'),Path('scripts/generate_my_meta.py')]:
+    need(consumer.exists(),f'Catalog consumer missing: {consumer}')
+    if consumer.exists():
+        text=consumer.read_text(encoding='utf-8')
+        need("CAT=ROOT/'data'/'hero-catalog.json'" in text,f'{consumer} does not read shared hero catalog directly')
+        need("re.search(r'const DATA=" not in text,f'{consumer} still parses homepage DATA for editorial metadata')
+        need("catalog.get('heroes',[])" in text,f'{consumer} does not consume catalog heroes')
+
 hero_pages=list(Path('heroes').glob('*/index.html')) if Path('heroes').exists() else []
 need(len(hero_pages)==34,f'Expected 34 generated editorial hero pages, found {len(hero_pages)}')
+
+trends=Path('trends/index.html')
+my_meta=Path('my-meta/index.html')
+need(trends.exists(),'Generated Trends page missing')
+need(my_meta.exists(),'Generated My Meta page missing')
+if trends.exists():
+    text=trends.read_text(encoding='utf-8')
+    need('EDITORIAL<small>34 héroes' in text,'Trends editorial mode no longer reports 34 curated heroes')
+if my_meta.exists():
+    text=my_meta.read_text(encoding='utf-8')
+    need('EDITORIAL ROLE RADAR' in text,'My Meta editorial role radar missing')
 
 if errors:
     print('EDITORIAL CATALOG VALIDATION FAILED')
     for e in errors: print('- '+e)
     sys.exit(1)
-print('Editorial catalog validation passed: 34 heroes aligned across catalog, homepage, editorial core and generated pages.')
+print('Editorial catalog validation passed: 34 heroes aligned across catalog, homepage, editorial core, generated pages, Trends and My Meta direct consumers.')
