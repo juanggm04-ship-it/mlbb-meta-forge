@@ -6,6 +6,7 @@ BASE='https://juanggm04-ship-it.github.io/mlbb-meta-forge/'
 CARD=Path('assets/social-card.png')
 W,H=1200,630
 LIVE=Path('data/live-meta.json')
+NOINDEX_PATHS={'offline.html','404.html','repair/index.html'}
 
 
 def png_chunk(kind,data):
@@ -17,7 +18,6 @@ def make_social_card():
     for y in range(H):
         raw.append(0)
         for x in range(W):
-            # Dark navy base with two soft esports glows.
             r,g,b=7,10,18
             d1=((x-210)**2+(y-130)**2)**0.5
             d2=((x-1010)**2+(y-500)**2)**0.5
@@ -26,7 +26,6 @@ def make_social_card():
             r=min(255,int(r+15*c1+42*c2))
             g=min(255,int(g+54*c1+18*c2))
             b=min(255,int(b+83*c1+72*c2))
-            # Geometric MF monogram, no external font dependency.
             cyan=(70,230,255); violet=(139,92,255); gold=(242,194,85)
             col=None
             if 300<=x<342 and 205<=y<425: col=cyan
@@ -66,7 +65,7 @@ def breadcrumb_name(segment):
     known={
         'roster':'Live Roster','explore':'Meta Explorer','trends':'Trends','compare':'Hero Compare',
         'my-meta':'My Meta','methodology.html':'Metodología','status':'Estado','stats':'Estadísticas',
-        'heroes':'Héroes','privacy.html':'Privacidad','terms.html':'Términos','repair':'Reparar caché'
+        'heroes':'Héroes','privacy.html':'Privacidad','terms.html':'Términos'
     }
     return known.get(segment,segment.replace('.html','').replace('-',' ').title())
 
@@ -76,7 +75,6 @@ def breadcrumb_graph(path,canonical):
     parts=rel.split('/')
     if parts[-1]=='index.html':parts=parts[:-1]
     items=[{'@type':'ListItem','position':1,'name':'Meta Forge','item':BASE}]
-    # Hero stat/editorial pages get a clearer parent than a mechanical path label.
     if len(parts)>=3 and parts[0]=='stats' and parts[1]=='heroes':
         items.append({'@type':'ListItem','position':2,'name':'Live Roster','item':BASE+'roster/'})
         items.append({'@type':'ListItem','position':3,'name':breadcrumb_name(parts[2]),'item':canonical})
@@ -121,15 +119,12 @@ for path in ROOT.rglob('*.html'):
     text=path.read_text(encoding='utf-8')
     if 'id="mf-social-meta"' in text: continue
     rel=path.as_posix()
-    if rel in ('offline.html','404.html'):
-        if 'name="robots"' not in text:
-            text=text.replace('</head>','<meta id="mf-social-meta" name="robots" content="noindex,nofollow"></head>',1)
-        else:
-            text=text.replace('</head>','<meta id="mf-social-meta" name="referrer" content="no-referrer"></head>',1)
+    if rel in NOINDEX_PATHS:
+        text=re.sub(r'<meta\s+name=["\']robots["\'][^>]*>','',text,flags=re.I)
+        text=text.replace('</head>','<meta id="mf-social-meta" name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"></head>',1)
         path.write_text(text,encoding='utf-8');changed+=1;noindexed+=1
         continue
     title=title_of(text);desc=description_of(text);canonical=canonical_for(path)
-    # Keep one canonical source of truth even if a generator already added one.
     text=re.sub(r'<link\s+rel=["\']canonical["\'][^>]*>','',text,flags=re.I)
     block=(f'<link id="mf-social-meta" rel="canonical" href="{esc(canonical)}">'
            f'<meta property="og:site_name" content="MLBB Meta Forge">'
