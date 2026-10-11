@@ -31,10 +31,10 @@ if script_marker not in html:
     raise RuntimeError('Hero Compare script marker missing')
 html=html.replace(script_marker,js+script_marker,1)
 
-hook='renderEditorial(a,b)}}'
+hook='renderEditorial(a,b)}'
 if hook not in html:
     raise RuntimeError('Editorial render hook missing')
-html=html.replace(hook,'renderEditorial(a,b);renderDirectMatchup(a,b)}}',1)
+html=html.replace(hook,'renderEditorial(a,b);renderDirectMatchup(a,b)}',1)
 
 PAGE.write_text(html,encoding='utf-8')
 print(f'Injected direct editorial matchup context from {len(matchups)} matchup rules')
