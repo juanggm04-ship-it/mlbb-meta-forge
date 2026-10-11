@@ -1,5 +1,6 @@
 from pathlib import Path
-import json,re,unicodedata
+import json
+from hero_identity import hero_key, index_by_hero_key
 
 INDEX=Path('index.html')
 LIVE=Path('data/live-meta.json')
@@ -8,11 +9,6 @@ CAT=Path('data/hero-catalog.json')
 for p in [INDEX,LIVE,CAT]:
     if not p.exists():
         raise RuntimeError(f'Missing onboarding dependency: {p}')
-
-def norm(s):
-    s=str(s or '').lower().replace('&','and')
-    s=''.join(c for c in unicodedata.normalize('NFD',s) if unicodedata.category(c)!='Mn')
-    return re.sub(r'[^a-z0-9]+','',s)
 
 html=INDEX.read_text(encoding='utf-8')
 if 'id="mfOnboarding"' not in html:
@@ -24,7 +20,7 @@ if 'window.MF_ONBOARD_HEROES=' in html:
 live=json.loads(LIVE.read_text(encoding='utf-8'))
 catalog=json.loads(CAT.read_text(encoding='utf-8'))
 live_heroes=[h for h in live.get('heroes',[]) if h.get('name')]
-editorial={norm(h['name']):h for h in catalog.get('heroes',[]) if h.get('name')}
+editorial=index_by_hero_key([h for h in catalog.get('heroes',[]) if h.get('name')])
 if len(live_heroes)<100:
     raise RuntimeError(f'Live onboarding requires full roster, found {len(live_heroes)} heroes')
 if len(editorial)!=34:
@@ -35,7 +31,7 @@ seen=set()
 matched_editorial=0
 for h in sorted(live_heroes,key=lambda x:x['name'].lower()):
     name=h['name']
-    key=norm(name)
+    key=hero_key(name)
     if key in seen:
         raise RuntimeError(f'Duplicate normalized live hero in onboarding pool: {name}')
     seen.add(key)
@@ -52,7 +48,7 @@ for h in sorted(live_heroes,key=lambda x:x['name'].lower()):
     })
 
 if matched_editorial!=34:
-    missing=sorted(h['name'] for h in catalog.get('heroes',[]) if norm(h.get('name')) not in seen)
+    missing=sorted(h['name'] for h in catalog.get('heroes',[]) if hero_key(h.get('name')) not in seen)
     raise RuntimeError(f'Only {matched_editorial}/34 editorial heroes matched live onboarding roster; missing={missing}')
 
 payload=json.dumps(pool,ensure_ascii=False,separators=(',',':')).replace('</','<\\/')
@@ -78,4 +74,4 @@ html=html.replace('id="mfOnboarding" class="onboarding"',f'id="mfOnboarding" dat
 html=html.replace('Elige tu rol principal y entre 3 y 5 héroes favoritos. Todo se guarda únicamente en este navegador.','Elige tu rol principal y entre 3 y 5 héroes favoritos del roster live. Todo se guarda únicamente en este navegador.',1)
 
 INDEX.write_text(html,encoding='utf-8')
-print(f'Enhanced onboarding with {len(pool)} live heroes; {matched_editorial}/34 matched normalized editorial profiles')
+print(f'Enhanced onboarding with {len(pool)} live heroes; {matched_editorial}/34 matched via shared hero identity')
