@@ -1,15 +1,21 @@
 from pathlib import Path
-import json,re,sys
+import json,re,sys,unicodedata
 
 errors=[]
 def need(cond,msg):
     if not cond: errors.append(msg)
+def norm(s):
+    s=str(s or '').lower().replace('&','and')
+    s=''.join(c for c in unicodedata.normalize('NFD',s) if unicodedata.category(c)!='Mn')
+    return re.sub(r'[^a-z0-9]+','',s)
 
 cat_path=Path('data/hero-catalog.json')
 core_path=Path('data/editorial-core.json')
+live_path=Path('data/live-meta.json')
 index_path=Path('index.html')
 need(cat_path.exists(),'Editorial catalog missing')
 need(core_path.exists(),'Editorial core missing')
+need(live_path.exists(),'Live meta missing')
 need(index_path.exists(),'Homepage missing')
 
 if cat_path.exists() and core_path.exists():
@@ -19,12 +25,21 @@ if cat_path.exists() and core_path.exists():
     need(cat.get('scope')=='editorial','Catalog scope must be editorial')
     need(len(heroes)==34,f'Catalog must contain 34 heroes, found {len(heroes)}')
     need(len(names)==len(set(names)),'Catalog contains duplicate hero names')
+    need(len({norm(n) for n in names})==34,'Catalog contains duplicate normalized hero names')
     for h in heroes:
         for key in ['name','lane','tier','role']:
             need(bool(h.get(key)),f'Catalog missing {key} for {h.get("name")}')
     core=json.loads(core_path.read_text(encoding='utf-8'))
     profiles=set(core.get('profiles',{}))
     need(set(names)==profiles,f'Catalog/profile names differ: catalog_only={sorted(set(names)-profiles)}, profile_only={sorted(profiles-set(names))}')
+
+    if live_path.exists():
+        live=json.loads(live_path.read_text(encoding='utf-8'))
+        live_names=[h.get('name') for h in live.get('heroes',[]) if h.get('name')]
+        live_norm={norm(n) for n in live_names}
+        catalog_norm={norm(n) for n in names}
+        missing=sorted(n for n in names if norm(n) not in live_norm)
+        need(len(catalog_norm & live_norm)==34,f'Only {len(catalog_norm & live_norm)}/34 catalog heroes resolve against live roster by normalized name; missing={missing}')
 
     if index_path.exists():
         src=index_path.read_text(encoding='utf-8')
@@ -45,6 +60,9 @@ for consumer in [Path('scripts/generate_dual_trends.py'),Path('scripts/generate_
     if consumer.exists():
         text=consumer.read_text(encoding='utf-8')
         need("CAT=ROOT/'data'/'hero-catalog.json'" in text,f'{consumer} does not read shared hero catalog directly')
+        need("LIVE=ROOT/'data'/'live-meta.json'" in text,f'{consumer} does not resolve catalog names against live roster')
+        need("def _norm(s):" in text,f'{consumer} has no normalized alias resolver')
+        need("matched!=34" in text,f'{consumer} does not require all 34 editorial heroes to resolve live aliases')
         need("re.search(r'const DATA=" not in text,f'{consumer} still parses homepage DATA for editorial metadata')
         need("catalog.get('heroes',[])" in text,f'{consumer} does not consume catalog heroes')
 
@@ -66,4 +84,4 @@ if errors:
     print('EDITORIAL CATALOG VALIDATION FAILED')
     for e in errors: print('- '+e)
     sys.exit(1)
-print('Editorial catalog validation passed: 34 heroes aligned across catalog, homepage, editorial core, generated pages, Trends and My Meta direct consumers.')
+print('Editorial catalog validation passed: 34 heroes align across catalog/core/homepage and all resolve to live aliases for Trends and My Meta.')
