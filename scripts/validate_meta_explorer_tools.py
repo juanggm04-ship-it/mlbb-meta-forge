@@ -1,5 +1,5 @@
 from pathlib import Path
-import sys
+import re,sys
 PAGE=Path('explore/index.html')
 errors=[]
 def need(cond,msg):
@@ -32,7 +32,12 @@ if PAGE.exists():
         ('MutationObserver','Explorer redraw synchronization missing'),
         ("window.addEventListener('storage'",'Cross-tab Watchlist sync missing'),
     ]: need(token in text,msg)
-    need('localStorage.setItem' not in text.split('id="explorer-power-runtime"',1)[1],'Explorer power tools must not mutate Watchlist localStorage')
+    runtime=re.search(r'<script id="explorer-power-runtime">(.*?)</script>',text,re.S)
+    need(bool(runtime),'Explorer power runtime block could not be isolated')
+    if runtime:
+        js=runtime.group(1)
+        need('localStorage.getItem' in js,'Explorer Watchlist reader missing')
+        need('localStorage.setItem' not in js,'Explorer power tools must not mutate Watchlist localStorage')
 if errors:
     print('META EXPLORER POWER TOOLS VALIDATION FAILED')
     for e in errors: print('- '+e)
