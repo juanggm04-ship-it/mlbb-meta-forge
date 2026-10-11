@@ -1,5 +1,5 @@
 from pathlib import Path
-import json, os, struct, sys
+import json, struct, subprocess, sys
 
 errors=[]
 def need(cond,msg):
@@ -51,8 +51,17 @@ for token,msg in [
     ('cache.put(key,response.clone())','Navigation response is not cached under normalized key'),
     ('cache.match(key)','Offline navigation does not read normalized key'),
 ]: need(token in sw,msg)
-sha=os.getenv('GITHUB_SHA')
-if sha: need(sha[:12] in sw,'Service worker cache is not tied to current GITHUB_SHA')
+try:
+    head=subprocess.check_output(['git','rev-parse','HEAD'],text=True,stderr=subprocess.DEVNULL).strip()
+except Exception as exc:
+    head=None;errors.append(f'Cannot resolve checked-out git HEAD for PWA validation: {exc}')
+if head:
+    need(head[:12] in sw,'Service worker cache is not tied to checked-out git HEAD')
+    try:
+        build_info=json.loads(Path('data/build-info.json').read_text(encoding='utf-8'))
+        need(build_info.get('build_sha')==head,'PWA HEAD and build-info.json build_sha are not aligned')
+    except Exception as exc:
+        errors.append(f'Cannot compare PWA version with build-info.json: {exc}')
 core=[Path('index.html'),Path('roster/index.html'),Path('trends/index.html'),Path('compare/index.html'),Path('my-meta/index.html'),Path('status/index.html'),Path('methodology.html'),Path('privacy.html'),Path('terms.html')]
 for p in core:
     if not p.exists(): errors.append(f'Missing core PWA page: {p}'); continue
@@ -75,4 +84,4 @@ if errors:
     print('PWA VALIDATION FAILED')
     for e in errors: print('- '+e)
     sys.exit(1)
-print(f'PWA validation passed: PNG icons=192/512, status/build-info offline-ready, query-normalized navigation cache, live hero coverage={covered}/133 and reduced-motion support present.')
+print(f'PWA validation passed: cache tied to git HEAD {head[:12] if head else "unknown"}, build-info aligned, PNG icons=192/512, query-normalized navigation cache, live hero coverage={covered}/133.')
