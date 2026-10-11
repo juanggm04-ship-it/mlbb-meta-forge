@@ -1,5 +1,5 @@
 from pathlib import Path
-import hashlib, sys
+import hashlib, json, sys
 
 ROOT=Path('.')
 SITE=ROOT/'_site'
@@ -7,7 +7,10 @@ errors=[]
 def need(cond,msg):
     if not cond: errors.append(msg)
 def digest(p):
-    h=hashlib.sha256();h.update(p.read_bytes());return h.hexdigest()
+    h=hashlib.sha256()
+    with p.open('rb') as f:
+        for chunk in iter(lambda:f.read(1024*1024),b''): h.update(chunk)
+    return h.hexdigest()
 
 need(SITE.exists(),'_site artifact directory missing')
 for name in ['index.html','privacy.html','terms.html','methodology.html','offline.html','manifest.webmanifest','robots.txt','sitemap.xml','sw.js']:
@@ -28,14 +31,27 @@ editorial_pages=list((SITE/'heroes').glob('*/index.html')) if (SITE/'heroes').ex
 need(len(stat_pages)==133,f'Expected 133 live hero pages in artifact, got {len(stat_pages)}')
 need(len(editorial_pages)==34,f'Expected 34 editorial hero pages in artifact, got {len(editorial_pages)}')
 
-# Every copied public file must match the already-validated source byte-for-byte.
 for dest in [p for p in SITE.rglob('*') if p.is_file()]:
     rel=dest.relative_to(SITE);src=ROOT/rel
     need(src.exists(),f'Artifact file has no source counterpart: {rel}')
     if src.exists(): need(digest(src)==digest(dest),f'Artifact copy differs from validated source: {rel}')
 
-required_data=['live-meta.json','meta-score.json','meta-score-history.json','build-info.json']
+required_data=['live-meta.json','meta-score.json','meta-score-history.json','build-info.json','integrity.json']
 for name in required_data: need((SITE/'data'/name).exists(),f'Runtime data missing from artifact: data/{name}')
+
+integrity_path=SITE/'data/integrity.json'
+if integrity_path.exists():
+    try: integrity=json.loads(integrity_path.read_text(encoding='utf-8'))
+    except Exception as exc: integrity={};errors.append(f'Invalid artifact integrity manifest: {exc}')
+    entries=integrity.get('files') if isinstance(integrity.get('files'),dict) else {}
+    for rel,item in entries.items():
+        p=SITE/rel
+        need(p.exists(),f'Integrity entry missing from _site: {rel}')
+        if p.exists():
+            need(item.get('bytes')==p.stat().st_size,f'Artifact integrity size mismatch: {rel}')
+            need(item.get('sha256')==digest(p),f'Artifact integrity hash mismatch: {rel}')
+    artifact_files=[p for p in SITE.rglob('*') if p.is_file() and p!=integrity_path]
+    need(set(entries)=={p.relative_to(SITE).as_posix() for p in artifact_files},'Integrity manifest does not cover exactly every public artifact file except itself')
 
 size=sum(p.stat().st_size for p in SITE.rglob('*') if p.is_file())
 need(size<=25*1024*1024,f'Public artifact exceeds 25 MiB guardrail: {size/1024/1024:.2f} MiB')
@@ -43,4 +59,4 @@ if errors:
     print('PUBLIC ARTIFACT VALIDATION FAILED')
     for e in errors: print('- '+e)
     sys.exit(1)
-print(f'Public artifact validation passed: html={len(site_html)}; live=133; editorial=34; size={size/1024/1024:.2f}MiB; no Python/workflow build sources served.')
+print(f'Public artifact validation passed: html={len(site_html)}; live=133; editorial=34; size={size/1024/1024:.2f}MiB; exact integrity coverage; no Python/workflow build sources served.')
