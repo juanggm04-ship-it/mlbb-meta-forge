@@ -137,6 +137,8 @@ jobs:
         run: python scripts/inject_social_meta.py
       - name: Enhance site-wide accessibility
         run: python scripts/enhance_accessibility.py
+      - name: Generate public integrity manifest
+        run: python scripts/generate_integrity_manifest.py
       - name: Validate Hero Compare
         run: python scripts/validate_compare.py
       - name: Validate Hero Compare signal summary
@@ -161,6 +163,8 @@ jobs:
         run: python scripts/validate_accessibility.py
       - name: Validate internal navigation links
         run: python scripts/validate_internal_links.py
+      - name: Validate public integrity manifest
+        run: python scripts/validate_integrity_manifest.py
       - name: Validate static performance budget
         run: python scripts/validate_performance_budget.py
       - name: Validate methodology
