@@ -189,12 +189,16 @@ jobs:
         run: python scripts/validate_home_watchlist_live.py
       - name: Validate generated site
         run: python scripts/validate_build.py
+      - name: Prepare public Pages artifact
+        run: python scripts/prepare_public_artifact.py
+      - name: Validate public Pages artifact
+        run: python scripts/validate_public_artifact.py
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload static site
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: '_site'
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
