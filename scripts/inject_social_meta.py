@@ -1,10 +1,12 @@
 from pathlib import Path
-import re, html, struct, zlib, binascii
+import re, html, struct, zlib, binascii, json
 
 ROOT=Path('.')
 BASE='https://juanggm04-ship-it.github.io/mlbb-meta-forge/'
 CARD=Path('assets/social-card.png')
 W,H=1200,630
+LIVE=Path('data/live-meta.json')
+
 
 def png_chunk(kind,data):
     return struct.pack('>I',len(data))+kind+data+struct.pack('>I',binascii.crc32(kind+data)&0xffffffff)
@@ -60,8 +62,60 @@ def description_of(text):
 def esc(v):
     return html.escape(v,quote=True)
 
+def breadcrumb_name(segment):
+    known={
+        'roster':'Live Roster','explore':'Meta Explorer','trends':'Trends','compare':'Hero Compare',
+        'my-meta':'My Meta','methodology.html':'Metodología','status':'Estado','stats':'Estadísticas',
+        'heroes':'Héroes','privacy.html':'Privacidad','terms.html':'Términos','repair':'Reparar caché'
+    }
+    return known.get(segment,segment.replace('.html','').replace('-',' ').title())
+
+def breadcrumb_graph(path,canonical):
+    rel=path.as_posix()
+    if rel=='index.html': return None
+    parts=rel.split('/')
+    if parts[-1]=='index.html':parts=parts[:-1]
+    items=[{'@type':'ListItem','position':1,'name':'Meta Forge','item':BASE}]
+    # Hero stat/editorial pages get a clearer parent than a mechanical path label.
+    if len(parts)>=3 and parts[0]=='stats' and parts[1]=='heroes':
+        items.append({'@type':'ListItem','position':2,'name':'Live Roster','item':BASE+'roster/'})
+        items.append({'@type':'ListItem','position':3,'name':breadcrumb_name(parts[2]),'item':canonical})
+    elif len(parts)>=2 and parts[0]=='heroes':
+        items.append({'@type':'ListItem','position':2,'name':'Héroes','item':BASE+'heroes/'})
+        if len(parts)>1:items.append({'@type':'ListItem','position':3,'name':breadcrumb_name(parts[1]),'item':canonical})
+    else:
+        current=BASE
+        for i,segment in enumerate(parts,2):
+            current+=segment+('/' if '.' not in segment else '')
+            items.append({'@type':'ListItem','position':i,'name':breadcrumb_name(segment),'item':canonical if i==len(parts)+1 else current})
+    return {'@type':'BreadcrumbList','@id':canonical+'#breadcrumb','itemListElement':items}
+
+def structured_graph(path,title,desc,canonical,modified):
+    website={
+        '@type':'WebSite','@id':BASE+'#website','url':BASE,'name':'MLBB Meta Forge','inLanguage':'es',
+        'description':'Herramientas estadísticas y editoriales para explorar el meta de Mobile Legends: Bang Bang.'
+    }
+    webpage={
+        '@type':'WebPage','@id':canonical+'#webpage','url':canonical,'name':title,'description':desc,
+        'inLanguage':'es','isPartOf':{'@id':BASE+'#website'},
+        'about':{'@type':'VideoGame','name':'Mobile Legends: Bang Bang'}
+    }
+    if modified:webpage['dateModified']=modified
+    crumb=breadcrumb_graph(path,canonical)
+    graph=[website,webpage]
+    if crumb:
+        webpage['breadcrumb']={'@id':crumb['@id']}
+        graph.append(crumb)
+    return {'@context':'https://schema.org','@graph':graph}
+
 make_social_card()
-changed=0; indexed=0; noindexed=0
+modified=None
+if LIVE.exists():
+    try:
+        live=json.loads(LIVE.read_text(encoding='utf-8'));modified=live.get('source_updated') or live.get('fetched_at')
+    except Exception:
+        modified=None
+changed=0; indexed=0; noindexed=0; structured=0
 for path in ROOT.rglob('*.html'):
     if '.git' in path.parts: continue
     text=path.read_text(encoding='utf-8')
@@ -90,6 +144,9 @@ for path in ROOT.rglob('*.html'):
            f'<meta name="twitter:description" content="{esc(desc)}">'
            f'<meta name="twitter:image" content="{BASE}assets/social-card.png">'
            f'<meta name="referrer" content="strict-origin-when-cross-origin">')
+    graph=structured_graph(path,title,desc,canonical,modified)
+    jsonld=json.dumps(graph,ensure_ascii=False,separators=(',',':')).replace('</','<\\/')
+    block+=f'<script id="mf-structured-data" type="application/ld+json">{jsonld}</script>'
     text=text.replace('</head>',block+'</head>',1)
-    path.write_text(text,encoding='utf-8');changed+=1;indexed+=1
-print(f'Social metadata injected: pages={changed}; indexable={indexed}; noindex={noindexed}; social_card={CARD.stat().st_size/1024:.1f}KiB')
+    path.write_text(text,encoding='utf-8');changed+=1;indexed+=1;structured+=1
+print(f'Social metadata injected: pages={changed}; indexable={indexed}; noindex={noindexed}; structured={structured}; social_card={CARD.stat().st_size/1024:.1f}KiB')
