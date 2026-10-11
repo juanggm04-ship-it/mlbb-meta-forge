@@ -5,6 +5,7 @@ ROOT=Path('.')
 MANIFEST=ROOT/'data/integrity.json'
 ROOT_FILES=['index.html','privacy.html','terms.html','methodology.html','offline.html','manifest.webmanifest','robots.txt','sitemap.xml','sw.js']
 if Path('404.html').exists(): ROOT_FILES.append('404.html')
+if Path('CNAME').exists(): ROOT_FILES.append('CNAME')
 PUBLIC_DIRS=['assets','data','heroes','stats','roster','explore','trends','compare','my-meta','status','repair']
 errors=[]
 def need(cond,msg):
@@ -47,6 +48,7 @@ need(manifest.get('file_count')==len(expected),f'Integrity file_count mismatch: 
 need(manifest.get('total_bytes')==actual_total,f'Integrity total_bytes mismatch: {manifest.get("total_bytes")} != {actual_total}')
 for rel in ['index.html','explore/index.html','status/index.html','repair/index.html','data/live-meta.json','data/meta-score.json','data/build-info.json','sw.js','assets/social-card.png']:
     need(rel in files,f'Critical integrity entry missing: {rel}')
+if Path('CNAME').exists(): need('CNAME' in files,'Configured custom-domain CNAME missing from integrity manifest')
 status=Path('status/index.html').read_text(encoding='utf-8') if Path('status/index.html').exists() else ''
 need('../data/integrity.json' in status,'Status page does not link to integrity manifest')
 need('../repair/' in status,'Status page does not link to repair utility')
@@ -55,4 +57,4 @@ if errors:
     print('INTEGRITY MANIFEST VALIDATION FAILED')
     for e in errors: print('- '+e)
     sys.exit(1)
-print(f'Integrity validation passed: build={head[:12] if head else "unknown"}; files={len(expected)}; Explorer + repair covered; total={actual_total/1024/1024:.2f}MiB; exact SHA-256 coverage.')
+print(f'Integrity validation passed: build={head[:12] if head else "unknown"}; files={len(expected)}; cname={Path("CNAME").exists()}; Explorer + repair covered; total={actual_total/1024/1024:.2f}MiB; exact SHA-256 coverage.')
