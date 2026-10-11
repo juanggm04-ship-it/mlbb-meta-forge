@@ -14,6 +14,7 @@ def need(cond,msg):
 
 robots=Path('robots.txt')
 sitemap=Path('sitemap.xml')
+cname=Path('CNAME')
 need(robots.exists(),'robots.txt missing')
 need(sitemap.exists(),'sitemap.xml missing')
 if robots.exists():
@@ -24,6 +25,13 @@ if sitemap.exists():
     urls=set(re.findall(r'<loc>(.*?)</loc>',text))
 else:
     urls=set()
+
+if CFG.get('custom_domain'):
+    need(cname.exists(),'Custom domain configured but CNAME file is missing')
+    if cname.exists():
+        need(cname.read_text(encoding='utf-8').strip()==CFG['custom_domain'],'CNAME does not match configured custom domain')
+else:
+    need(not cname.exists(),'CNAME exists while custom_domain is not configured')
 
 pages=[]
 for path in ROOT.rglob('*.html'):
@@ -54,4 +62,4 @@ if errors:
     print('SITE ORIGIN VALIDATION FAILED')
     for e in errors: print('- '+e)
     sys.exit(1)
-print(f'Site origin validation passed: base={BASE}; indexable={len(expected)}; noindex={len(NOINDEX)}; stale_legacy_urls=0.')
+print(f'Site origin validation passed: base={BASE}; custom_domain={CFG.get("custom_domain") or "none"}; cname={cname.exists()}; indexable={len(expected)}; noindex={len(NOINDEX)}; stale_legacy_urls=0.')
