@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "release_id": "2026-10-11-foundation",
+  "title": "Meta Forge Foundation",
+  "published": "2026-10-11",
+  "highlights": [
+    "Roster live de 133 héroes con Meta Score estadístico y navegación comparativa",
+    "Hero Compare, Mi Meta, Watchlist compartible y respaldo local de preferencias",
+    "PWA, SEO social, estado público, integridad SHA-256 y pipeline de despliegue endurecido"
+  ]
+}
