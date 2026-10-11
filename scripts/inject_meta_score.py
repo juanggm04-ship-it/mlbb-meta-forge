@@ -17,7 +17,14 @@ heroes=[h for h in cur.get('heroes',[]) if h.get('name')]
 if len(heroes)<100:
     raise RuntimeError(f'Meta Score requires >=100 heroes, got {len(heroes)}')
 rows=compute_score_rows(heroes, prev.get('heroes',[]))
-OUT.write_text(json.dumps({'version':2,'patch':cur.get('patch'),'formula':FORMULA,'momentum_formula':MOMENTUM_FORMULA,'percentile_method':'average rank for ties','heroes':rows},ensure_ascii=False,indent=2),encoding='utf-8')
+observed_count=sum(1 for r in rows if r.get('momentum_observed'))
+if observed_count==len(rows):
+    momentum_status='observed'
+elif observed_count:
+    momentum_status='partial'
+else:
+    momentum_status='neutral_no_history'
+OUT.write_text(json.dumps({'version':3,'patch':cur.get('patch'),'formula':FORMULA,'momentum_formula':MOMENTUM_FORMULA,'percentile_method':'average rank for ties','momentum_status':momentum_status,'momentum_observed_count':observed_count,'heroes':rows},ensure_ascii=False,indent=2),encoding='utf-8')
 by={r['name']:r for r in rows}
 
 def slug(name):
@@ -27,13 +34,24 @@ def slug(name):
 def top_cards(n=10):
     return ''.join(f'<a class="ms-card" href="../stats/heroes/{slug(r["name"])}/"><span class="ms-rank">#{r["rank"]}</span><span class="ms-name">{html.escape(r["name"])}</span><strong>{r["score"]:.1f}</strong><small>{r["label"]}</small></a>' for r in rows[:n])
 
-CSS='''<style id="meta-score-style">.meta-score-panel{margin:18px 0;padding:20px;border:1px solid #334764;border-radius:22px;background:linear-gradient(145deg,#0a1322,#141225)}.ms-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-end}.ms-head h2{margin:4px 0 0}.ms-head p{max-width:650px;margin:0;color:#8fa0bb;font-size:12px;line-height:1.55}.ms-kicker{font-size:10px;font-weight:900;letter-spacing:.13em;color:#b89cff}.ms-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:14px}.ms-card{display:grid;grid-template-columns:auto 1fr auto;gap:7px;align-items:center;border:1px solid #263954;border-radius:13px;padding:10px;background:#0a1422}.ms-card:hover{border-color:#6f5fa0}.ms-rank{font-size:9px;color:#6f819d;font-weight:900}.ms-name{font-size:12px;font-weight:850;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ms-card strong{color:#c4acff;font-size:13px}.ms-card small{grid-column:2/-1;color:#7689a7;font-size:9px}.ms-formula{margin-top:12px;padding-top:11px;border-top:1px solid #22334c;color:#7588a6;font-size:10px;line-height:1.55}.ms-watch{display:grid;gap:8px;margin-top:12px}.ms-watch-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:9px;align-items:center;padding:10px 11px;border:1px solid #263954;border-radius:12px;background:#0a1422}.ms-watch-row b{font-size:12px}.ms-watch-row span{font-size:11px;color:#8ea0bc}.ms-watch-row strong{font-size:13px;color:#c4acff}@media(max-width:900px){.ms-grid{grid-template-columns:1fr 1fr}.ms-head{align-items:flex-start;flex-direction:column}}@media(max-width:560px){.ms-grid{grid-template-columns:1fr}.ms-watch-row{grid-template-columns:1fr auto}.ms-watch-row span{grid-column:1/-1}}</style>'''
-FORMULA_HTML='<div class="ms-formula"><b>Meta Score estadístico, no tier:</b> 45% percentil WR + 20% percentil pick + 20% percentil ban + 15% percentil momentum. Momentum = 60% ΔWR + 25% Δpick + 15% Δban. Empates usan percentil promedio. No representa probabilidad de victoria.</div>'
+CSS='''<style id="meta-score-style">.meta-score-panel{margin:18px 0;padding:20px;border:1px solid #334764;border-radius:22px;background:linear-gradient(145deg,#0a1322,#141225)}.ms-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-end}.ms-head h2{margin:4px 0 0}.ms-head p{max-width:650px;margin:0;color:#8fa0bb;font-size:12px;line-height:1.55}.ms-kicker{font-size:10px;font-weight:900;letter-spacing:.13em;color:#b89cff}.ms-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:14px}.ms-card{display:grid;grid-template-columns:auto 1fr auto;gap:7px;align-items:center;border:1px solid #263954;border-radius:13px;padding:10px;background:#0a1422}.ms-card:hover{border-color:#6f5fa0}.ms-rank{font-size:9px;color:#6f819d;font-weight:900}.ms-name{font-size:12px;font-weight:850;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ms-card strong{color:#c4acff;font-size:13px}.ms-card small{grid-column:2/-1;color:#7689a7;font-size:9px}.ms-formula{margin-top:12px;padding-top:11px;border-top:1px solid #22334c;color:#7588a6;font-size:10px;line-height:1.55}.ms-momentum-state{display:inline-flex;margin-top:7px;padding:5px 8px;border:1px solid #35465f;border-radius:999px;color:#aab8ce;background:#0e1725;font-weight:800}.ms-watch{display:grid;gap:8px;margin-top:12px}.ms-watch-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:9px;align-items:center;padding:10px 11px;border:1px solid #263954;border-radius:12px;background:#0a1422}.ms-watch-row b{font-size:12px}.ms-watch-row span{font-size:11px;color:#8ea0bc}.ms-watch-row strong{font-size:13px;color:#c4acff}@media(max-width:900px){.ms-grid{grid-template-columns:1fr 1fr}.ms-head{align-items:flex-start;flex-direction:column}}@media(max-width:560px){.ms-grid{grid-template-columns:1fr}.ms-watch-row{grid-template-columns:1fr auto}.ms-watch-row span{grid-column:1/-1}}</style>'''
+
+if momentum_status=='observed':
+    momentum_copy='Momentum observado en los 133 héroes usando el snapshot anterior real.'
+    intro_copy='Resume rendimiento, presencia y movimiento reciente en una escala 0–100.'
+elif momentum_status=='partial':
+    momentum_copy=f'Momentum observado para {observed_count}/{len(rows)} héroes; el resto recibe percentil neutral 50.'
+    intro_copy='Resume rendimiento y presencia; el momentum solo se usa donde existe comparación histórica válida.'
+else:
+    momentum_copy='Momentum neutral: todavía no existe un segundo snapshot real. Todos reciben percentil 50 en este componente.'
+    intro_copy='Resume rendimiento y presencia. El componente de momentum permanece neutral hasta que exista un segundo snapshot real.'
+
+FORMULA_HTML=f'<div class="ms-formula"><b>Meta Score estadístico, no tier:</b> 45% percentil WR + 20% percentil pick + 20% percentil ban + 15% percentil momentum. Momentum = 60% ΔWR + 25% Δpick + 15% Δban. Empates usan percentil promedio. No representa probabilidad de victoria.<br><span class="ms-momentum-state">{html.escape(momentum_copy)}</span></div>'
 
 if not ROSTER.exists(): raise RuntimeError('roster/index.html missing')
 page=ROSTER.read_text(encoding='utf-8')
 if 'id="metaScorePanel"' not in page:
-    section=f'<section id="metaScorePanel" class="meta-score-panel"><div class="ms-head"><div><span class="ms-kicker">META SCORE · LIVE</span><h2>Señal estadística compuesta</h2></div><p>Resume rendimiento, presencia y movimiento reciente en una escala 0–100. Sirve para detectar señal estadística, no para reemplazar el análisis de draft ni el tier editorial.</p></div><div class="ms-grid">{top_cards()}</div>{FORMULA_HTML}</section>'
+    section=f'<section id="metaScorePanel" class="meta-score-panel"><div class="ms-head"><div><span class="ms-kicker">META SCORE · LIVE</span><h2>Señal estadística compuesta</h2></div><p>{html.escape(intro_copy)} Sirve para detectar señal estadística, no para reemplazar el análisis de draft ni el tier editorial.</p></div><div class="ms-grid">{top_cards()}</div>{FORMULA_HTML}</section>'
     page=page.replace('</head>',CSS+'</head>',1)
     marker='<div class="toolbar">'
     if marker not in page: raise RuntimeError('Roster toolbar missing for Meta Score')
@@ -63,4 +81,4 @@ if 'id="myMetaScore"' not in page:
     page=page.replace('</body>',js+'</body>',1)
     MYMETA.write_text(page,encoding='utf-8')
 
-print(f'Injected tie-aware Meta Score for {len(rows)} heroes; top={rows[0]["name"]} {rows[0]["score"]}')
+print(f'Injected tie-aware Meta Score for {len(rows)} heroes; top={rows[0]["name"]} {rows[0]["score"]}; momentum_status={momentum_status}; observed={observed_count}/{len(rows)}')
