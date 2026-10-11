@@ -1,52 +1,56 @@
 {
   "identity_version": 1,
+  "parser_version": 2,
+  "rate_unit": "percentage_points",
   "snapshots": [
     {
-      "updated": "2026-10-06",
+      "updated": "2026-10-05",
+      "source_updated": "2026-10-05T10:57:12.368Z",
+      "freshness_basis": "source",
       "patch": "2.2.16",
-      "fetched_at": "2026-10-06T23:53:54.904879+00:00",
+      "fetched_at": "2026-10-11T02:41:46.765110+00:00",
       "heroes": [
         {
           "key": "aamon",
           "name": "Aamon",
           "wr": 49.58,
           "ban": 2.27,
-          "pick": 65.0
+          "pick": 0.65
         },
         {
           "key": "akai",
           "name": "Akai",
           "wr": 50.33,
           "ban": 1.33,
-          "pick": 34.0
+          "pick": 0.34
         },
         {
           "key": "aldous",
           "name": "Aldous",
           "wr": 50.51,
-          "ban": 59.0,
-          "pick": 44.0
+          "ban": 0.59,
+          "pick": 0.44
         },
         {
           "key": "alice",
           "name": "Alice",
           "wr": 51.18,
           "ban": 5.51,
-          "pick": 82.0
+          "pick": 0.82
         },
         {
           "key": "alpha",
           "name": "Alpha",
           "wr": 48.07,
-          "ban": 70.0,
+          "ban": 0.7,
           "pick": 1.21
         },
         {
           "key": "alucard",
           "name": "Alucard",
           "wr": 46.81,
-          "ban": 35.0,
-          "pick": 72.0
+          "ban": 0.35,
+          "pick": 0.72
         },
         {
           "key": "angela",
@@ -60,21 +64,21 @@
           "name": "Argus",
           "wr": 55.62,
           "ban": 1.37,
-          "pick": 57.0
+          "pick": 0.57
         },
         {
           "key": "arlott",
           "name": "Arlott",
           "wr": 47.57,
-          "ban": 29.0,
-          "pick": 39.0
+          "ban": 0.29,
+          "pick": 0.39
         },
         {
           "key": "atlas",
           "name": "Atlas",
           "wr": 51.79,
           "ban": 11.86,
-          "pick": 95.0
+          "pick": 0.95
         },
         {
           "key": "aulus",
@@ -87,8 +91,8 @@
           "key": "aurora",
           "name": "Aurora",
           "wr": 48.44,
-          "ban": 37.0,
-          "pick": 60.0
+          "ban": 0.37,
+          "pick": 0.6
         },
         {
           "key": "badang",
@@ -101,36 +105,36 @@
           "key": "balmond",
           "name": "Balmond",
           "wr": 46.46,
-          "ban": 41.0,
-          "pick": 65.0
+          "ban": 0.41,
+          "pick": 0.65
         },
         {
           "key": "bane",
           "name": "Bane",
           "wr": 50.87,
-          "ban": 17.0,
-          "pick": 26.0
+          "ban": 0.17,
+          "pick": 0.26
         },
         {
           "key": "barats",
           "name": "Barats",
           "wr": 52.05,
           "ban": 5.03,
-          "pick": 76.0
+          "pick": 0.76
         },
         {
           "key": "baxia",
           "name": "Baxia",
           "wr": 46.99,
-          "ban": 10.0,
-          "pick": 5.0
+          "ban": 0.1,
+          "pick": 0.05
         },
         {
           "key": "beatrix",
           "name": "Beatrix",
           "wr": 51.19,
-          "ban": 43.0,
-          "pick": 71.0
+          "ban": 0.43,
+          "pick": 0.71
         },
         {
           "key": "belerick",
@@ -143,8 +147,8 @@
           "key": "benedetta",
           "name": "Benedetta",
           "wr": 52.46,
-          "ban": 30.0,
-          "pick": 38.0
+          "ban": 0.3,
+          "pick": 0.38
         },
         {
           "key": "brody",
@@ -157,8 +161,8 @@
           "key": "bruno",
           "name": "Bruno",
           "wr": 52.98,
-          "ban": 28.0,
-          "pick": 43.0
+          "ban": 0.28,
+          "pick": 0.43
         },
         {
           "key": "carmilla",
@@ -171,22 +175,22 @@
           "key": "cecilion",
           "name": "Cecilion",
           "wr": 51.0,
-          "ban": 13.0,
-          "pick": 64.0
+          "ban": 0.13,
+          "pick": 0.64
         },
         {
           "key": "change",
           "name": "Chang'e",
           "wr": 47.86,
-          "ban": 34.0,
-          "pick": 72.0
+          "ban": 0.34,
+          "pick": 0.72
         },
         {
           "key": "chip",
           "name": "Chip",
           "wr": 46.84,
-          "ban": 24.0,
-          "pick": 4.0
+          "ban": 0.24,
+          "pick": 0.04
         },
         {
           "key": "chou",
@@ -199,36 +203,36 @@
           "key": "cici",
           "name": "Cici",
           "wr": 48.94,
-          "ban": 89.0,
-          "pick": 45.0
+          "ban": 0.89,
+          "pick": 0.45
         },
         {
           "key": "claude",
           "name": "Claude",
           "wr": 49.09,
-          "ban": 23.0,
-          "pick": 78.0
+          "ban": 0.23,
+          "pick": 0.78
         },
         {
           "key": "clint",
           "name": "Clint",
           "wr": 50.66,
-          "ban": 80.0,
-          "pick": 72.0
+          "ban": 0.8,
+          "pick": 0.72
         },
         {
           "key": "cyclops",
           "name": "Cyclops",
           "wr": 51.05,
-          "ban": 26.0,
-          "pick": 63.0
+          "ban": 0.26,
+          "pick": 0.63
         },
         {
           "key": "diggie",
           "name": "Diggie",
           "wr": 53.34,
           "ban": 3.25,
-          "pick": 18.0
+          "pick": 0.18
         },
         {
           "key": "dyrroth",
@@ -241,22 +245,22 @@
           "key": "edith",
           "name": "Edith",
           "wr": 52.85,
-          "ban": 22.0,
-          "pick": 33.0
+          "ban": 0.22,
+          "pick": 0.33
         },
         {
           "key": "esmeralda",
           "name": "Esmeralda",
           "wr": 47.61,
           "ban": 2.28,
-          "pick": 88.0
+          "pick": 0.88
         },
         {
           "key": "estes",
           "name": "Estes",
           "wr": 53.14,
           "ban": 38.33,
-          "pick": 68.0
+          "pick": 0.68
         },
         {
           "key": "eudora",
@@ -270,14 +274,14 @@
           "name": "Fanny",
           "wr": 41.48,
           "ban": 1.81,
-          "pick": 67.0
+          "pick": 0.67
         },
         {
           "key": "faramis",
           "name": "Faramis",
           "wr": 51.57,
-          "ban": 29.0,
-          "pick": 9.0
+          "ban": 0.29,
+          "pick": 0.09
         },
         {
           "key": "floryn",
@@ -291,42 +295,42 @@
           "name": "Franco",
           "wr": 41.15,
           "ban": 3.24,
-          "pick": 93.0
+          "pick": 0.93
         },
         {
           "key": "fredrinn",
           "name": "Fredrinn",
           "wr": 51.72,
           "ban": 1.84,
-          "pick": 53.0
+          "pick": 0.53
         },
         {
           "key": "freya",
           "name": "Freya",
           "wr": 48.05,
           "ban": 1.47,
-          "pick": 57.0
+          "pick": 0.57
         },
         {
           "key": "gatotkaca",
           "name": "Gatotkaca",
           "wr": 44.69,
-          "ban": 30.0,
-          "pick": 55.0
+          "ban": 0.3,
+          "pick": 0.55
         },
         {
           "key": "gloo",
           "name": "Gloo",
           "wr": 53.77,
           "ban": 39.2,
-          "pick": 76.0
+          "pick": 0.76
         },
         {
           "key": "gord",
           "name": "Gord",
           "wr": 52.75,
-          "ban": 58.0,
-          "pick": 63.0
+          "ban": 0.58,
+          "pick": 0.63
         },
         {
           "key": "granger",
@@ -339,15 +343,15 @@
           "key": "grock",
           "name": "Grock",
           "wr": 46.71,
-          "ban": 69.0,
-          "pick": 34.0
+          "ban": 0.69,
+          "pick": 0.34
         },
         {
           "key": "guinevere",
           "name": "Guinevere",
           "wr": 51.47,
           "ban": 2.62,
-          "pick": 84.0
+          "pick": 0.84
         },
         {
           "key": "gusion",
@@ -368,189 +372,189 @@
           "name": "Hanzo",
           "wr": 49.6,
           "ban": 15.26,
-          "pick": 47.0
+          "pick": 0.47
         },
         {
           "key": "harith",
           "name": "Harith",
           "wr": 46.33,
-          "ban": 5.0,
-          "pick": 15.0
+          "ban": 0.05,
+          "pick": 0.15
         },
         {
           "key": "harley",
           "name": "Harley",
           "wr": 47.67,
           "ban": 3.77,
-          "pick": 77.0
+          "pick": 0.77
         },
         {
           "key": "hayabusa",
           "name": "Hayabusa",
           "wr": 47.94,
           "ban": 2.15,
-          "pick": 99.0
+          "pick": 0.99
         },
         {
           "key": "helcurt",
           "name": "Helcurt",
           "wr": 46.77,
           "ban": 5.64,
-          "pick": 58.0
+          "pick": 0.58
         },
         {
           "key": "hilda",
           "name": "Hilda",
           "wr": 50.46,
           "ban": 7.38,
-          "pick": 57.0
+          "pick": 0.57
         },
         {
           "key": "hirara",
           "name": "Hirara",
           "wr": 53.34,
           "ban": 66.43,
-          "pick": 62.0
+          "pick": 0.62
         },
         {
           "key": "hylos",
           "name": "Hylos",
           "wr": 47.97,
-          "ban": 26.0,
-          "pick": 29.0
+          "ban": 0.26,
+          "pick": 0.29
         },
         {
           "key": "irithel",
           "name": "Irithel",
           "wr": 52.54,
-          "ban": 26.0,
-          "pick": 41.0
+          "ban": 0.26,
+          "pick": 0.41
         },
         {
           "key": "ixia",
           "name": "Ixia",
           "wr": 50.03,
-          "ban": 73.0,
-          "pick": 75.0
+          "ban": 0.73,
+          "pick": 0.75
         },
         {
           "key": "jawhead",
           "name": "Jawhead",
           "wr": 47.19,
-          "ban": 28.0,
-          "pick": 32.0
+          "ban": 0.28,
+          "pick": 0.32
         },
         {
           "key": "johnson",
           "name": "Johnson",
           "wr": 48.18,
           "ban": 1.99,
-          "pick": 78.0
+          "pick": 0.78
         },
         {
           "key": "joy",
           "name": "Joy",
           "wr": 48.59,
-          "ban": 19.0,
-          "pick": 15.0
+          "ban": 0.19,
+          "pick": 0.15
         },
         {
           "key": "julian",
           "name": "Julian",
           "wr": 49.99,
-          "ban": 85.0,
-          "pick": 72.0
+          "ban": 0.85,
+          "pick": 0.72
         },
         {
           "key": "kadita",
           "name": "Kadita",
           "wr": 51.46,
           "ban": 4.24,
-          "pick": 91.0
+          "pick": 0.91
         },
         {
           "key": "kagura",
           "name": "Kagura",
           "wr": 51.91,
           "ban": 1.16,
-          "pick": 72.0
+          "pick": 0.72
         },
         {
           "key": "kaja",
           "name": "Kaja",
           "wr": 49.52,
           "ban": 19.3,
-          "pick": 57.0
+          "pick": 0.57
         },
         {
           "key": "kalea",
           "name": "Kalea",
           "wr": 44.91,
-          "ban": 33.0,
-          "pick": 20.0
+          "ban": 0.33,
+          "pick": 0.2
         },
         {
           "key": "karina",
           "name": "Karina",
           "wr": 47.5,
           "ban": 2.94,
-          "pick": 79.0
+          "pick": 0.79
         },
         {
           "key": "karrie",
           "name": "Karrie",
           "wr": 48.42,
           "ban": 1.02,
-          "pick": 57.0
+          "pick": 0.57
         },
         {
           "key": "khaleed",
           "name": "Khaleed",
           "wr": 50.59,
-          "ban": 8.0,
-          "pick": 12.0
+          "ban": 0.08,
+          "pick": 0.12
         },
         {
           "key": "khufra",
           "name": "Khufra",
           "wr": 54.51,
           "ban": 1.82,
-          "pick": 30.0
+          "pick": 0.3
         },
         {
           "key": "kimmy",
           "name": "Kimmy",
           "wr": 48.39,
-          "ban": 30.0,
-          "pick": 64.0
+          "ban": 0.3,
+          "pick": 0.64
         },
         {
           "key": "lancelot",
           "name": "Lancelot",
           "wr": 42.52,
-          "ban": 43.0,
-          "pick": 54.0
+          "ban": 0.43,
+          "pick": 0.54
         },
         {
           "key": "lapulapu",
           "name": "Lapu-Lapu",
           "wr": 48.62,
-          "ban": 30.0,
-          "pick": 34.0
+          "ban": 0.3,
+          "pick": 0.34
         },
         {
           "key": "layla",
           "name": "Layla",
           "wr": 49.2,
-          "ban": 89.0,
+          "ban": 0.89,
           "pick": 1.1
         },
         {
           "key": "leomord",
           "name": "Leomord",
           "wr": 50.41,
-          "ban": 49.0,
-          "pick": 30.0
+          "ban": 0.49,
+          "pick": 0.3
         },
         {
           "key": "lesley",
@@ -563,78 +567,78 @@
           "key": "ling",
           "name": "Ling",
           "wr": 52.14,
-          "ban": 83.0,
-          "pick": 73.0
+          "ban": 0.83,
+          "pick": 0.73
         },
         {
           "key": "lolita",
           "name": "Lolita",
           "wr": 53.99,
-          "ban": 18.0,
-          "pick": 7.0
+          "ban": 0.18,
+          "pick": 0.07
         },
         {
           "key": "lukas",
           "name": "Lukas",
           "wr": 52.93,
           "ban": 31.21,
-          "pick": 99.0
+          "pick": 0.99
         },
         {
           "key": "lunox",
           "name": "Lunox",
           "wr": 48.61,
-          "ban": 17.0,
-          "pick": 24.0
+          "ban": 0.17,
+          "pick": 0.24
         },
         {
           "key": "luoyi",
           "name": "Luo Yi",
           "wr": 47.86,
-          "ban": 9.0,
-          "pick": 19.0
+          "ban": 0.09,
+          "pick": 0.19
         },
         {
           "key": "lylia",
           "name": "Lylia",
           "wr": 49.57,
-          "ban": 38.0,
-          "pick": 50.0
+          "ban": 0.38,
+          "pick": 0.5
         },
         {
           "key": "marcel",
           "name": "Marcel",
           "wr": 58.06,
           "ban": 32.27,
-          "pick": 27.0
+          "pick": 0.27
         },
         {
           "key": "martis",
           "name": "Martis",
           "wr": 47.3,
-          "ban": 39.0,
-          "pick": 55.0
+          "ban": 0.39,
+          "pick": 0.55
         },
         {
           "key": "masha",
           "name": "Masha",
           "wr": 59.27,
           "ban": 28.95,
-          "pick": 62.0
+          "pick": 0.62
         },
         {
           "key": "mathilda",
           "name": "Mathilda",
           "wr": 45.01,
-          "ban": 17.0,
-          "pick": 14.0
+          "ban": 0.17,
+          "pick": 0.14
         },
         {
           "key": "melissa",
           "name": "Melissa",
           "wr": 48.25,
           "ban": 1.68,
-          "pick": 45.0
+          "pick": 0.45
         },
         {
           "key": "minotaur",
@@ -648,7 +652,7 @@
           "name": "Minsitthar",
           "wr": 51.39,
           "ban": 5.25,
-          "pick": 62.0
+          "pick": 0.62
         },
         {
           "key": "miya",
@@ -661,8 +665,8 @@
           "key": "moskov",
           "name": "Moskov",
           "wr": 50.23,
-          "ban": 28.0,
-          "pick": 93.0
+          "ban": 0.28,
+          "pick": 0.93
         },
         {
           "key": "nana",
@@ -676,21 +680,21 @@
           "name": "Natalia",
           "wr": 50.83,
           "ban": 1.29,
-          "pick": 26.0
+          "pick": 0.26
         },
         {
           "key": "natan",
           "name": "Natan",
           "wr": 51.49,
-          "ban": 14.0,
-          "pick": 30.0
+          "ban": 0.14,
+          "pick": 0.3
         },
         {
           "key": "nolan",
           "name": "Nolan",
           "wr": 49.06,
           "ban": 2.86,
-          "pick": 100.0
+          "pick": 1.0
         },
         {
           "key": "novaria",
@@ -710,8 +714,8 @@
           "key": "odette",
           "name": "Odette",
           "wr": 49.75,
-          "ban": 40.0,
-          "pick": 64.0
+          "ban": 0.4,
+          "pick": 0.64
         },
         {
           "key": "paquito",
@@ -724,22 +728,22 @@
           "key": "pharsa",
           "name": "Pharsa",
           "wr": 47.27,
-          "ban": 18.0,
-          "pick": 35.0
+          "ban": 0.18,
+          "pick": 0.35
         },
         {
           "key": "phoveus",
           "name": "Phoveus",
           "wr": 48.29,
-          "ban": 54.0,
-          "pick": 25.0
+          "ban": 0.54,
+          "pick": 0.25
         },
         {
           "key": "popolandkupa",
           "name": "Popol and Kupa",
           "wr": 54.29,
-          "ban": 31.0,
-          "pick": 45.0
+          "ban": 0.31,
+          "pick": 0.45
         },
         {
           "key": "rafaela",
@@ -752,22 +756,22 @@
           "key": "roger",
           "name": "Roger",
           "wr": 48.86,
-          "ban": 11.0,
-          "pick": 29.0
+          "ban": 0.11,
+          "pick": 0.29
         },
         {
           "key": "ruby",
           "name": "Ruby",
           "wr": 49.54,
-          "ban": 28.0,
-          "pick": 36.0
+          "ban": 0.28,
+          "pick": 0.36
         },
         {
           "key": "saber",
           "name": "Saber",
           "wr": 49.56,
           "ban": 21.89,
-          "pick": 96.0
+          "pick": 0.96
         },
         {
           "key": "selena",
@@ -781,14 +785,14 @@
           "name": "Silvanna",
           "wr": 51.01,
           "ban": 1.61,
-          "pick": 96.0
+          "pick": 0.96
         },
         {
           "key": "sora",
           "name": "Sora",
           "wr": 49.99,
           "ban": 2.89,
-          "pick": 56.0
+          "pick": 0.56
         },
         {
           "key": "sun",
@@ -801,22 +805,22 @@
           "key": "suyou",
           "name": "Suyou",
           "wr": 49.63,
-          "ban": 95.0,
-          "pick": 77.0
+          "ban": 0.95,
+          "pick": 0.77
         },
         {
           "key": "terizla",
           "name": "Terizla",
           "wr": 50.68,
-          "ban": 18.0,
-          "pick": 33.0
+          "ban": 0.18,
+          "pick": 0.33
         },
         {
           "key": "thamuz",
           "name": "Thamuz",
           "wr": 48.7,
           "ban": 1.63,
-          "pick": 86.0
+          "pick": 0.86
         },
         {
           "key": "tigreal",
@@ -829,29 +833,29 @@
           "key": "uranus",
           "name": "Uranus",
           "wr": 49.07,
-          "ban": 37.0,
-          "pick": 35.0
+          "ban": 0.37,
+          "pick": 0.35
         },
         {
           "key": "vale",
           "name": "Vale",
           "wr": 50.1,
-          "ban": 19.0,
-          "pick": 51.0
+          "ban": 0.19,
+          "pick": 0.51
         },
         {
           "key": "valentina",
           "name": "Valentina",
           "wr": 45.55,
-          "ban": 17.0,
-          "pick": 18.0
+          "ban": 0.17,
+          "pick": 0.18
         },
         {
           "key": "valir",
           "name": "Valir",
           "wr": 53.51,
           "ban": 1.93,
-          "pick": 97.0
+          "pick": 0.97
         },
         {
           "key": "vexana",
@@ -864,29 +868,29 @@
           "key": "wanwan",
           "name": "Wanwan",
           "wr": 48.45,
-          "ban": 11.0,
-          "pick": 14.0
+          "ban": 0.11,
+          "pick": 0.14
         },
         {
           "key": "xavier",
           "name": "Xavier",
           "wr": 49.86,
-          "ban": 11.0,
-          "pick": 51.0
+          "ban": 0.11,
+          "pick": 0.51
         },
         {
           "key": "xborg",
           "name": "X.Borg",
           "wr": 50.0,
           "ban": 1.65,
-          "pick": 54.0
+          "pick": 0.54
         },
         {
           "key": "yin",
           "name": "Yin",
           "wr": 48.75,
           "ban": 1.63,
-          "pick": 48.0
+          "pick": 0.48
         },
         {
           "key": "yisunshin",
@@ -899,15 +903,15 @@
           "key": "yuzhong",
           "name": "Yu Zhong",
           "wr": 49.08,
-          "ban": 73.0,
-          "pick": 58.0
+          "ban": 0.73,
+          "pick": 0.58
         },
         {
           "key": "yve",
           "name": "Yve",
           "wr": 52.26,
-          "ban": 4.0,
-          "pick": 5.0
+          "ban": 0.04,
+          "pick": 0.05
         },
         {
           "key": "zetian",
@@ -920,22 +924,22 @@
           "key": "zhask",
           "name": "Zhask",
           "wr": 51.99,
-          "ban": 36.0,
-          "pick": 34.0
+          "ban": 0.36,
+          "pick": 0.34
         },
         {
           "key": "zhuxin",
           "name": "Zhuxin",
           "wr": 50.17,
-          "ban": 30.0,
-          "pick": 18.0
+          "ban": 0.3,
+          "pick": 0.18
         },
         {
           "key": "zilong",
           "name": "Zilong",
           "wr": 45.47,
-          "ban": 45.0,
-          "pick": 63.0
+          "ban": 0.45,
+          "pick": 0.63
         }
       ]
     }
