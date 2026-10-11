@@ -1,9 +1,20 @@
 {
+  "id": "./",
   "name": "MLBB Meta Forge",
   "short_name": "Meta Forge",
+  "description": "Meta, live stats, Hero Compare, Trends y Draft Coach para MLBB.",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#070a12",
   "theme_color": "#070a12",
-  "icons": [{"src":"assets/icon.svg","sizes":"any","type":"image/svg+xml"}]
+  "lang": "es",
+  "categories": ["games", "utilities"],
+  "icons": [{"src":"assets/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any"}],
+  "shortcuts": [
+    {"name":"Live Roster","short_name":"Roster","url":"./roster/"},
+    {"name":"Hero Compare","short_name":"Compare","url":"./compare/"},
+    {"name":"Trends","short_name":"Trends","url":"./trends/"},
+    {"name":"Mi Meta","short_name":"Mi Meta","url":"./my-meta/"}
+  ]
 }
