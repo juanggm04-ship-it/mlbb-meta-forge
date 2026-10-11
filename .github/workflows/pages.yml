@@ -129,6 +129,8 @@ jobs:
         run: python scripts/inject_data_provenance.py
       - name: Build PWA offline shell
         run: python scripts/build_pwa.py
+      - name: Add SEO and social metadata
+        run: python scripts/inject_social_meta.py
       - name: Enhance site-wide accessibility
         run: python scripts/enhance_accessibility.py
       - name: Validate Hero Compare
@@ -147,6 +149,8 @@ jobs:
         run: python scripts/validate_live_data_contract.py
       - name: Validate PWA offline shell
         run: python scripts/validate_pwa.py
+      - name: Validate SEO and social metadata
+        run: python scripts/validate_social_meta.py
       - name: Validate site-wide accessibility
         run: python scripts/validate_accessibility.py
       - name: Validate internal navigation links
