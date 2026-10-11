@@ -1,17 +1,16 @@
 from pathlib import Path
 import re, struct, sys, json
+from site_config import load_site_config, canonical_for
 
-BASE='https://juanggm04-ship-it.github.io/mlbb-meta-forge/'
+CFG=load_site_config()
+BASE=CFG['base_url']
 CARD=Path('assets/social-card.png')
-NOINDEX_PATHS={'offline.html','404.html','repair/index.html'}
+NOINDEX_PATHS=set(CFG['noindex_paths'])
 errors=[]
 def need(cond,msg):
     if not cond: errors.append(msg)
 def expected_url(p):
-    rel=p.as_posix()
-    if rel=='index.html': return BASE
-    if rel.endswith('/index.html'): return BASE+rel[:-10]
-    return BASE+rel
+    return canonical_for(p,BASE)
 need(CARD.exists(),'Social preview card missing')
 if CARD.exists():
     data=CARD.read_bytes()
@@ -20,7 +19,7 @@ if CARD.exists():
         w,h=struct.unpack('>II',data[16:24]);need((w,h)==(1200,630),f'Social card dimensions are {w}x{h}, expected 1200x630')
     need(CARD.stat().st_size<=500*1024,f'Social card exceeds 500 KiB: {CARD.stat().st_size/1024:.1f} KiB')
 
-pages=[p for p in Path('.').rglob('*.html') if '.git' not in p.parts]
+pages=[p for p in Path('.').rglob('*.html') if '.git' not in p.parts and '_site' not in p.parts]
 public=[];structured_ok=0;breadcrumb_ok=0;canonical_urls=set()
 for p in pages:
     text=p.read_text(encoding='utf-8');rel=p.as_posix()
@@ -56,6 +55,9 @@ for p in pages:
             need(payload.get('@context')=='https://schema.org',f'Wrong JSON-LD context on {p}')
             need(len(website)==1,f'Expected one WebSite node on {p}')
             need(len(webpage)==1,f'Expected one WebPage node on {p}')
+            if website:
+                need(website[0].get('url')==BASE,f'JSON-LD WebSite URL mismatch on {p}')
+                need(website[0].get('name')==CFG['site_name'],f'JSON-LD site name mismatch on {p}')
             if webpage:
                 need(webpage[0].get('url')==expected,f'JSON-LD WebPage URL mismatch on {p}')
                 need(webpage[0].get('isPartOf',{}).get('@id')==BASE+'#website',f'JSON-LD site relation missing on {p}')
@@ -85,10 +87,11 @@ need(sitemap.exists(),'sitemap.xml missing')
 if sitemap.exists():
     sitemap_urls=set(re.findall(r'<loc>(.*?)</loc>',sitemap.read_text(encoding='utf-8')))
     need(sitemap_urls==canonical_urls,f'Sitemap/canonical mismatch: sitemap={len(sitemap_urls)}, indexable={len(canonical_urls)}, missing={sorted(canonical_urls-sitemap_urls)[:3]}, extra={sorted(sitemap_urls-canonical_urls)[:3]}')
-    need(BASE+'repair/' not in sitemap_urls,'Repair utility must not appear in sitemap')
+    for rel in NOINDEX_PATHS:
+        need(canonical_for(rel,BASE) not in sitemap_urls,f'Noindex path must not appear in sitemap: {rel}')
 
 if errors:
     print('SOCIAL META VALIDATION FAILED')
     for e in errors: print('- '+e)
     sys.exit(1)
-print(f'Social metadata validation passed: public_pages={len(public)}; structured={structured_ok}; breadcrumbs={breadcrumb_ok}; live_hero_coverage={covered}/133; sitemap_exact={len(canonical_urls)}; repair_noindex=true; exact canonical/og:url paths, schema.org graph and 1200x630 social card are consistent.')
+print(f'Social metadata validation passed: base={BASE}; public_pages={len(public)}; structured={structured_ok}; breadcrumbs={breadcrumb_ok}; live_hero_coverage={covered}/133; sitemap_exact={len(canonical_urls)}; noindex={len(NOINDEX)}; exact canonical/og:url paths, schema.org graph and 1200x630 social card are consistent.')
