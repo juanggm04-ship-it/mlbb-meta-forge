@@ -50,13 +50,29 @@ page=page.replace('<div class="status"><i></i> Snapshot verificado · S42</div>'
 page=page.replace('<meta name="description" content="MLBB Meta Forge: snapshot editorial de héroes meta, alineaciones y consejos de draft para Mobile Legends: Bang Bang.">','<meta name="description" content="Explora 133 héroes de MLBB, compara estadísticas y prepara tu draft. Meta Explorer, seguimiento personal y análisis editorial con fuente y fecha visibles.">')
 HOME.write_text(page,encoding='utf-8')
 
-# Reuse a small cached stylesheet and keep search in the navigation flow.
+# Reuse cached stylesheets, add page identity for targeted responsive behavior and keep search in the navigation flow.
 paths=[HOME,Path('roster/index.html'),Path('explore/index.html'),Path('trends/index.html'),Path('compare/index.html'),Path('my-meta/index.html'),Path('methodology.html')]+sorted(Path('stats/heroes').glob('*/index.html'))
+page_keys={
+    Path('index.html'):'home',
+    Path('roster/index.html'):'roster',
+    Path('explore/index.html'):'explorer',
+    Path('trends/index.html'):'trends',
+    Path('compare/index.html'):'compare',
+    Path('my-meta/index.html'):'my-meta',
+    Path('methodology.html'):'methodology',
+}
 for path in paths:
     text=path.read_text(encoding='utf-8')
     href=os.path.relpath('assets/product-design.css',path.parent).replace(os.sep,'/')
-    text=re.sub(r'<body\b', '<body data-mf-design="2"',text,count=1)
-    text=text.replace('</head>',f'<link rel="stylesheet" href="{href}" id="mf-product-design"></head>',1)
+    ux_href=os.path.relpath('assets/ux-refinements.css',path.parent).replace(os.sep,'/')
+    page_key=page_keys.get(path,'hero')
+    text=re.sub(r'<body\b', f'<body data-mf-design="2" data-mf-page="{page_key}"',text,count=1)
+    text=text.replace('</head>',f'<link rel="stylesheet" href="{href}" id="mf-product-design"><link rel="stylesheet" href="{ux_href}" id="mf-ux-refinements"></head>',1)
+    if path==Path('explore/index.html') and 'id="explorerMobileHint"' not in text:
+        marker='<div id="exploreDetail"'
+        hint='<p id="explorerMobileHint" class="explorer-mobile-hint">En pantallas pequeñas, desliza el mapa horizontalmente para separar mejor los puntos.</p>'
+        if marker not in text:raise RuntimeError('Explorer detail marker missing for mobile hint')
+        text=text.replace(marker,hint+marker,1)
     match=re.search(r'<button\b[^>]*class="ghs-launch"[^>]*>.*?</button>',text,re.S)
     if match:
         launcher=match.group();text=text[:match.start()]+text[match.end():]
@@ -67,4 +83,4 @@ for path in paths:
             _,end=element_range(text,'nav','<nav id="productShellNav"')
             text=text[:end-6]+launcher+text[end-6:]
     path.write_text(text,encoding='utf-8')
-print(f'Product design refined: {len(paths)} pages; canonical snapshot leaders; responsive directory; optional profile; secondary panels grouped')
+print(f'Product design refined: {len(paths)} pages; canonical snapshot leaders; responsive directory; page-aware UX layer; optional profile; secondary panels grouped')
