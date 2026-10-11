@@ -3,6 +3,7 @@ from pathlib import Path
 TARGETS={
     Path('index.html'):'./',
     Path('roster/index.html'):'../',
+    Path('explore/index.html'):'../',
     Path('trends/index.html'):'../',
     Path('compare/index.html'):'../',
     Path('my-meta/index.html'):'../',
@@ -61,4 +62,4 @@ new='La web puede usar almacenamiento local del navegador para funciones como Wa
 if old in p:p=p.replace(old,new,1)
 elif 'estado de novedades que ya marcaste como vistas' not in p:raise RuntimeError('Privacy local-storage disclosure anchor missing')
 privacy.write_text(p,encoding='utf-8')
-print(f'Update beacon injected: surfaces={changed}/5; key=mf_seen_updates_v1; compares=release_id/source_updated/patch; fetched_at_ignored=true; local_only=true')
+print(f'Update beacon injected: surfaces={changed}/{len(TARGETS)}; key=mf_seen_updates_v1; compares=release_id/source_updated/patch; fetched_at_ignored=true; local_only=true')
