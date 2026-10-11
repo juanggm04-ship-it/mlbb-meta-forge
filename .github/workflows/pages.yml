@@ -107,6 +107,8 @@ jobs:
         run: python scripts/validate_compare.py
       - name: Validate shared hero identity
         run: python scripts/validate_hero_identity.py
+      - name: Validate live data contract
+        run: python scripts/validate_live_data_contract.py
       - name: Validate editorial catalog
         run: python scripts/validate_editorial_catalog.py
       - name: Validate live onboarding
