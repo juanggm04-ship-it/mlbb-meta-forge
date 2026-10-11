@@ -60,16 +60,14 @@ for page in ROOT.glob('*/index.html'):
         history='<div class="hero-ms-history"><span class="hero-ms-chip">Historial insuficiente para calcular evolución</span></div>'
 
     if r.get('momentum_observed'):
-        momentum_label='Momentum'
         momentum_help=f"Peso 15%. Percentil de la señal compuesta observada; señal bruta {r.get('momentum_raw',0):+.3f}."
         momentum_note='Momentum observado contra el snapshot anterior.'
     else:
         neutral_count+=1
-        momentum_label='Momentum · neutral'
         momentum_help='Peso 15%. Percentil neutral 50 porque todavía no existe una comparación histórica válida para este héroe.'
         momentum_note='Momentum aún no observado; el 50.º percentil es neutral y no significa “sin cambio”.'
 
-    section=f'''<section id="heroMetaScore" class="hero-ms" aria-labelledby="heroMetaScoreTitle"><div class="hero-ms-head"><div><span class="hero-ms-kicker">META SCORE · ESTADÍSTICO</span><h2 id="heroMetaScoreTitle">¿Por qué {html.escape(name)} tiene {r['score']:.1f}?</h2><p>Desglose relativo frente al roster live. Cada barra es un percentil, no el porcentaje bruto de la métrica.</p></div><div class="hero-ms-score"><strong>{r['score']:.1f}</strong><span>#{r['rank']} de {len(rows)} · {html.escape(r.get('label',''))}</span></div></div><div class="hero-ms-bars">{metric('Win rate',r.get('wr_pct'),'Peso 45% del Meta Score. Percentil de WR dentro del roster.')}{metric('Pick rate',r.get('pick_pct'),'Peso 20%. Señal de presencia, no fuerza por sí sola.')}{metric('Ban rate',r.get('ban_pct'),'Peso 20%. Señal de prioridad o rechazo, no fuerza por sí sola.')}{metric(momentum_label,r.get('momentum_pct'),momentum_help)}</div>{history}<div class="hero-ms-note"><b>Fórmula:</b> 45% percentil WR + 20% percentil pick + 20% percentil ban + 15% percentil momentum. Momentum = 60% ΔWR + 25% Δpick + 15% Δban. <span class="{'hero-ms-neutral' if not r.get('momentum_observed') else ''}">{html.escape(momentum_note)}</span> El Meta Score no es tier, counter score ni probabilidad de victoria.</div></section>'''
+    section=f'''<section id="heroMetaScore" class="hero-ms" aria-labelledby="heroMetaScoreTitle"><div class="hero-ms-head"><div><span class="hero-ms-kicker">META SCORE · ESTADÍSTICO</span><h2 id="heroMetaScoreTitle">¿Por qué {html.escape(name)} tiene {r['score']:.1f}?</h2><p>Desglose relativo frente al roster live. Cada barra es un percentil, no el porcentaje bruto de la métrica.</p></div><div class="hero-ms-score"><strong>{r['score']:.1f}</strong><span>#{r['rank']} de {len(rows)} · {html.escape(r.get('label',''))}</span></div></div><div class="hero-ms-bars">{metric('Win rate',r.get('wr_pct'),'Peso 45% del Meta Score. Percentil de WR dentro del roster.')}{metric('Pick rate',r.get('pick_pct'),'Peso 20%. Señal de presencia, no fuerza por sí sola.')}{metric('Ban rate',r.get('ban_pct'),'Peso 20%. Señal de prioridad o rechazo, no fuerza por sí sola.')}{metric('Momentum' if r.get('momentum_observed') else 'Momentum · neutral',r.get('momentum_pct'),momentum_help)}</div>{history}<div class="hero-ms-note"><b>Fórmula:</b> 45% percentil WR + 20% percentil pick + 20% percentil ban + 15% percentil momentum. Momentum = 60% ΔWR + 25% Δpick + 15% Δban. <span class="{'hero-ms-neutral' if not r.get('momentum_observed') else ''}">{html.escape(momentum_note)}</span> El Meta Score no es tier, counter score ni probabilidad de victoria.</div></section>'''
     text=text.replace('</head>',CSS+'</head>',1)
     marker='<section class="panel"><h2>Procedencia</h2>'
     if marker not in text:
