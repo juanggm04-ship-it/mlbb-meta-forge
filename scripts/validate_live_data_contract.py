@@ -3,6 +3,8 @@ import json,datetime,sys
 from hero_identity import hero_key,index_by_hero_key
 
 errors=[]
+LIVE_HERO_FIELDS={'key','name','wr','ban','pick'}
+
 def need(cond,msg):
     if not cond: errors.append(msg)
 
@@ -15,8 +17,10 @@ def parse_iso(value,label):
 
 live_path=Path('data/live-meta.json')
 history_path=Path('data/meta-history.json')
+sync_path=Path('scripts/sync_public_meta.py')
 need(live_path.exists(),'live-meta.json missing')
 need(history_path.exists(),'meta-history.json missing')
+need(sync_path.exists(),'sync_public_meta.py missing')
 
 live={}
 if live_path.exists():
@@ -44,6 +48,10 @@ if live:
     picks=[]; bans=[]
     for h in heroes:
         name=h.get('name')
+        fields=set(h)
+        need(fields==LIVE_HERO_FIELDS,f'Live hero row for {name} must be stats-only {sorted(LIVE_HERO_FIELDS)}, found {sorted(fields)}')
+        need('tier' not in h,f'Provider tier leaked into live hero row for {name}')
+        need('date' not in h,f'Per-hero source date leaked into live hero row for {name}; use top-level source_updated')
         need(h.get('key')==hero_key(name),f'Hero key mismatch for {name}')
         wr=h.get('wr');ban=h.get('ban');pick=h.get('pick')
         need(isinstance(wr,(int,float)) and 30<=wr<=80,f'Invalid WR for {name}: {wr}')
@@ -70,11 +78,18 @@ if history_path.exists():
             hs=snap.get('heroes',[])
             need(len(hs)==133,f'History snapshot {i} has {len(hs)} heroes instead of 133')
             for h in hs:
+                need(set(h)==LIVE_HERO_FIELDS,f'History snapshot {i} row for {h.get("name")} is not stats-only: {sorted(h)}')
                 need(h.get('key')==hero_key(h.get('name')),f'History key mismatch for {h.get("name")}')
                 p=h.get('pick')
                 need(isinstance(p,(int,float)) and 0<=p<=20,f'History pick-rate scale invalid for {h.get("name")}: {p}')
     except Exception as e:
         errors.append(f'Cannot validate meta-history.json: {e}')
+
+if sync_path.exists():
+    src=sync_path.read_text(encoding='utf-8')
+    need("LIVE_HERO_FIELDS=('key','name','wr','ban','pick')" in src,'Sync does not pin the stats-only live hero schema')
+    need("'tier':['tier','rank_tier']" not in src,'Sync still parses provider tier into the live contract')
+    need("'tier':" not in src,'Sync still writes provider tier')
 
 for page in ['index.html','roster/index.html','trends/index.html','my-meta/index.html']:
     p=Path(page)
@@ -89,4 +104,4 @@ if errors:
     print('LIVE DATA CONTRACT VALIDATION FAILED')
     for e in errors: print('- '+e)
     sys.exit(1)
-print('Live data contract validation passed: parser v2, percentage-point rates, 133 heroes, source measurement timestamp, corrected history and visible provenance.')
+print('Live data contract validation passed: stats-only hero rows, no provider tier leakage, parser v2 percentage-point rates, 133 heroes, stable history and visible provenance.')
