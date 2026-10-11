@@ -60,3 +60,7 @@ for path in ROOT.rglob('*.html'):
         text=text.replace('</body>',banner+install+runtime+'</body>',1)
     path.write_text(text,encoding='utf-8');count+=1
 print(f'PWA shell built: build={build_sha[:12]}; version={version}; cache={cache_name}; html_pages={count}; core={len(core)}; explorer_offline=true; png_icons=192/512; navigation_query_cache=false; product_release_offline=true')
+
+# Generate the repair utility only after normal pages received their PWA runtime.
+# This intentionally leaves repair/index.html outside the service-worker registration shell.
+import generate_cache_repair
