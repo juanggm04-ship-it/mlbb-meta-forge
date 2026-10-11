@@ -5,6 +5,7 @@ ROOT=Path('.')
 OUT=ROOT/'data/integrity.json'
 ROOT_FILES=['index.html','privacy.html','terms.html','methodology.html','offline.html','manifest.webmanifest','robots.txt','sitemap.xml','sw.js']
 if Path('404.html').exists(): ROOT_FILES.append('404.html')
+if Path('CNAME').exists(): ROOT_FILES.append('CNAME')
 PUBLIC_DIRS=['assets','data','heroes','stats','roster','explore','trends','compare','my-meta','status','repair']
 
 def sha256(path):
@@ -40,4 +41,4 @@ manifest={
     'files':entries,
 }
 OUT.write_text(json.dumps(manifest,ensure_ascii=False,indent=2,sort_keys=True),encoding='utf-8')
-print(f'Integrity manifest generated: build={build_sha[:12]}; files={len(entries)}; bytes={manifest["total_bytes"]}; explorer_covered=true; repair_covered=true; output={OUT}')
+print(f'Integrity manifest generated: build={build_sha[:12]}; files={len(entries)}; bytes={manifest["total_bytes"]}; cname={Path("CNAME").exists()}; explorer_covered=true; repair_covered=true; output={OUT}')
