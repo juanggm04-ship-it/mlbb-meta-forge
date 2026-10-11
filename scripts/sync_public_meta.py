@@ -11,13 +11,13 @@ MAX_POINTS=24
 IDENTITY_VERSION=1
 PARSER_VERSION=2
 RATE_UNIT='percentage_points'
+LIVE_HERO_FIELDS=('key','name','wr','ban','pick')
 
 ALIASES={
     'name':['name','hero_name','hero','title'],
     'wr':['winrate','win_rate','wr'],
     'ban':['banrate','ban_rate','br'],
     'pick':['pickrate','pick_rate','pr'],
-    'tier':['tier','rank_tier'],
     'date':['date','updated_at','updated','snapshot_date','recorded_at'],
     'patch':['patch','version','patch_version']
 }
@@ -103,7 +103,7 @@ def reconcile_rows(rows,current_map,compact=False):
         if compact:
             item.update({'wr':row.get('wr'),'ban':row.get('ban'),'pick':row.get('pick')})
         else:
-            item.update({k:v for k,v in row.items() if k not in ('key','name')})
+            item.update({k:v for k,v in row.items() if k not in ('key','name','tier','date')})
         out.append(item)
     return sorted(out,key=lambda h:h['key'])
 
@@ -163,6 +163,7 @@ def main():
     rows=extract_records(rankings)
     if len(rows)<100:raise RuntimeError(f'Validation failed: only {len(rows)} ranking rows')
     heroes=[]
+    record_dates=[]
     for rec in rows:
         if not isinstance(rec,dict):continue
         name=name_from_record(rec)
@@ -173,16 +174,20 @@ def main():
         except:ban=None
         try:pick=norm_rate(pick_field(rec,ALIASES['pick']))
         except:pick=None
-        tier=pick_field(rec,ALIASES['tier']); date=pick_field(rec,ALIASES['date'])
+        record_date=pick_field(rec,ALIASES['date'])
+        if record_date:record_dates.append(str(record_date))
         if wr is None or not 30<=wr<=80:continue
         if ban is None or not 0<=ban<=100:continue
         # MLBBDex publishes pickRate directly in percentage points; current values are low single digits.
         if pick is None or not 0<=pick<=20:continue
-        heroes.append({'key':hero_key(name),'name':name,'wr':wr,'ban':ban,'pick':pick,'tier':str(tier) if tier else None,'date':str(date) if date else None})
+        heroes.append({'key':hero_key(name),'name':name,'wr':wr,'ban':ban,'pick':pick})
     if len(heroes)<100:raise RuntimeError(f'Validation failed: only {len(heroes)} valid hero records')
     identity=index_by_hero_key(heroes)
     if len(identity)!=len(heroes):
         raise RuntimeError('Normalized hero identity count differs from validated hero count')
+    for h in heroes:
+        if tuple(h.keys())!=LIVE_HERO_FIELDS:
+            raise RuntimeError(f'Live hero row schema drift for {h.get("name")}: {tuple(h.keys())}')
 
     max_pick=max((h['pick'] for h in heroes),default=0)
     if max_pick>20:
@@ -191,8 +196,7 @@ def main():
     patch=latest_patch(patches)
     source_updated=measured_at(rankings)
     if not source_updated:
-        dates=[h['date'] for h in heroes if h.get('date')]
-        source_updated=max(dates) if dates else None
+        source_updated=max(record_dates) if record_dates else None
     fetched_at=datetime.datetime.now(datetime.timezone.utc).isoformat()
     fetched_date=fetched_at[:10]
     updated=(source_updated[:10] if source_updated else fetched_date)
@@ -222,7 +226,7 @@ def main():
     parser_migrated=not old or old.get('parser_version')!=PARSER_VERSION or old.get('rate_unit')!=RATE_UNIT
     semantic_changed=semantic_view(old)!=semantic_view(out)
 
-    # A parser-unit correction is not a meta event. Never create previous/delta history from it.
+    # Schema cleanup (e.g. removing provider tier) is not a meta event because semantic_view is stats-only.
     if old and semantic_changed and not parser_migrated:
         write_previous(old,identity)
     elif parser_migrated and PREV.exists():
@@ -241,6 +245,6 @@ def main():
         elif history_migrated:
             write_history(history)
     points=len(history.get('snapshots',[]))
-    print(f'Wrote {len(heroes)} validated heroes; patch={patch}; source_updated={source_updated}; freshness={freshness_basis}; parser_migrated={parser_migrated}; semantic_changed={semantic_changed}; history_migrated={history_migrated}; previous={PREV.exists()}; history_points={points}; max_pick={max_pick:.2f}; identity_keys={len(identity)}')
+    print(f'Wrote {len(heroes)} stats-only hero rows; fields={LIVE_HERO_FIELDS}; patch={patch}; source_updated={source_updated}; freshness={freshness_basis}; parser_migrated={parser_migrated}; semantic_changed={semantic_changed}; history_migrated={history_migrated}; previous={PREV.exists()}; history_points={points}; max_pick={max_pick:.2f}; identity_keys={len(identity)}')
 
 if __name__=='__main__':main()
