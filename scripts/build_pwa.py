@@ -52,7 +52,7 @@ for path in ROOT.rglob('*.html'):
     if path.name=='offline.html' or '.git' in path.parts or '_site' in path.parts:continue
     text=path.read_text(encoding='utf-8');prefix=prefix_for(path)
     if 'rel="manifest"' not in text:text=text.replace('</head>',f'<link rel="manifest" href="{prefix}manifest.webmanifest">'+reduced+pwa_css+'</head>',1)
-    elif 'id="mf-reduced-motion"' not in text:text.replace('</head>',reduced+pwa_css+'</head>',1)
+    elif 'id="mf-reduced-motion"' not in text:text=text.replace('</head>',reduced+pwa_css+'</head>',1)
     if 'id="mf-pwa-runtime"' not in text:
         banner='<div id="mfOfflineStatus" role="status" hidden>Sin conexión · mostrando contenido guardado cuando esté disponible</div>';install=''
         if path==Path('index.html'):install='<button id="installMetaForge" type="button" hidden>Instalar Meta Forge</button>'
