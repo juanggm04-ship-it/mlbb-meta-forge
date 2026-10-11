@@ -89,6 +89,8 @@ jobs:
         run: python scripts/enhance_hero_compare.py
       - name: Add Hero Compare editorial context
         run: python scripts/inject_compare_editorial.py
+      - name: Add direct Hero Compare matchup context
+        run: python scripts/inject_compare_matchup.py
       - name: Add My Meta Compare shortcut
         run: python scripts/inject_my_meta_compare.py
       - name: Add global hero search
