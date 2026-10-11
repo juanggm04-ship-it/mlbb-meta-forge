@@ -5,7 +5,7 @@ ROOT=Path('.')
 OUT=ROOT/'data/integrity.json'
 ROOT_FILES=['index.html','privacy.html','terms.html','methodology.html','offline.html','manifest.webmanifest','robots.txt','sitemap.xml','sw.js']
 if Path('404.html').exists(): ROOT_FILES.append('404.html')
-PUBLIC_DIRS=['assets','data','heroes','stats','roster','trends','compare','my-meta','status']
+PUBLIC_DIRS=['assets','data','heroes','stats','roster','explore','trends','compare','my-meta','status']
 
 def sha256(path):
     h=hashlib.sha256()
@@ -40,4 +40,4 @@ manifest={
     'files':entries,
 }
 OUT.write_text(json.dumps(manifest,ensure_ascii=False,indent=2,sort_keys=True),encoding='utf-8')
-print(f'Integrity manifest generated: build={build_sha[:12]}; files={len(entries)}; bytes={manifest["total_bytes"]}; output={OUT}')
+print(f'Integrity manifest generated: build={build_sha[:12]}; files={len(entries)}; bytes={manifest["total_bytes"]}; explorer_covered=true; output={OUT}')
