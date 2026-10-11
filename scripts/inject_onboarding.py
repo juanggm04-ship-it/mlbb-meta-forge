@@ -43,7 +43,7 @@ document.getElementById('saveOnboarding').onclick=()=>{if(!role){document.queryS
 document.getElementById('skipOnboarding').onclick=()=>{localStorage.setItem(PROFILE,JSON.stringify({skipped:true,updatedAt:Date.now()}));dlg.close()};
 document.getElementById('editProfile')?.addEventListener('click',openProfile);
 renderProfile();
-const initial=currentProfile();if(!initial)setTimeout(openProfile,650);
+document.querySelectorAll('[data-open-profile]').forEach(b=>b.addEventListener('click',openProfile));
 })();
 </script>'''
 html=html.replace('</body>',js+'</body>')

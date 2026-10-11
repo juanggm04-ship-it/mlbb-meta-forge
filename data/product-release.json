@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "release_id": "2026-10-11-explorer-polish",
-  "title": "Explorer: filtros y vistas compartidas",
+  "release_id": "2026-10-11-design",
+  "title": "Una portada más clara",
   "published": "2026-10-11",
   "highlights": [
-    "Búsqueda y filtros sincronizados entre mapa, tabla y contador, con mensajes cuando no hay resultados",
-    "Vistas compartidas que conservan búsqueda, ejes, filtro, héroe seleccionado y pareja A/B",
-    "Selección con teclado sin pérdida de foco, escalas numéricas y eliminación individual de héroes de la comparación"
+    "Nueva portada con accesos directos y tres señales del snapshot con fecha visible",
+    "Herramientas visibles en móvil, texto más legible y búsqueda integrada en la navegación",
+    "Personalización opcional y paneles secundarios agrupados para navegar con menos interrupciones"
   ]
 }

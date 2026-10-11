@@ -141,6 +141,8 @@ jobs:
         run: python scripts/inject_data_provenance.py
       - name: Add real-change update beacon
         run: python scripts/inject_update_beacon.py
+      - name: Refine product design and navigation
+        run: python scripts/refine_product_design.py
       - name: Build PWA offline shell
         run: python scripts/build_pwa.py
       - name: Add SEO and social metadata
@@ -181,6 +183,8 @@ jobs:
         run: python scripts/validate_social_meta.py
       - name: Validate site-wide accessibility
         run: python scripts/validate_accessibility.py
+      - name: Validate product design
+        run: python scripts/validate_product_design.py
       - name: Validate internal navigation links
         run: python scripts/validate_internal_links.py
       - name: Validate public integrity manifest

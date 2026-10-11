@@ -1,0 +1,70 @@
+"""Apply the shared product design after all content generators, before PWA/SEO."""
+from pathlib import Path
+import datetime, html, json, os, re, unicodedata
+
+HOME=Path('index.html')
+page=HOME.read_text(encoding='utf-8')
+if 'id="forgeHero"' in page:
+    raise RuntimeError('Product design must run once on a fresh generated site')
+live=json.loads(Path('data/live-meta.json').read_text())
+heroes=live['heroes']
+editorial=json.loads(Path('data/hero-catalog.json').read_text())['heroes']
+esc=lambda value: html.escape(str(value),quote=True)
+def slug(name):
+    value=''.join(c for c in unicodedata.normalize('NFD',name.lower()) if unicodedata.category(c)!='Mn')
+    return re.sub(r'[^a-z0-9]+','-',value.replace('&','and')).strip('-')
+def element_range(text,tag,marker):
+    start=text.index(marker)
+    depth=0
+    for m in re.finditer(r'</?'+tag+r'\b[^>]*>',text[start:],re.I):
+        depth+=-1 if m.group().startswith('</') else 1
+        if depth==0:return start,start+m.end()
+    raise RuntimeError(f'Unclosed {marker}')
+def pop_element(tag,marker):
+    global page
+    start,end=element_range(page,tag,marker)
+    value=page[start:end];page=page[:start]+page[end:]
+    return value
+health=pop_element('div','<div id="dataHealth"')
+measured=live.get('source_updated')
+if not measured:raise RuntimeError('A source date is required for the homepage snapshot')
+date=datetime.datetime.fromisoformat(measured.replace('Z','+00:00')).strftime('%d/%m/%Y')
+leaders=[]
+for metric,label in [('wr','Mayor win rate'),('ban','Mayor ban rate'),('pick','Mayor pick rate')]:
+    leader=sorted(heroes,key=lambda h:(-h[metric],h['name']))[0]
+    name=esc(leader['name']);initial=esc(leader['name'][:2].upper())
+    leaders.append(f'<a class="forge-leader" data-signal="{metric}" data-hero-key="{esc(leader["key"])}" href="stats/heroes/{slug(leader["name"])}/"><span class="forge-initial" aria-hidden="true">{initial}</span><span><small>{label}</small><b>{name}</b></span><strong>{leader[metric]:.2f}%</strong></a>')
+hero=f'''<header id="forgeHero" class="hero-header"><div class="forge-hero-grid"><div class="forge-intro"><span class="badge">TU MESA DE ANÁLISIS · MLBB</span><h1>Lee el meta.<br><b>Prepara tu partida.</b></h1><p>Explora {len(heroes)} héroes, compara sus estadísticas y prepara tu draft con contexto. Tus herramientas, en un solo lugar.</p><div class="forge-ctas"><a class="forge-cta-main" href="roster/">Explorar héroes <span aria-hidden="true">↗</span></a><a class="forge-cta-alt" href="explore/">Abrir Meta Explorer <span aria-hidden="true">→</span></a></div><button class="forge-profile-action" type="button" data-open-profile>☆ Personalizar mi meta</button></div><aside class="forge-snapshot" aria-labelledby="forgeSnapshotTitle"><div class="forge-snapshot-head"><h2 id="forgeSnapshotTitle">En este snapshot</h2><span>3 SEÑALES</span></div>{''.join(leaders)}<p class="forge-source">Medición del proveedor: <time datetime="{esc(measured)}">{date}</time>.<br>Valores descriptivos; no son recomendaciones de pick.</p></aside></div><div class="forge-metrics"><span><b>{len(heroes)}</b> héroes con estadísticas</span><span><b id="heroCount">{len(editorial)}</b> perfiles editoriales</span><span>Patch <b id="patchKpi">{esc(live.get('patch','—'))}</b></span><span>Proyecto fan independiente</span></div></header>'''
+start,end=element_range(page,'header','<header class="hero-header"')
+page=page[:start]+hero+f'<details id="forgeDataDetails" class="forge-data-details"><summary>Fuente, fecha y estado de los datos</summary>{health}<button id="refresh" type="button">Consultar el snapshot</button></details>'+page[end:]
+# Keep existing runtime IDs while putting secondary panels inside the Meta view.
+sections=[pop_element('section',f'<section id="{key}"') for key in ['personalProfile','watchlistPanel','watchlistPulse','metaChanges','trendSpotlight']]
+start,end=element_range(page,'section','<section id="heroes"')
+extra='<details id="forgeMoreSignals" class="forge-more-signals"><summary>Tu seguimiento y cambios del meta</summary>'+''.join(sections)+'</details>'
+page=page[:end-len('</section>')]+extra+page[end-len('</section>'):]
+# Remove an empty advertising placeholder from the usable content.
+page=re.sub(r'<div class="ad-slot">.*?</div>','',page,flags=re.S)
+page=page.replace('Héroes que están pegando fuerte','El pool editorial, a detalle').replace('RANKED SNAPSHOT','ANÁLISIS EDITORIAL')
+page=page.replace('>Alineaciones</button>','>Draft Lab</button>').replace('>Pro Tips</button>','>Consejos</button>')
+page=page.replace('<div class="status"><i></i> Snapshot verificado · S42</div>','')
+page=page.replace('<meta name="description" content="MLBB Meta Forge: snapshot editorial de héroes meta, alineaciones y consejos de draft para Mobile Legends: Bang Bang.">','<meta name="description" content="Explora 133 héroes de MLBB, compara estadísticas y prepara tu draft. Meta Explorer, seguimiento personal y análisis editorial con fuente y fecha visibles.">')
+HOME.write_text(page,encoding='utf-8')
+
+# Reuse a small cached stylesheet and keep search in the navigation flow.
+paths=[HOME,Path('roster/index.html'),Path('explore/index.html'),Path('trends/index.html'),Path('compare/index.html'),Path('my-meta/index.html'),Path('methodology.html')]+sorted(Path('stats/heroes').glob('*/index.html'))
+for path in paths:
+    text=path.read_text(encoding='utf-8')
+    href=os.path.relpath('assets/product-design.css',path.parent).replace(os.sep,'/')
+    text=re.sub(r'<body\b', '<body data-mf-design="2"',text,count=1)
+    text=text.replace('</head>',f'<link rel="stylesheet" href="{href}" id="mf-product-design"></head>',1)
+    match=re.search(r'<button\b[^>]*class="ghs-launch"[^>]*>.*?</button>',text,re.S)
+    if match:
+        launcher=match.group();text=text[:match.start()]+text[match.end():]
+        if path==HOME:
+            _,end=element_range(text,'div','<div class="topbar"')
+            text=text[:end-6]+launcher+text[end-6:]
+        else:
+            _,end=element_range(text,'nav','<nav id="productShellNav"')
+            text=text[:end-6]+launcher+text[end-6:]
+    path.write_text(text,encoding='utf-8')
+print(f'Product design refined: {len(paths)} pages; canonical snapshot leaders; responsive directory; optional profile; secondary panels grouped')
