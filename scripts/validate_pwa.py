@@ -4,7 +4,7 @@ import json, os, struct, sys
 errors=[]
 def need(cond,msg):
     if not cond: errors.append(msg)
-for p in ['sw.js','offline.html','manifest.webmanifest','privacy.html','assets/icon-192.png','assets/icon-512.png']:
+for p in ['sw.js','offline.html','manifest.webmanifest','privacy.html','assets/icon-192.png','assets/icon-512.png','status/index.html','data/build-info.json']:
     need(Path(p).exists(),f'Missing PWA artifact: {p}')
 manifest={}
 if Path('manifest.webmanifest').exists():
@@ -43,10 +43,12 @@ for token,msg in [
     ("k.startsWith('mf-shell-')&&k!==CACHE",'Old PWA cache cleanup missing'),
     ("'./assets/icon-192.png'",'192 PNG is not precached'),
     ("'./assets/icon-512.png'",'512 PNG is not precached'),
+    ("'./status/'",'Public status page is not precached'),
+    ("'./data/build-info.json'",'Machine-readable build info is not precached'),
 ]: need(token in sw,msg)
 sha=os.getenv('GITHUB_SHA')
 if sha: need(sha[:12] in sw,'Service worker cache is not tied to current GITHUB_SHA')
-core=[Path('index.html'),Path('roster/index.html'),Path('trends/index.html'),Path('compare/index.html'),Path('my-meta/index.html'),Path('methodology.html'),Path('privacy.html'),Path('terms.html')]
+core=[Path('index.html'),Path('roster/index.html'),Path('trends/index.html'),Path('compare/index.html'),Path('my-meta/index.html'),Path('status/index.html'),Path('methodology.html'),Path('privacy.html'),Path('terms.html')]
 for p in core:
     if not p.exists(): errors.append(f'Missing core PWA page: {p}'); continue
     t=p.read_text(encoding='utf-8')
@@ -68,4 +70,4 @@ if errors:
     print('PWA VALIDATION FAILED')
     for e in errors: print('- '+e)
     sys.exit(1)
-print(f'PWA validation passed: PNG icons=192/512, manifest shortcuts=4; live hero coverage={covered}/133; versioned offline shell, local cache disclosure and reduced-motion support present.')
+print(f'PWA validation passed: PNG icons=192/512, status/build-info offline-ready, manifest shortcuts=4; live hero coverage={covered}/133; versioned offline shell and reduced-motion support present.')
