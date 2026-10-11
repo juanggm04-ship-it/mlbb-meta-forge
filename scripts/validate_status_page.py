@@ -62,3 +62,6 @@ if errors:
     for e in errors: print('- '+e)
     sys.exit(1)
 print(f'Status validation passed: build={info.get("build_short")}; release={release.get("release_id")}; live=133; editorial=34; history={info.get("history_points")}; observed={info.get("momentum_observed_heroes")}; ready={info.get("history_ready")}; repair_link=true.')
+
+# Repair is generated after the normal PWA pass and validated alongside status.
+import validate_cache_repair
