@@ -51,4 +51,10 @@ sitemap.append('</urlset>')
 (ROOT/'sitemap.xml').write_text('\n'.join(sitemap)+'\n',encoding='utf-8')
 (ROOT/'robots.txt').write_text(f'User-agent: *\nAllow: /\nSitemap: {BASE}sitemap.xml\n',encoding='utf-8')
 
-print(f'Public origin finalized: base={BASE}; indexable={len(urls)}; rewritten_files={rewritten}; noindex={len(NOINDEX)}')
+cname=ROOT/'CNAME'
+if CFG.get('custom_domain'):
+    cname.write_text(CFG['custom_domain']+'\n',encoding='utf-8')
+elif cname.exists():
+    cname.unlink()
+
+print(f'Public origin finalized: base={BASE}; custom_domain={CFG.get("custom_domain") or "none"}; indexable={len(urls)}; rewritten_files={rewritten}; noindex={len(NOINDEX)}')
