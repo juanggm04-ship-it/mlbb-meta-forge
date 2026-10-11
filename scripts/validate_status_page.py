@@ -65,3 +65,7 @@ print(f'Status validation passed: build={info.get("build_short")}; release={rele
 
 # Repair is generated after the normal PWA pass and validated alongside status.
 import validate_cache_repair
+
+# Ads and analytics remain opt-in. This blocks accidental runtime activation,
+# placeholder publisher IDs, or European ad serving without the configured consent guard.
+import validate_monetization_readiness
