@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "release_id": "2026-10-11-explorer",
-  "title": "Meta Explorer",
+  "release_id": "2026-10-11-explorer-polish",
+  "title": "Explorer: filtros y vistas compartidas",
   "published": "2026-10-11",
   "highlights": [
-    "Nuevo mapa interactivo de los 133 héroes con ejes WR, pick, ban y Meta Score",
-    "Vista compartible por URL, búsqueda, cuadrantes descriptivos y tabla accesible completa",
-    "Explorer integrado en navegación, portada, PWA offline, SEO, beacon de novedades e integridad SHA-256"
+    "Búsqueda y filtros sincronizados entre mapa, tabla y contador, con mensajes cuando no hay resultados",
+    "Vistas compartidas que conservan búsqueda, ejes, filtro, héroe seleccionado y pareja A/B",
+    "Selección con teclado sin pérdida de foco, escalas numéricas y eliminación individual de héroes de la comparación"
   ]
 }
