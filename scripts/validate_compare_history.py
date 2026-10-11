@@ -18,7 +18,7 @@ for token,msg in [
     ("KEY='mf_compare_recent_v1'",'Recent compare localStorage key missing'),
     ('MAX=6','Recent compare history is not capped at six'),
     (".sort((m,n)=>m.localeCompare(n)).join(':::')",'Unordered pair key missing'),
-    ("rows.filter(r=>r&&r.key!==key)",'Recent compare deduplication missing'),
+    ("read().filter(r=>r&&r.key!==key)",'Recent compare deduplication missing'),
     ("rows.unshift({a:x,b:y,key,ts:Date.now()})",'Recent compare orientation/timestamp record missing'),
     ("u.searchParams.set('a',r.a)",'Recent compare A route missing'),
     ("u.searchParams.set('b',r.b)",'Recent compare B route missing'),
