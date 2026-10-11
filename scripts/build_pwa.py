@@ -1,8 +1,14 @@
 from pathlib import Path
-import os, struct, zlib, binascii
+import os, struct, subprocess, zlib, binascii
 
 ROOT=Path('.')
-version=(os.getenv('GITHUB_SHA') or 'dev')[:12]
+def checked_out_sha():
+    try:
+        return subprocess.check_output(['git','rev-parse','HEAD'],text=True,stderr=subprocess.DEVNULL).strip()
+    except Exception:
+        return os.getenv('GITHUB_SHA') or 'dev'
+build_sha=checked_out_sha()
+version=build_sha[:12]
 cache_name=f'mf-shell-{version}'
 
 
@@ -81,4 +87,4 @@ for path in ROOT.rglob('*.html'):
         text=text.replace('</body>',banner+install+runtime+'</body>',1)
     path.write_text(text,encoding='utf-8')
     count+=1
-print(f'PWA shell built: version={version}; cache={cache_name}; html_pages={count}; core={len(core)}; png_icons=192/512; navigation_query_cache=false')
+print(f'PWA shell built: build={build_sha[:12]}; version={version}; cache={cache_name}; html_pages={count}; core={len(core)}; png_icons=192/512; navigation_query_cache=false')
