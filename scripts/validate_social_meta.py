@@ -94,6 +94,6 @@ if errors:
     print('SOCIAL META VALIDATION FAILED')
     for e in errors: print('- '+e)
     sys.exit(1)
-print(f'Social metadata validation passed: base={BASE}; public_pages={len(public)}; structured={structured_ok}; breadcrumbs={breadcrumb_ok}; live_hero_coverage={covered}/133; sitemap_exact={len(canonical_urls)}; noindex={len(NOINDEX)}; exact canonical/og:url paths, schema.org graph and 1200x630 social card are consistent.')
+print(f'Social metadata validation passed: base={BASE}; public_pages={len(public)}; structured={structured_ok}; breadcrumbs={breadcrumb_ok}; live_hero_coverage={covered}/133; sitemap_exact={len(canonical_urls)}; noindex={len(NOINDEX_PATHS)}; exact canonical/og:url paths, schema.org graph and 1200x630 social card are consistent.')
 
 import validate_site_origin
