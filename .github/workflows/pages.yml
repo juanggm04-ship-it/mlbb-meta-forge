@@ -109,6 +109,8 @@ jobs:
         run: python scripts/validate_hero_identity.py
       - name: Validate live data contract
         run: python scripts/validate_live_data_contract.py
+      - name: Validate live roster leaders
+        run: python scripts/validate_live_leaders.py
       - name: Validate Meta Score momentum state
         run: python scripts/validate_meta_score_momentum.py
       - name: Validate editorial catalog
