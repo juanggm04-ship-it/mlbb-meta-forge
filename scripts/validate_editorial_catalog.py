@@ -1,10 +1,15 @@
 from pathlib import Path
-import json,re,sys
+import json,re,sys,unicodedata
 from hero_identity import hero_key,index_by_hero_key
 
 errors=[]
 def need(cond,msg):
     if not cond: errors.append(msg)
+def slug(name):
+    value=''.join(c for c in unicodedata.normalize('NFD',str(name).lower()) if unicodedata.category(c)!='Mn')
+    return re.sub(r'[^a-z0-9]+','-',value.replace('&','and')).strip('-')
+def same_number(a,b):
+    return isinstance(a,(int,float)) and isinstance(b,(int,float)) and round(float(a),2)==round(float(b),2)
 
 cat_path=Path('data/hero-catalog.json')
 core_path=Path('data/editorial-core.json')
@@ -14,6 +19,7 @@ need(cat_path.exists(),'Editorial catalog missing')
 need(core_path.exists(),'Editorial core missing')
 need(live_path.exists(),'Live meta missing')
 need(index_path.exists(),'Homepage missing')
+live_index={}
 
 if cat_path.exists() and core_path.exists():
     cat=json.loads(cat_path.read_text(encoding='utf-8'))
@@ -57,6 +63,12 @@ if cat_path.exists() and core_path.exists():
                 need(h.get('lane')==c['lane'],f'Homepage lane differs from catalog for {c["name"]}')
                 need(h.get('role')==c['role'],f'Homepage role differs from catalog for {c["name"]}')
                 need(h.get('tier')==c['tier'],f'Homepage tier differs from catalog for {c["name"]}')
+                live_h=live_index.get(hero_key(c['name']),{})
+                for metric in ('wr','ban','pick'):
+                    expected=live_h.get(metric)
+                    actual=h.get(metric)
+                    if isinstance(expected,(int,float)):
+                        need(same_number(actual,expected),f'Homepage {metric} drift for {c["name"]}: page={actual}, live={expected}')
 
 for consumer in [Path('scripts/generate_dual_trends.py'),Path('scripts/generate_my_meta.py')]:
     need(consumer.exists(),f'Catalog consumer missing: {consumer}')
@@ -71,6 +83,20 @@ for consumer in [Path('scripts/generate_dual_trends.py'),Path('scripts/generate_
 
 hero_pages=list(Path('heroes').glob('*/index.html')) if Path('heroes').exists() else []
 need(len(hero_pages)==34,f'Expected 34 generated editorial hero pages, found {len(hero_pages)}')
+if cat_path.exists() and live_index:
+    cat=json.loads(cat_path.read_text(encoding='utf-8'))
+    for c in cat.get('heroes',[]):
+        name=c.get('name')
+        live_h=live_index.get(hero_key(name),{})
+        path=Path('heroes')/slug(name)/'index.html'
+        need(path.exists(),f'Editorial hero page missing for {name}')
+        if not path.exists(): continue
+        text=path.read_text(encoding='utf-8')
+        wr=live_h.get('wr');ban=live_h.get('ban')
+        if isinstance(wr,(int,float)):
+            need(f'<b>{wr:.2f}%</b><span>WIN RATE</span>' in text,f'Editorial hero page WR drift for {name}: expected {wr:.2f}%')
+        if isinstance(ban,(int,float)):
+            need(f'<b>{ban:.2f}%</b><span>BAN RATE</span>' in text,f'Editorial hero page ban drift for {name}: expected {ban:.2f}%')
 
 trends=Path('trends/index.html')
 my_meta=Path('my-meta/index.html')
@@ -87,4 +113,4 @@ if errors:
     print('EDITORIAL CATALOG VALIDATION FAILED')
     for e in errors: print('- '+e)
     sys.exit(1)
-print('Editorial catalog validation passed: 34 heroes align across catalog/core/homepage and resolve live aliases through the shared identity module.')
+print('Editorial catalog validation passed: 34 heroes align across catalog/core/homepage, resolve live aliases, and all displayed WR/BAN/PICK values are guarded against live-data drift.')
