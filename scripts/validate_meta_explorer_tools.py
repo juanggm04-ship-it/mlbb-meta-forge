@@ -29,7 +29,7 @@ if PAGE.exists():
         ('pair.length>=2','Pair hard limit of 2 missing'),
         ('pair.includes(current)','Pair duplicate guard missing'),
         ('../compare/?a=${encodeURIComponent(pair[0])}&b=${encodeURIComponent(pair[1])}','Direct A/B Compare route missing'),
-        ('MutationObserver','Explorer redraw synchronization missing'),
+        ("svg.addEventListener('mf:explorer-drawn',syncVisibility)",'Explorer event-driven redraw synchronization missing'),
         ("window.addEventListener('storage'",'Cross-tab Watchlist sync missing'),
     ]: need(token in text,msg)
     runtime=re.search(r'<script id="explorer-power-runtime">(.*?)</script>',text,re.S)
@@ -38,8 +38,9 @@ if PAGE.exists():
         js=runtime.group(1)
         need('localStorage.getItem' in js,'Explorer Watchlist reader missing')
         need('localStorage.setItem' not in js,'Explorer power tools must not mutate Watchlist localStorage')
+        need('MutationObserver' not in js,'Explorer power tools must stay free of MutationObserver loops')
 if errors:
     print('META EXPLORER POWER TOOLS VALIDATION FAILED')
     for e in errors: print('- '+e)
     sys.exit(1)
-print('Meta Explorer power tools validation passed: all/watch/editorial/top20 scopes, canonical Top20, shared read-only Watchlist, max-2 pair selection and direct Hero Compare route.')
+print('Meta Explorer power tools validation passed: all/watch/editorial/top20 scopes, canonical Top20, shared read-only Watchlist, max-2 pair selection, direct Hero Compare route and event-driven redraw sync.')
