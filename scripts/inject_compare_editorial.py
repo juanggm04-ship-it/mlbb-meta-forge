@@ -32,10 +32,10 @@ if script_marker not in html:
     raise RuntimeError('Hero Compare script marker missing')
 html=html.replace(script_marker,js+script_marker,1)
 
-render_marker="history.replaceState(null,'',u)}}"
+render_marker="history.replaceState(null,'',u)}"
 if render_marker not in html:
     raise RuntimeError('Hero Compare render hook missing')
-html=html.replace(render_marker,"history.replaceState(null,'',u);renderEditorial(a,b)}}",1)
+html=html.replace(render_marker,"history.replaceState(null,'',u);renderEditorial(a,b)}",1)
 
 PAGE.write_text(html,encoding='utf-8')
 print(f'Injected optional editorial comparison for {len(profiles)} curated heroes')
