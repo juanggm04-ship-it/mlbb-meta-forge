@@ -24,8 +24,8 @@ if ROSTER.exists():
         ("Ya hay 2 héroes seleccionados. Quita uno antes de elegir otro.",'Third-selection warning missing'),
         ("selected.splice(i,1)",'Selected hero cannot be removed individually'),
         ("selected.length=0",'Clear action does not reset selection'),
-        ("'?a='+encodeURIComponent(selected[0])+'&b='+encodeURIComponent(selected[1])",'Direct two-hero Compare route missing'),
-        ("data.compareSelect",'Selection buttons do not bind to hero identity'),
+        ("go.href='../compare/?a='+encodeURIComponent(selected[0])+'&b='+encodeURIComponent(selected[1])",'Direct two-hero Compare route missing'),
+        ("b.dataset.compareSelect",'Selection buttons do not bind to hero identity'),
         ("new MutationObserver(enhanceCards).observe(grid,{childList:true})",'Dynamic cards are not re-enhanced after Roster renders'),
         ('Esta selección es temporal y no modifica tu Watchlist.','Selection-vs-Watchlist disclosure missing'),
     ]
