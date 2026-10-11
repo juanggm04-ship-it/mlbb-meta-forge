@@ -9,12 +9,13 @@ def read(path):
     return p.read_text(encoding='utf-8') if p.exists() else ''
 
 html=read('index.html')
-required_ids=['homeQuickActions','draftLibrary','turnDraft','saveTurnDraft','postDraftAnalysis','dataHealth','metaChanges','watchlistPanel','watchlistPulse','dataProvenance','globalHeroSearch']
+required_ids=['homeProductHub','draftLibrary','turnDraft','saveTurnDraft','postDraftAnalysis','dataHealth','metaChanges','watchlistPanel','watchlistPulse','dataProvenance','globalHeroSearch']
 for item in required_ids:need(f'id="{item}"' in html,f'Missing homepage module: #{item}')
 need('LIVE STATS' in html and 'EDITORIAL' in html,'Homepage provenance labels missing')
 need('trends/' in html,'Homepage has no link/reference to Trends')
 need('my-meta/' in html,'Homepage has no link/reference to My Meta')
 need('roster/' in html,'Homepage has no link/reference to Live Roster')
+need('compare/' in html,'Homepage has no link/reference to Hero Compare')
 need('stats/heroes/' in html,'Homepage global search has no live-stat route')
 need('rankWr' in html and 'rankBan' in html and 'rankPick' in html,'Watchlist Pulse multidimensional rankings missing')
 need('Entró al Top 10' in html,'Watchlist Pulse Top 10 alerts missing')
@@ -47,7 +48,7 @@ need('id="myMetaScoreHistory"' in my_meta,'My Meta Score history panel missing')
 need('META SCORE HISTORY' in trends,'Trends Meta Score history label missing')
 
 sitemap=read('sitemap.xml')
-need('/trends/' in sitemap,'Sitemap missing /trends/');need('/my-meta/' in sitemap,'Sitemap missing /my-meta/');need('/roster/' in sitemap,'Sitemap missing /roster/')
+need('/trends/' in sitemap,'Sitemap missing /trends/');need('/my-meta/' in sitemap,'Sitemap missing /my-meta/');need('/roster/' in sitemap,'Sitemap missing /roster/');need('/compare/' in sitemap,'Sitemap missing /compare/');need('/methodology.html' in sitemap,'Sitemap missing methodology page')
 
 live=Path('data/live-meta.json');live_count=0
 if live.exists():
@@ -59,7 +60,7 @@ if live.exists():
             wr=h.get('wr');ban=h.get('ban');pick=h.get('pick')
             need(isinstance(wr,(int,float)) and 30<=wr<=80,f'Invalid WR for {h.get("name")}')
             if ban is not None:need(isinstance(ban,(int,float)) and 0<=ban<=100,f'Invalid ban for {h.get("name")}')
-            if pick is not None:need(isinstance(pick,(int,float)) and 0<=pick<=100,f'Invalid pick for {h.get("name")}')
+            if pick is not None:need(isinstance(pick,(int,float)) and 0<=pick<=20,f'Invalid pick for {h.get("name")}')
     except Exception as e:errors.append(f'Cannot validate live-meta.json: {e}')
 
 formula='45% WR percentile + 20% pick percentile + 20% ban percentile + 15% momentum percentile'
@@ -127,4 +128,4 @@ if errors:
     print('BUILD VALIDATION FAILED')
     for e in errors:print(f'- {e}')
     sys.exit(1)
-print(f'Build validation passed: {len(hero_pages)} editorial pages, {len(stat_pages)} live-stat pages with per-hero Meta Score breakdown, tie-aware Meta Score + history, My Meta rankings, multidimensional Watchlist Pulse, full live Watchlist, dual Trends, search and provenance present.')
+print(f'Build validation passed: {len(hero_pages)} editorial pages, {len(stat_pages)} live-stat pages with per-hero Meta Score breakdown, tie-aware Meta Score + history, homepage launchpad, My Meta rankings, multidimensional Watchlist Pulse, full live Watchlist, dual Trends, search and provenance present.')
