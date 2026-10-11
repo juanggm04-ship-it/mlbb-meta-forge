@@ -24,7 +24,8 @@ if len(editorial)<30: raise RuntimeError(f'Editorial pool too small: {len(editor
 EDITORIAL=json.dumps(editorial,ensure_ascii=False,separators=(',',':')).replace('</','<\\\\/')
 """
 new_trends="""from pathlib import Path
-import json,re,unicodedata
+import json
+from hero_identity import hero_key, index_by_hero_key
 
 ROOT=Path('.')
 INDEX=ROOT/'index.html'
@@ -34,22 +35,19 @@ OUT=ROOT/'trends'/'index.html'
 if not INDEX.exists(): raise RuntimeError('index.html not found')
 if not CAT.exists(): raise RuntimeError('data/hero-catalog.json not found')
 if not LIVE.exists(): raise RuntimeError('data/live-meta.json not found')
-def _norm(s):
-    s=str(s or '').lower().replace('&','and')
-    s=''.join(c for c in unicodedata.normalize('NFD',s) if unicodedata.category(c)!='Mn')
-    return re.sub(r'[^a-z0-9]+','',s)
 catalog=json.loads(CAT.read_text(encoding='utf-8'))
 live=json.loads(LIVE.read_text(encoding='utf-8'))
-live_names={_norm(h.get('name')):h.get('name') for h in live.get('heroes',[]) if h.get('name')}
+live_map=index_by_hero_key([h for h in live.get('heroes',[]) if h.get('name')])
 editorial=[]
 matched=0
 for h in catalog.get('heroes',[]):
     if not h.get('name'): continue
-    live_name=live_names.get(_norm(h.get('name')))
+    live_row=live_map.get(hero_key(h.get('name')))
+    live_name=live_row.get('name') if live_row else None
     if live_name: matched+=1
     editorial.append({'name':live_name or h.get('name'),'canonical_name':h.get('name'),'lane':h.get('lane'),'role':h.get('role'),'tier':h.get('tier')})
 if len(editorial)!=34: raise RuntimeError(f'Editorial catalog must contain 34 heroes, found {len(editorial)}')
-if matched!=34: raise RuntimeError(f'Only {matched}/34 editorial heroes matched the live roster by normalized name')
+if matched!=34: raise RuntimeError(f'Only {matched}/34 editorial heroes matched the live roster by shared identity')
 EDITORIAL=json.dumps(editorial,ensure_ascii=False,separators=(',',':')).replace('</','<\\\\/')
 """
 if "CAT=ROOT/'data'/'hero-catalog.json'" not in trends:
@@ -80,7 +78,8 @@ if index.exists():
 EDITORIAL=json.dumps(editorial,ensure_ascii=False,separators=(',',':')).replace('</','<\\\\/')
 """
 new_my_meta="""from pathlib import Path
-import json,re,unicodedata
+import json
+from hero_identity import hero_key, index_by_hero_key
 
 ROOT=Path('.')
 out=ROOT/'my-meta';out.mkdir(exist_ok=True)
@@ -89,25 +88,22 @@ CAT=ROOT/'data'/'hero-catalog.json'
 LIVE=ROOT/'data'/'live-meta.json'
 if not CAT.exists(): raise RuntimeError('data/hero-catalog.json not found')
 if not LIVE.exists(): raise RuntimeError('data/live-meta.json not found')
-def _norm(s):
-    s=str(s or '').lower().replace('&','and')
-    s=''.join(c for c in unicodedata.normalize('NFD',s) if unicodedata.category(c)!='Mn')
-    return re.sub(r'[^a-z0-9]+','',s)
 catalog=json.loads(CAT.read_text(encoding='utf-8'))
 live=json.loads(LIVE.read_text(encoding='utf-8'))
 heroes=catalog.get('heroes',[])
 if len(heroes)!=34: raise RuntimeError(f'Editorial catalog must contain 34 heroes, found {len(heroes)}')
-live_names={_norm(h.get('name')):h.get('name') for h in live.get('heroes',[]) if h.get('name')}
+live_map=index_by_hero_key([h for h in live.get('heroes',[]) if h.get('name')])
 editorial={}
 matched=0
 for h in heroes:
     if not h.get('name'): continue
-    live_name=live_names.get(_norm(h.get('name')))
+    live_row=live_map.get(hero_key(h.get('name')))
+    live_name=live_row.get('name') if live_row else None
     if live_name: matched+=1
     key=live_name or h.get('name')
     editorial[key]={'lane':h.get('lane'),'role':h.get('role'),'tier':h.get('tier'),'canonical_name':h.get('name')}
 if len(editorial)!=34: raise RuntimeError(f'Editorial catalog names must be unique and complete, found {len(editorial)}')
-if matched!=34: raise RuntimeError(f'Only {matched}/34 editorial heroes matched the live roster by normalized name')
+if matched!=34: raise RuntimeError(f'Only {matched}/34 editorial heroes matched the live roster by shared identity')
 EDITORIAL=json.dumps(editorial,ensure_ascii=False,separators=(',',':')).replace('</','<\\\\/')
 """
 if "CAT=ROOT/'data'/'hero-catalog.json'" not in my_meta:
@@ -122,7 +118,9 @@ for p in [TRENDS,MY_META]:
         raise RuntimeError(f'{p} did not switch to shared catalog')
     if "LIVE=ROOT/'data'/'live-meta.json'" not in text:
         raise RuntimeError(f'{p} does not resolve catalog aliases against live roster')
+    if 'from hero_identity import hero_key, index_by_hero_key' not in text:
+        raise RuntimeError(f'{p} does not use shared hero identity')
     if "re.search(r'const DATA=" in text:
         raise RuntimeError(f'{p} still parses homepage DATA for editorial metadata')
 
-print('Refactored Trends and My Meta to consume hero catalog directly with normalized live-name resolution')
+print('Refactored Trends and My Meta to consume catalog + live roster through shared hero identity')
