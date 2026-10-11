@@ -1,5 +1,5 @@
 from pathlib import Path
-import sys
+import re,sys
 PAGE=Path('explore/index.html')
 errors=[]
 def need(cond,msg):
@@ -16,13 +16,18 @@ if PAGE.exists():
         ("c.setAttribute('aria-label','Seleccionar '+t)",'Explorer point accessible label missing'),
         ("e.key==='Enter'||e.key===' '",'Enter/Space point activation missing'),
         ("c.dispatchEvent(new MouseEvent('click',{bubbles:true}))",'Keyboard activation is not routed through point click behavior'),
-        ("svg.addEventListener('mf:explorer-drawn',upgrade)",'Keyboard affordances are not restored after plot redraw'),
         ("xs.value=ys.value;ys.value=x",'Axis swap implementation missing'),
         ("xs.dispatchEvent(new Event('change',{bubbles:true}))",'Axis swap does not redraw plot'),
         ("location.assign(clean)",'Reset-view implementation missing'),
         ('.dot[tabindex="0"]:focus','Visible SVG keyboard focus style missing'),
     ]: need(token in text,msg)
-    need('MutationObserver' not in text,'Explorer accessibility must remain free of MutationObserver loops')
+    runtime=re.search(r'<script id="explorerKeyboardRuntime">(.*?)</script>',text,re.S)
+    need(bool(runtime),'Explorer keyboard runtime block could not be isolated')
+    if runtime:
+        js=runtime.group(1)
+        need('mf:explorer-drawn' in js and 'addEventListener' in js and 'upgrade' in js,'Keyboard affordances are not restored after plot redraw')
+        need('MutationObserver' not in js,'Explorer keyboard runtime must remain free of MutationObserver loops')
+    need('MutationObserver' not in text,'Explorer page must remain free of MutationObserver loops')
 if errors:
     print('META EXPLORER ACCESSIBILITY VALIDATION FAILED')
     for e in errors: print('- '+e)
