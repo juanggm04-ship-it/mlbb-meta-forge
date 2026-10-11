@@ -6,7 +6,7 @@
   "source_updated": "2026-10-05T10:57:12.368Z",
   "freshness_basis": "source",
   "patch": "2.2.16",
-  "fetched_at": "2026-10-11T02:41:46.765110+00:00",
+  "fetched_at": "2026-10-11T02:58:26.371578+00:00",
   "provider": "MLBBDex public API",
   "provider_url": "https://mlbbdex.com/api-doc",
   "source": {
@@ -21,1197 +21,931 @@
       "name": "Aamon",
       "wr": 49.58,
       "ban": 2.27,
-      "pick": 0.65,
-      "tier": "B",
-      "date": null
+      "pick": 0.65
     },
     {
       "key": "akai",
       "name": "Akai",
       "wr": 50.33,
       "ban": 1.33,
-      "pick": 0.34,
-      "tier": "A",
-      "date": null
+      "pick": 0.34
     },
     {
       "key": "aldous",
       "name": "Aldous",
       "wr": 50.51,
       "ban": 0.59,
-      "pick": 0.44,
-      "tier": "A",
-      "date": null
+      "pick": 0.44
     },
     {
       "key": "alice",
       "name": "Alice",
       "wr": 51.18,
       "ban": 5.51,
-      "pick": 0.82,
-      "tier": "A",
-      "date": null
+      "pick": 0.82
     },
     {
       "key": "alpha",
       "name": "Alpha",
       "wr": 48.07,
       "ban": 0.7,
-      "pick": 1.21,
-      "tier": "B",
-      "date": null
+      "pick": 1.21
     },
     {
       "key": "alucard",
       "name": "Alucard",
       "wr": 46.81,
       "ban": 0.35,
-      "pick": 0.72,
-      "tier": "C",
-      "date": null
+      "pick": 0.72
     },
     {
       "key": "angela",
       "name": "Angela",
       "wr": 49.71,
       "ban": 9.22,
-      "pick": 1.79,
-      "tier": "A",
-      "date": null
+      "pick": 1.79
     },
     {
       "key": "argus",
       "name": "Argus",
       "wr": 55.62,
       "ban": 1.37,
-      "pick": 0.57,
-      "tier": "S",
-      "date": null
+      "pick": 0.57
     },
     {
       "key": "arlott",
       "name": "Arlott",
       "wr": 47.57,
       "ban": 0.29,
-      "pick": 0.39,
-      "tier": "C",
-      "date": null
+      "pick": 0.39
     },
     {
       "key": "atlas",
       "name": "Atlas",
       "wr": 51.79,
       "ban": 11.86,
-      "pick": 0.95,
-      "tier": "S",
-      "date": null
+      "pick": 0.95
     },
     {
       "key": "aulus",
       "name": "Aulus",
       "wr": 59.78,
       "ban": 23.27,
-      "pick": 1.07,
-      "tier": "S+",
-      "date": null
+      "pick": 1.07
     },
     {
       "key": "aurora",
       "name": "Aurora",
       "wr": 48.44,
       "ban": 0.37,
-      "pick": 0.6,
-      "tier": "B",
-      "date": null
+      "pick": 0.6
     },
     {
       "key": "badang",
       "name": "Badang",
       "wr": 50.33,
       "ban": 5.93,
-      "pick": 1.52,
-      "tier": "A",
-      "date": null
+      "pick": 1.52
     },
     {
       "key": "balmond",
       "name": "Balmond",
       "wr": 46.46,
       "ban": 0.41,
-      "pick": 0.65,
-      "tier": "C",
-      "date": null
+      "pick": 0.65
     },
     {
       "key": "bane",
       "name": "Bane",
       "wr": 50.87,
       "ban": 0.17,
-      "pick": 0.26,
-      "tier": "A",
-      "date": null
+      "pick": 0.26
     },
     {
       "key": "barats",
       "name": "Barats",
       "wr": 52.05,
       "ban": 5.03,
-      "pick": 0.76,
-      "tier": "S",
-      "date": null
+      "pick": 0.76
     },
     {
       "key": "baxia",
       "name": "Baxia",
       "wr": 46.99,
       "ban": 0.1,
-      "pick": 0.05,
-      "tier": "C",
-      "date": null
+      "pick": 0.05
     },
     {
       "key": "beatrix",
       "name": "Beatrix",
       "wr": 51.19,
       "ban": 0.43,
-      "pick": 0.71,
-      "tier": "A",
-      "date": null
+      "pick": 0.71
     },
     {
       "key": "belerick",
       "name": "Belerick",
       "wr": 52.48,
       "ban": 56.62,
-      "pick": 1.7,
-      "tier": "S+",
-      "date": null
+      "pick": 1.7
     },
     {
       "key": "benedetta",
       "name": "Benedetta",
       "wr": 52.46,
       "ban": 0.3,
-      "pick": 0.38,
-      "tier": "A",
-      "date": null
+      "pick": 0.38
     },
     {
       "key": "brody",
       "name": "Brody",
       "wr": 50.82,
       "ban": 2.52,
-      "pick": 1.04,
-      "tier": "A",
-      "date": null
+      "pick": 1.04
     },
     {
       "key": "bruno",
       "name": "Bruno",
       "wr": 52.98,
       "ban": 0.28,
-      "pick": 0.43,
-      "tier": "S",
-      "date": null
+      "pick": 0.43
     },
     {
       "key": "carmilla",
       "name": "Carmilla",
       "wr": 53.71,
       "ban": 13.01,
-      "pick": 1.15,
-      "tier": "S+",
-      "date": null
+      "pick": 1.15
     },
     {
       "key": "cecilion",
       "name": "Cecilion",
       "wr": 51.0,
       "ban": 0.13,
-      "pick": 0.64,
-      "tier": "A",
-      "date": null
+      "pick": 0.64
     },
     {
       "key": "change",
       "name": "Chang'e",
       "wr": 47.86,
       "ban": 0.34,
-      "pick": 0.72,
-      "tier": "C",
-      "date": null
+      "pick": 0.72
     },
     {
       "key": "chip",
       "name": "Chip",
       "wr": 46.84,
       "ban": 0.24,
-      "pick": 0.04,
-      "tier": "C",
-      "date": null
+      "pick": 0.04
     },
     {
       "key": "chou",
       "name": "Chou",
       "wr": 44.1,
       "ban": 3.46,
-      "pick": 1.28,
-      "tier": "C",
-      "date": null
+      "pick": 1.28
     },
     {
       "key": "cici",
       "name": "Cici",
       "wr": 48.94,
       "ban": 0.89,
-      "pick": 0.45,
-      "tier": "B",
-      "date": null
+      "pick": 0.45
     },
     {
       "key": "claude",
       "name": "Claude",
       "wr": 49.09,
       "ban": 0.23,
-      "pick": 0.78,
-      "tier": "B",
-      "date": null
+      "pick": 0.78
     },
     {
       "key": "clint",
       "name": "Clint",
       "wr": 50.66,
       "ban": 0.8,
-      "pick": 0.72,
-      "tier": "A",
-      "date": null
+      "pick": 0.72
     },
     {
       "key": "cyclops",
       "name": "Cyclops",
       "wr": 51.05,
       "ban": 0.26,
-      "pick": 0.63,
-      "tier": "A",
-      "date": null
+      "pick": 0.63
     },
     {
       "key": "diggie",
       "name": "Diggie",
       "wr": 53.34,
       "ban": 3.25,
-      "pick": 0.18,
-      "tier": "S",
-      "date": null
+      "pick": 0.18
     },
     {
       "key": "dyrroth",
       "name": "Dyrroth",
       "wr": 47.65,
       "ban": 1.36,
-      "pick": 1.67,
-      "tier": "C",
-      "date": null
+      "pick": 1.67
     },
     {
       "key": "edith",
       "name": "Edith",
       "wr": 52.85,
       "ban": 0.22,
-      "pick": 0.33,
-      "tier": "A",
-      "date": null
+      "pick": 0.33
     },
     {
       "key": "esmeralda",
       "name": "Esmeralda",
       "wr": 47.61,
       "ban": 2.28,
-      "pick": 0.88,
-      "tier": "B",
-      "date": null
+      "pick": 0.88
     },
     {
       "key": "estes",
       "name": "Estes",
       "wr": 53.14,
       "ban": 38.33,
-      "pick": 0.68,
-      "tier": "S+",
-      "date": null
+      "pick": 0.68
     },
     {
       "key": "eudora",
       "name": "Eudora",
       "wr": 51.33,
       "ban": 58.64,
-      "pick": 1.94,
-      "tier": "S+",
-      "date": null
+      "pick": 1.94
     },
     {
       "key": "fanny",
       "name": "Fanny",
       "wr": 41.48,
       "ban": 1.81,
-      "pick": 0.67,
-      "tier": "C",
-      "date": null
+      "pick": 0.67
     },
     {
       "key": "faramis",
       "name": "Faramis",
       "wr": 51.57,
       "ban": 0.29,
-      "pick": 0.09,
-      "tier": "A",
-      "date": null
+      "pick": 0.09
     },
     {
       "key": "floryn",
       "name": "Floryn",
       "wr": 54.31,
       "ban": 12.85,
-      "pick": 1.05,
-      "tier": "S+",
-      "date": null
+      "pick": 1.05
     },
     {
       "key": "franco",
       "name": "Franco",
       "wr": 41.15,
       "ban": 3.24,
-      "pick": 0.93,
-      "tier": "C",
-      "date": null
+      "pick": 0.93
     },
     {
       "key": "fredrinn",
       "name": "Fredrinn",
       "wr": 51.72,
       "ban": 1.84,
-      "pick": 0.53,
-      "tier": "A",
-      "date": null
+      "pick": 0.53
     },
     {
       "key": "freya",
       "name": "Freya",
       "wr": 48.05,
       "ban": 1.47,
-      "pick": 0.57,
-      "tier": "B",
-      "date": null
+      "pick": 0.57
     },
     {
       "key": "gatotkaca",
       "name": "Gatotkaca",
       "wr": 44.69,
       "ban": 0.3,
-      "pick": 0.55,
-      "tier": "C",
-      "date": null
+      "pick": 0.55
     },
     {
       "key": "gloo",
       "name": "Gloo",
       "wr": 53.77,
       "ban": 39.2,
-      "pick": 0.76,
-      "tier": "S+",
-      "date": null
+      "pick": 0.76
     },
     {
       "key": "gord",
       "name": "Gord",
       "wr": 52.75,
       "ban": 0.58,
-      "pick": 0.63,
-      "tier": "A",
-      "date": null
+      "pick": 0.63
     },
     {
       "key": "granger",
       "name": "Granger",
       "wr": 42.78,
       "ban": 1.49,
-      "pick": 1.43,
-      "tier": "C",
-      "date": null
+      "pick": 1.43
     },
     {
       "key": "grock",
       "name": "Grock",
       "wr": 46.71,
       "ban": 0.69,
-      "pick": 0.34,
-      "tier": "C",
-      "date": null
+      "pick": 0.34
     },
     {
       "key": "guinevere",
       "name": "Guinevere",
       "wr": 51.47,
       "ban": 2.62,
-      "pick": 0.84,
-      "tier": "A",
-      "date": null
+      "pick": 0.84
     },
     {
       "key": "gusion",
       "name": "Gusion",
       "wr": 48.16,
       "ban": 4.28,
-      "pick": 1.41,
-      "tier": "B",
-      "date": null
+      "pick": 1.41
     },
     {
       "key": "hanabi",
       "name": "Hanabi",
       "wr": 52.14,
       "ban": 5.77,
-      "pick": 2.7,
-      "tier": "S",
-      "date": null
+      "pick": 2.7
     },
     {
       "key": "hanzo",
       "name": "Hanzo",
       "wr": 49.6,
       "ban": 15.26,
-      "pick": 0.47,
-      "tier": "S",
-      "date": null
+      "pick": 0.47
     },
     {
       "key": "harith",
       "name": "Harith",
       "wr": 46.33,
       "ban": 0.05,
-      "pick": 0.15,
-      "tier": "C",
-      "date": null
+      "pick": 0.15
     },
     {
       "key": "harley",
       "name": "Harley",
       "wr": 47.67,
       "ban": 3.77,
-      "pick": 0.77,
-      "tier": "B",
-      "date": null
+      "pick": 0.77
     },
     {
       "key": "hayabusa",
       "name": "Hayabusa",
       "wr": 47.94,
       "ban": 2.15,
-      "pick": 0.99,
-      "tier": "B",
-      "date": null
+      "pick": 0.99
     },
     {
       "key": "helcurt",
       "name": "Helcurt",
       "wr": 46.77,
       "ban": 5.64,
-      "pick": 0.58,
-      "tier": "B",
-      "date": null
+      "pick": 0.58
     },
     {
       "key": "hilda",
       "name": "Hilda",
       "wr": 50.46,
       "ban": 7.38,
-      "pick": 0.57,
-      "tier": "A",
-      "date": null
+      "pick": 0.57
     },
     {
       "key": "hirara",
       "name": "Hirara",
       "wr": 53.34,
       "ban": 66.43,
-      "pick": 0.62,
-      "tier": "S+",
-      "date": null
+      "pick": 0.62
     },
     {
       "key": "hylos",
       "name": "Hylos",
       "wr": 47.97,
       "ban": 0.26,
-      "pick": 0.29,
-      "tier": "B",
-      "date": null
+      "pick": 0.29
     },
     {
       "key": "irithel",
       "name": "Irithel",
       "wr": 52.54,
       "ban": 0.26,
-      "pick": 0.41,
-      "tier": "A",
-      "date": null
+      "pick": 0.41
     },
     {
       "key": "ixia",
       "name": "Ixia",
       "wr": 50.03,
       "ban": 0.73,
-      "pick": 0.75,
-      "tier": "B",
-      "date": null
+      "pick": 0.75
     },
     {
       "key": "jawhead",
       "name": "Jawhead",
       "wr": 47.19,
       "ban": 0.28,
-      "pick": 0.32,
-      "tier": "C",
-      "date": null
+      "pick": 0.32
     },
     {
       "key": "johnson",
       "name": "Johnson",
       "wr": 48.18,
       "ban": 1.99,
-      "pick": 0.78,
-      "tier": "B",
-      "date": null
+      "pick": 0.78
     },
     {
       "key": "joy",
       "name": "Joy",
       "wr": 48.59,
       "ban": 0.19,
-      "pick": 0.15,
-      "tier": "B",
-      "date": null
+      "pick": 0.15
     },
     {
       "key": "julian",
       "name": "Julian",
       "wr": 49.99,
       "ban": 0.85,
-      "pick": 0.72,
-      "tier": "B",
-      "date": null
+      "pick": 0.72
     },
     {
       "key": "kadita",
       "name": "Kadita",
       "wr": 51.46,
       "ban": 4.24,
-      "pick": 0.91,
-      "tier": "A",
-      "date": null
+      "pick": 0.91
     },
     {
       "key": "kagura",
       "name": "Kagura",
       "wr": 51.91,
       "ban": 1.16,
-      "pick": 0.72,
-      "tier": "A",
-      "date": null
+      "pick": 0.72
     },
     {
       "key": "kaja",
       "name": "Kaja",
       "wr": 49.52,
       "ban": 19.3,
-      "pick": 0.57,
-      "tier": "S",
-      "date": null
+      "pick": 0.57
     },
     {
       "key": "kalea",
       "name": "Kalea",
       "wr": 44.91,
       "ban": 0.33,
-      "pick": 0.2,
-      "tier": "C",
-      "date": null
+      "pick": 0.2
     },
     {
       "key": "karina",
       "name": "Karina",
       "wr": 47.5,
       "ban": 2.94,
-      "pick": 0.79,
-      "tier": "B",
-      "date": null
+      "pick": 0.79
     },
     {
       "key": "karrie",
       "name": "Karrie",
       "wr": 48.42,
       "ban": 1.02,
-      "pick": 0.57,
-      "tier": "B",
-      "date": null
+      "pick": 0.57
     },
     {
       "key": "khaleed",
       "name": "Khaleed",
       "wr": 50.59,
       "ban": 0.08,
-      "pick": 0.12,
-      "tier": "A",
-      "date": null
+      "pick": 0.12
     },
     {
       "key": "khufra",
       "name": "Khufra",
       "wr": 54.51,
       "ban": 1.82,
-      "pick": 0.3,
-      "tier": "S",
-      "date": null
+      "pick": 0.3
     },
     {
       "key": "kimmy",
       "name": "Kimmy",
       "wr": 48.39,
       "ban": 0.3,
-      "pick": 0.64,
-      "tier": "B",
-      "date": null
+      "pick": 0.64
     },
     {
       "key": "lancelot",
       "name": "Lancelot",
       "wr": 42.52,
       "ban": 0.43,
-      "pick": 0.54,
-      "tier": "C",
-      "date": null
+      "pick": 0.54
     },
     {
       "key": "lapulapu",
       "name": "Lapu-Lapu",
       "wr": 48.62,
       "ban": 0.3,
-      "pick": 0.34,
-      "tier": "B",
-      "date": null
+      "pick": 0.34
     },
     {
       "key": "layla",
       "name": "Layla",
       "wr": 49.2,
       "ban": 0.89,
-      "pick": 1.1,
-      "tier": "B",
-      "date": null
+      "pick": 1.1
     },
     {
       "key": "leomord",
       "name": "Leomord",
       "wr": 50.41,
       "ban": 0.49,
-      "pick": 0.3,
-      "tier": "A",
-      "date": null
+      "pick": 0.3
     },
     {
       "key": "lesley",
       "name": "Lesley",
       "wr": 48.28,
       "ban": 7.46,
-      "pick": 1.87,
-      "tier": "B",
-      "date": null
+      "pick": 1.87
     },
     {
       "key": "ling",
       "name": "Ling",
       "wr": 52.14,
       "ban": 0.83,
-      "pick": 0.73,
-      "tier": "A",
-      "date": null
+      "pick": 0.73
     },
     {
       "key": "lolita",
       "name": "Lolita",
       "wr": 53.99,
       "ban": 0.18,
-      "pick": 0.07,
-      "tier": "S",
-      "date": null
+      "pick": 0.07
     },
     {
       "key": "lukas",
       "name": "Lukas",
       "wr": 52.93,
       "ban": 31.21,
-      "pick": 0.99,
-      "tier": "S+",
-      "date": null
+      "pick": 0.99
     },
     {
       "key": "lunox",
       "name": "Lunox",
       "wr": 48.61,
       "ban": 0.17,
-      "pick": 0.24,
-      "tier": "B",
-      "date": null
+      "pick": 0.24
     },
     {
       "key": "luoyi",
       "name": "Luo Yi",
       "wr": 47.86,
       "ban": 0.09,
-      "pick": 0.19,
-      "tier": "C",
-      "date": null
+      "pick": 0.19
     },
     {
       "key": "lylia",
       "name": "Lylia",
       "wr": 49.57,
       "ban": 0.38,
-      "pick": 0.5,
-      "tier": "B",
-      "date": null
+      "pick": 0.5
     },
     {
       "key": "marcel",
       "name": "Marcel",
       "wr": 58.06,
       "ban": 32.27,
-      "pick": 0.27,
-      "tier": "S+",
-      "date": null
+      "pick": 0.27
     },
     {
       "key": "martis",
       "name": "Martis",
       "wr": 47.3,
       "ban": 0.39,
-      "pick": 0.55,
-      "tier": "C",
-      "date": null
+      "pick": 0.55
     },
     {
       "key": "masha",
       "name": "Masha",
       "wr": 59.27,
       "ban": 28.95,
-      "pick": 0.62,
-      "tier": "S+",
-      "date": null
+      "pick": 0.62
     },
     {
       "key": "mathilda",
       "name": "Mathilda",
       "wr": 45.01,
       "ban": 0.17,
-      "pick": 0.14,
-      "tier": "C",
-      "date": null
+      "pick": 0.14
     },
     {
       "key": "melissa",
       "name": "Melissa",
       "wr": 48.25,
       "ban": 1.68,
-      "pick": 0.45,
-      "tier": "B",
-      "date": null
+      "pick": 0.45
     },
     {
       "key": "minotaur",
       "name": "Minotaur",
       "wr": 55.03,
       "ban": 7.11,
-      "pick": 1.02,
-      "tier": "S+",
-      "date": null
+      "pick": 1.02
     },
     {
       "key": "minsitthar",
       "name": "Minsitthar",
       "wr": 51.39,
       "ban": 5.25,
-      "pick": 0.62,
-      "tier": "A",
-      "date": null
+      "pick": 0.62
     },
     {
       "key": "miya",
       "name": "Miya",
       "wr": 49.61,
       "ban": 7.85,
-      "pick": 2.83,
-      "tier": "A",
-      "date": null
+      "pick": 2.83
     },
     {
       "key": "moskov",
       "name": "Moskov",
       "wr": 50.23,
       "ban": 0.28,
-      "pick": 0.93,
-      "tier": "B",
-      "date": null
+      "pick": 0.93
     },
     {
       "key": "nana",
       "name": "Nana",
       "wr": 47.35,
       "ban": 3.96,
-      "pick": 2.13,
-      "tier": "B",
-      "date": null
+      "pick": 2.13
     },
     {
       "key": "natalia",
       "name": "Natalia",
       "wr": 50.83,
       "ban": 1.29,
-      "pick": 0.26,
-      "tier": "A",
-      "date": null
+      "pick": 0.26
     },
     {
       "key": "natan",
       "name": "Natan",
       "wr": 51.49,
       "ban": 0.14,
-      "pick": 0.3,
-      "tier": "A",
-      "date": null
+      "pick": 0.3
     },
     {
       "key": "nolan",
       "name": "Nolan",
       "wr": 49.06,
       "ban": 2.86,
-      "pick": 1.0,
-      "tier": "B",
-      "date": null
+      "pick": 1.0
     },
     {
       "key": "novaria",
       "name": "Novaria",
       "wr": 49.71,
       "ban": 4.18,
-      "pick": 1.43,
-      "tier": "A",
-      "date": null
+      "pick": 1.43
     },
     {
       "key": "obsidia",
       "name": "Obsidia",
       "wr": 53.57,
       "ban": 12.07,
-      "pick": 2.06,
-      "tier": "S+",
-      "date": null
+      "pick": 2.06
     },
     {
       "key": "odette",
       "name": "Odette",
       "wr": 49.75,
       "ban": 0.4,
-      "pick": 0.64,
-      "tier": "B",
-      "date": null
+      "pick": 0.64
     },
     {
       "key": "paquito",
       "name": "Paquito",
       "wr": 50.22,
       "ban": 41.68,
-      "pick": 1.65,
-      "tier": "S+",
-      "date": null
+      "pick": 1.65
     },
     {
       "key": "pharsa",
       "name": "Pharsa",
       "wr": 47.27,
       "ban": 0.18,
-      "pick": 0.35,
-      "tier": "C",
-      "date": null
+      "pick": 0.35
     },
     {
       "key": "phoveus",
       "name": "Phoveus",
       "wr": 48.29,
       "ban": 0.54,
-      "pick": 0.25,
-      "tier": "B",
-      "date": null
+      "pick": 0.25
     },
     {
       "key": "popolandkupa",
       "name": "Popol and Kupa",
       "wr": 54.29,
       "ban": 0.31,
-      "pick": 0.45,
-      "tier": "S",
-      "date": null
+      "pick": 0.45
     },
     {
       "key": "rafaela",
       "name": "Rafaela",
       "wr": 59.5,
       "ban": 16.74,
-      "pick": 1.25,
-      "tier": "S+",
-      "date": null
+      "pick": 1.25
     },
     {
       "key": "roger",
       "name": "Roger",
       "wr": 48.86,
       "ban": 0.11,
-      "pick": 0.29,
-      "tier": "B",
-      "date": null
+      "pick": 0.29
     },
     {
       "key": "ruby",
       "name": "Ruby",
       "wr": 49.54,
       "ban": 0.28,
-      "pick": 0.36,
-      "tier": "B",
-      "date": null
+      "pick": 0.36
     },
     {
       "key": "saber",
       "name": "Saber",
       "wr": 49.56,
       "ban": 21.89,
-      "pick": 0.96,
-      "tier": "S",
-      "date": null
+      "pick": 0.96
     },
     {
       "key": "selena",
       "name": "Selena",
       "wr": 48.79,
       "ban": 3.5,
-      "pick": 1.36,
-      "tier": "B",
-      "date": null
+      "pick": 1.36
     },
     {
       "key": "silvanna",
       "name": "Silvanna",
       "wr": 51.01,
       "ban": 1.61,
-      "pick": 0.96,
-      "tier": "A",
-      "date": null
+      "pick": 0.96
     },
     {
       "key": "sora",
       "name": "Sora",
       "wr": 49.99,
       "ban": 2.89,
-      "pick": 0.56,
-      "tier": "A",
-      "date": null
+      "pick": 0.56
     },
     {
       "key": "sun",
       "name": "Sun",
       "wr": 52.3,
       "ban": 20.84,
-      "pick": 1.76,
-      "tier": "S+",
-      "date": null
+      "pick": 1.76
     },
     {
       "key": "suyou",
       "name": "Suyou",
       "wr": 49.63,
       "ban": 0.95,
-      "pick": 0.77,
-      "tier": "B",
-      "date": null
+      "pick": 0.77
     },
     {
       "key": "terizla",
       "name": "Terizla",
       "wr": 50.68,
       "ban": 0.18,
-      "pick": 0.33,
-      "tier": "A",
-      "date": null
+      "pick": 0.33
     },
     {
       "key": "thamuz",
       "name": "Thamuz",
       "wr": 48.7,
       "ban": 1.63,
-      "pick": 0.86,
-      "tier": "B",
-      "date": null
+      "pick": 0.86
     },
     {
       "key": "tigreal",
       "name": "Tigreal",
       "wr": 44.35,
       "ban": 5.66,
-      "pick": 1.89,
-      "tier": "C",
-      "date": null
+      "pick": 1.89
     },
     {
       "key": "uranus",
       "name": "Uranus",
       "wr": 49.07,
       "ban": 0.37,
-      "pick": 0.35,
-      "tier": "B",
-      "date": null
+      "pick": 0.35
     },
     {
       "key": "vale",
       "name": "Vale",
       "wr": 50.1,
       "ban": 0.19,
-      "pick": 0.51,
-      "tier": "B",
-      "date": null
+      "pick": 0.51
     },
     {
       "key": "valentina",
       "name": "Valentina",
       "wr": 45.55,
       "ban": 0.17,
-      "pick": 0.18,
-      "tier": "C",
-      "date": null
+      "pick": 0.18
     },
     {
       "key": "valir",
       "name": "Valir",
       "wr": 53.51,
       "ban": 1.93,
-      "pick": 0.97,
-      "tier": "S",
-      "date": null
+      "pick": 0.97
     },
     {
       "key": "vexana",
       "name": "Vexana",
       "wr": 49.63,
       "ban": 1.13,
-      "pick": 1.54,
-      "tier": "B",
-      "date": null
+      "pick": 1.54
     },
     {
       "key": "wanwan",
       "name": "Wanwan",
       "wr": 48.45,
       "ban": 0.11,
-      "pick": 0.14,
-      "tier": "B",
-      "date": null
+      "pick": 0.14
     },
     {
       "key": "xavier",
       "name": "Xavier",
       "wr": 49.86,
       "ban": 0.11,
-      "pick": 0.51,
-      "tier": "B",
-      "date": null
+      "pick": 0.51
     },
     {
       "key": "xborg",
       "name": "X.Borg",
       "wr": 50.0,
       "ban": 1.65,
-      "pick": 0.54,
-      "tier": "B",
-      "date": null
+      "pick": 0.54
     },
     {
       "key": "yin",
       "name": "Yin",
       "wr": 48.75,
       "ban": 1.63,
-      "pick": 0.48,
-      "tier": "B",
-      "date": null
+      "pick": 0.48
     },
     {
       "key": "yisunshin",
       "name": "Yi Sun-shin",
       "wr": 49.67,
       "ban": 6.98,
-      "pick": 1.31,
-      "tier": "A",
-      "date": null
+      "pick": 1.31
     },
     {
       "key": "yuzhong",
       "name": "Yu Zhong",
       "wr": 49.08,
       "ban": 0.73,
-      "pick": 0.58,
-      "tier": "B",
-      "date": null
+      "pick": 0.58
     },
     {
       "key": "yve",
       "name": "Yve",
       "wr": 52.26,
       "ban": 0.04,
-      "pick": 0.05,
-      "tier": "A",
-      "date": null
+      "pick": 0.05
     },
     {
       "key": "zetian",
       "name": "Zetian",
       "wr": 50.81,
       "ban": 3.89,
-      "pick": 1.54,
-      "tier": "A",
-      "date": null
+      "pick": 1.54
     },
     {
       "key": "zhask",
       "name": "Zhask",
       "wr": 51.99,
       "ban": 0.36,
-      "pick": 0.34,
-      "tier": "A",
-      "date": null
+      "pick": 0.34
     },
     {
       "key": "zhuxin",
       "name": "Zhuxin",
       "wr": 50.17,
       "ban": 0.3,
-      "pick": 0.18,
-      "tier": "B",
-      "date": null
+      "pick": 0.18
     },
     {
       "key": "zilong",
       "name": "Zilong",
       "wr": 45.47,
       "ban": 0.45,
-      "pick": 0.63,
-      "tier": "C",
-      "date": null
+      "pick": 0.63
     }
   ]
 }
