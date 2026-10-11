@@ -14,6 +14,7 @@ key_limits={
     Path('trends/index.html'):750,
     Path('compare/index.html'):550,
     Path('my-meta/index.html'):650,
+    Path('status/index.html'):180,
 }
 for p,limit in key_limits.items():
     need(p.exists(),f'Missing key page: {p}')
@@ -39,6 +40,7 @@ asset_limits={
     Path('data/live-meta.json'):1024,
     Path('data/meta-score.json'):1024,
     Path('data/meta-score-history.json'):1536,
+    Path('data/build-info.json'):64,
     Path('sw.js'):256,
     Path('assets/social-card.png'):500,
 }
@@ -46,7 +48,6 @@ for p,limit in asset_limits.items():
     need(p.exists(),f'Missing performance-budget asset: {p}')
     if p.exists(): need(kb(p)<=limit,f'{p} exceeds {limit} KiB budget: {kb(p):.1f} KiB')
 
-# Catch accidental giant inline payloads/base64 blobs that make HTML expensive to parse.
 for p in html_pages:
     text=p.read_text(encoding='utf-8',errors='ignore')
     need('data:image/png;base64,' not in text and 'data:image/jpeg;base64,' not in text,
@@ -58,5 +59,5 @@ if errors:
     sys.exit(1)
 print('Performance budget passed: '
       + ', '.join(f'{p}={kb(p):.1f}KiB' for p in key_limits if p.exists())
-      + f'; html_pages={len(html_pages)}; total_html={total:.2f}MiB; social_card={kb(Path("assets/social-card.png")):.1f}KiB; '
+      + f'; html_pages={len(html_pages)}; total_html={total:.2f}MiB; social_card={kb(Path("assets/social-card.png")):.1f}KiB; build_info={kb(Path("data/build-info.json")):.1f}KiB; '
       + (f'largest_stat={largest} ({kb(largest):.1f}KiB)' if largest else 'largest_stat=none'))
