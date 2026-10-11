@@ -95,6 +95,8 @@ jobs:
         run: python scripts/inject_meta_score_history.py
       - name: Generate methodology page
         run: python scripts/generate_methodology.py
+      - name: Generate public build status
+        run: python scripts/generate_status_page.py
       - name: Add per-hero Meta Score breakdown
         run: python scripts/inject_hero_meta_score.py
       - name: Generate Hero Compare
@@ -147,6 +149,8 @@ jobs:
         run: python scripts/validate_hero_identity.py
       - name: Validate live data contract
         run: python scripts/validate_live_data_contract.py
+      - name: Validate public build status
+        run: python scripts/validate_status_page.py
       - name: Validate PWA offline shell
         run: python scripts/validate_pwa.py
       - name: Validate SEO and social metadata
