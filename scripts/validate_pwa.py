@@ -4,7 +4,7 @@ import json, struct, subprocess, sys
 errors=[]
 def need(cond,msg):
     if not cond: errors.append(msg)
-for p in ['sw.js','offline.html','manifest.webmanifest','privacy.html','assets/icon-192.png','assets/icon-512.png','status/index.html','data/build-info.json']:
+for p in ['sw.js','offline.html','manifest.webmanifest','privacy.html','assets/icon-192.png','assets/icon-512.png','status/index.html','data/build-info.json','data/product-release.json']:
     need(Path(p).exists(),f'Missing PWA artifact: {p}')
 manifest={}
 if Path('manifest.webmanifest').exists():
@@ -45,6 +45,7 @@ for token,msg in [
     ("'./assets/icon-512.png'",'512 PNG is not precached'),
     ("'./status/'",'Public status page is not precached'),
     ("'./data/build-info.json'",'Machine-readable build info is not precached'),
+    ("'./data/product-release.json'",'Stable product release metadata is not precached'),
     ('function navigationKey(request)','Normalized navigation cache key missing'),
     ("url.search=''",'Navigation cache key does not strip query parameters'),
     ("url.hash=''",'Navigation cache key does not strip fragments'),
@@ -59,9 +60,11 @@ if head:
     need(head[:12] in sw,'Service worker cache is not tied to checked-out git HEAD')
     try:
         build_info=json.loads(Path('data/build-info.json').read_text(encoding='utf-8'))
+        release=json.loads(Path('data/product-release.json').read_text(encoding='utf-8'))
         need(build_info.get('build_sha')==head,'PWA HEAD and build-info.json build_sha are not aligned')
+        need((build_info.get('product_release') or {}).get('release_id')==release.get('release_id'),'PWA build-info and product release are not aligned')
     except Exception as exc:
-        errors.append(f'Cannot compare PWA version with build-info.json: {exc}')
+        errors.append(f'Cannot compare PWA version with build-info/product-release: {exc}')
 core=[Path('index.html'),Path('roster/index.html'),Path('trends/index.html'),Path('compare/index.html'),Path('my-meta/index.html'),Path('status/index.html'),Path('methodology.html'),Path('privacy.html'),Path('terms.html')]
 for p in core:
     if not p.exists(): errors.append(f'Missing core PWA page: {p}'); continue
@@ -84,4 +87,4 @@ if errors:
     print('PWA VALIDATION FAILED')
     for e in errors: print('- '+e)
     sys.exit(1)
-print(f'PWA validation passed: cache tied to git HEAD {head[:12] if head else "unknown"}, build-info aligned, PNG icons=192/512, query-normalized navigation cache, live hero coverage={covered}/133.')
+print(f'PWA validation passed: cache tied to git HEAD {head[:12] if head else "unknown"}, build-info/release aligned, product release offline-ready, query-normalized navigation cache, live hero coverage={covered}/133.')
