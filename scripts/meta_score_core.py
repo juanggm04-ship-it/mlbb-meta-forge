@@ -34,12 +34,24 @@ def compute_score_rows(heroes, previous_heroes=None):
     ban = {h['name']: h.get('ban') for h in heroes}
     pick = {h['name']: h.get('pick') for h in heroes}
     momentum = {}
+    momentum_observed = {}
     for h in heroes:
-        p = prev_by.get(h['name'], {})
-        dwr = h.get('wr') - p.get('wr') if finite(h.get('wr')) and finite(p.get('wr')) else 0.0
-        dp = h.get('pick') - p.get('pick') if finite(h.get('pick')) and finite(p.get('pick')) else 0.0
-        db = h.get('ban') - p.get('ban') if finite(h.get('ban')) and finite(p.get('ban')) else 0.0
-        momentum[h['name']] = 0.60 * dwr + 0.25 * dp + 0.15 * db
+        n = h['name']
+        p = prev_by.get(n, {})
+        complete = all(
+            finite(v)
+            for v in [h.get('wr'), h.get('pick'), h.get('ban'), p.get('wr'), p.get('pick'), p.get('ban')]
+        )
+        if complete:
+            dwr = h.get('wr') - p.get('wr')
+            dp = h.get('pick') - p.get('pick')
+            db = h.get('ban') - p.get('ban')
+            momentum[n] = 0.60 * dwr + 0.25 * dp + 0.15 * db
+            momentum_observed[n] = True
+        else:
+            # Missing history is neutral, not an observed zero movement.
+            momentum[n] = None
+            momentum_observed[n] = False
 
     pwr = percentiles(wr)
     pban = percentiles(ban)
@@ -49,14 +61,16 @@ def compute_score_rows(heroes, previous_heroes=None):
     rows = []
     for h in heroes:
         n = h['name']
+        momentum_pct = pmom.get(n, 50.0)
         score = (
             0.45 * pwr.get(n, 50.0)
             + 0.20 * ppick.get(n, 50.0)
             + 0.20 * pban.get(n, 50.0)
-            + 0.15 * pmom.get(n, 50.0)
+            + 0.15 * momentum_pct
         )
         score = round(score, 1)
         label = 'Señal muy alta' if score >= 80 else 'Señal alta' if score >= 65 else 'Señal media' if score >= 45 else 'Señal baja'
+        raw = momentum.get(n)
         rows.append({
             'name': n,
             'score': score,
@@ -64,8 +78,9 @@ def compute_score_rows(heroes, previous_heroes=None):
             'wr_pct': round(pwr.get(n, 50.0), 1),
             'pick_pct': round(ppick.get(n, 50.0), 1),
             'ban_pct': round(pban.get(n, 50.0), 1),
-            'momentum_pct': round(pmom.get(n, 50.0), 1),
-            'momentum_raw': round(momentum.get(n, 0.0), 3),
+            'momentum_pct': round(momentum_pct, 1),
+            'momentum_raw': round(raw, 3) if finite(raw) else None,
+            'momentum_observed': bool(momentum_observed.get(n)),
         })
     rows.sort(key=lambda x: (-x['score'], x['name']))
     for i, row in enumerate(rows, 1):
