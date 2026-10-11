@@ -11,6 +11,10 @@ if compare.exists():
     text=compare.read_text(encoding='utf-8')
     for token in ['id="a"','id="b"','Meta Score','Momentum','Ranking','URLSearchParams','searchParams.set(\'a\'','searchParams.set(\'b\'','Copiar enlace','id="swapHeroes"','Por qué cambia el Meta Score','Percentil WR','Percentil Pick','Percentil Ban','Percentil Momentum','avoidSame','id="compareEditorial"','EDITORIAL · SOLO SI AMBOS ESTÁN CURADOS','Frontline','Engage','Sustain','Peel','Waveclear','Scaling','Poke','Contexto editorial no disponible','id="compareMatchup"','INTERACCIÓN EDITORIAL','SIN REGLA DIRECTA','No es counter-rate ni probabilidad de victoria']:
         need(token in text,f'Hero Compare missing: {token}')
+    need('puntos porcentuales' in text,'Hero Compare does not disclose WR/ban/pick percentage-point units')
+    need('momentum_observed' in text,'Hero Compare payload does not expose momentum availability')
+    need('neutral · esperando historial' in text or '· neutral' in text,'Hero Compare does not label unavailable momentum as neutral')
+    need('No significa que el héroe no haya cambiado' in text,'Hero Compare neutral momentum explanation missing')
 
 stat_pages=list(Path('stats/heroes').glob('*/index.html')) if Path('stats/heroes').exists() else []
 need(len(stat_pages)>=100,f'Only {len(stat_pages)} live-stat pages found for compare validation')
@@ -37,10 +41,14 @@ src=Path('scripts/generate_hero_compare.py').read_text(encoding='utf-8')
 need("params.get('a')" in src and "params.get('b')" in src,'Compare URL parameter restore logic missing')
 need("history.replaceState" in src,'Compare shareable URL update logic missing')
 need('quote(name,safe="")' in src,'Per-hero compare links are not URL encoded')
+need("'momentum_observed':bool(s.get('momentum_observed'))" in src,'Compare source does not carry Meta Score momentum availability')
+need('puntos porcentuales' in src,'Compare source does not explain raw live-stat rate units')
 
 enhance=Path('scripts/enhance_hero_compare.py').read_text(encoding='utf-8')
 need("metric('Percentil WR'" in enhance and "metric('Percentil Pick'" in enhance and "metric('Percentil Ban'" in enhance and "metric('Percentil Momentum'" in enhance,'Compare score component explanation source incomplete')
 need("swapHeroes" in enhance and "avoidSame" in enhance,'Compare swap/distinct-selection logic missing')
+need('momentumPercentile()' in enhance and 'momentum_observed' in enhance,'Compare does not use momentum availability when rendering components')
+need('neutral-value' in enhance and 'Momentum neutral no es tendencia observada' in enhance,'Compare neutral momentum styling/disclosure missing')
 
 editorial=Path('scripts/inject_compare_editorial.py').read_text(encoding='utf-8')
 need("CORE=Path('data/editorial-core.json')" in editorial,'Compare editorial context is not sourced from shared editorial core')
@@ -60,4 +68,4 @@ if errors:
     print('HERO COMPARE VALIDATION FAILED')
     for e in errors:print('- '+e)
     sys.exit(1)
-print(f'Hero Compare validation passed: page present, {with_cta}/{len(stat_pages)} stat CTAs, score components, optional shared-core editorial context, direct matchup context with neutral fallback, swap/distinct selection, My Meta Watchlist compare, shareable a/b parameters and sitemap entry present.')
+print(f'Hero Compare validation passed: page present, {with_cta}/{len(stat_pages)} stat CTAs, rate-unit disclosure, neutral/observed momentum semantics, score components, optional shared-core editorial context, direct matchup context, swap/distinct selection, My Meta Watchlist compare, shareable a/b parameters and sitemap entry present.')
