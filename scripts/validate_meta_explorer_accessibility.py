@@ -16,14 +16,15 @@ if PAGE.exists():
         ("c.setAttribute('aria-label','Seleccionar '+t)",'Explorer point accessible label missing'),
         ("e.key==='Enter'||e.key===' '",'Enter/Space point activation missing'),
         ("c.dispatchEvent(new MouseEvent('click',{bubbles:true}))",'Keyboard activation is not routed through point click behavior'),
-        ("new MutationObserver(upgrade).observe(svg,{childList:true})",'Keyboard affordances are not restored after plot redraw'),
+        ("svg.addEventListener('mf:explorer-drawn',upgrade)",'Keyboard affordances are not restored after plot redraw'),
         ("xs.value=ys.value;ys.value=x",'Axis swap implementation missing'),
         ("xs.dispatchEvent(new Event('change',{bubbles:true}))",'Axis swap does not redraw plot'),
         ("location.assign(clean)",'Reset-view implementation missing'),
         ('.dot[tabindex="0"]:focus','Visible SVG keyboard focus style missing'),
     ]: need(token in text,msg)
+    need('MutationObserver' not in text,'Explorer accessibility must remain free of MutationObserver loops')
 if errors:
     print('META EXPLORER ACCESSIBILITY VALIDATION FAILED')
     for e in errors: print('- '+e)
     sys.exit(1)
-print('Meta Explorer accessibility validation passed: every rendered point is upgraded for keyboard use, Enter/Space mirrors click selection, and swap/reset controls are present.')
+print('Meta Explorer accessibility validation passed: every rendered point is upgraded through the stable redraw event, Enter/Space mirrors click selection, and swap/reset controls are present.')
