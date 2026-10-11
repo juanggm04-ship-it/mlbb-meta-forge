@@ -15,13 +15,14 @@ key_limits={
     Path('compare/index.html'):550,
     Path('my-meta/index.html'):650,
     Path('status/index.html'):180,
+    Path('repair/index.html'):100,
 }
 for p,limit in key_limits.items():
     need(p.exists(),f'Missing key page: {p}')
     if p.exists(): need(kb(p)<=limit,f'{p} exceeds {limit} KiB budget: {kb(p):.1f} KiB')
 
 html_pages=[p for p in ROOT.rglob('*.html') if '.git' not in p.parts and '_site' not in p.parts]
-need(len(html_pages)>=171,f'Expected at least 171 generated HTML pages, got {len(html_pages)}')
+need(len(html_pages)>=172,f'Expected at least 172 generated HTML pages, got {len(html_pages)}')
 if html_pages:
     total=sum(p.stat().st_size for p in html_pages)/1024/1024
     need(total<=20,f'Total generated HTML exceeds 20 MiB budget: {total:.2f} MiB')
