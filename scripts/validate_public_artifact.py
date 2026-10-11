@@ -15,8 +15,9 @@ def digest(p):
 need(SITE.exists(),'_site artifact directory missing')
 for name in ['index.html','privacy.html','terms.html','methodology.html','offline.html','manifest.webmanifest','robots.txt','sitemap.xml','sw.js']:
     need((SITE/name).exists(),f'Public artifact missing {name}')
-for name in ['assets','data','heroes','stats','roster','trends','compare','my-meta','status']:
+for name in ['assets','data','heroes','stats','roster','explore','trends','compare','my-meta','status']:
     need((SITE/name).is_dir(),f'Public artifact missing directory {name}/')
+need((SITE/'explore/index.html').exists(),'Meta Explorer page missing from public artifact')
 
 bad=[p for p in SITE.rglob('*') if p.is_file() and (p.suffix.lower()=='.py' or '__pycache__' in p.parts)]
 need(not bad,'Build/source Python leaked into public artifact: '+', '.join(str(p) for p in bad[:10]))
@@ -66,4 +67,4 @@ if errors:
     print('PUBLIC ARTIFACT VALIDATION FAILED')
     for e in errors: print('- '+e)
     sys.exit(1)
-print(f'Public artifact validation passed: html={len(site_html)}; live=133; editorial=34; product-release present; size={size/1024/1024:.2f}MiB; exact integrity coverage; no Python/workflow build sources served.')
+print(f'Public artifact validation passed: html={len(site_html)}; live=133; editorial=34; Explorer present; product-release present; size={size/1024/1024:.2f}MiB; exact integrity coverage; no Python/workflow build sources served.')
