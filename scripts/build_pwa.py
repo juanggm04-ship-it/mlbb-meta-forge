@@ -52,7 +52,7 @@ missing=[p for p in required if not Path(p).exists()]
 if missing:
     raise RuntimeError('PWA core dependencies missing: '+', '.join(missing))
 core_js=','.join(repr(x) for x in core)
-SW=f'''const CACHE={cache_name!r};\nconst CORE=[{core_js}];\nself.addEventListener('install',event=>{{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()))}});\nself.addEventListener('activate',event=>{{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('mf-shell-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))}});\nasync function networkFirst(request,offline=false){{const cache=await caches.open(CACHE);try{{const response=await fetch(request);if(response&&response.ok)cache.put(request,response.clone());return response}}catch{{return (await cache.match(request))||(offline?await cache.match('./offline.html'):Response.error())}}}}\nself.addEventListener('fetch',event=>{{const request=event.request;if(request.method!=='GET')return;const url=new URL(request.url);if(url.origin!==self.location.origin)return;if(request.mode==='navigate'){{event.respondWith(networkFirst(request,true));return}}if(url.pathname.includes('/data/')&&url.pathname.endsWith('.json')){{event.respondWith(networkFirst(request,false));return}}event.respondWith((async()=>{{const cache=await caches.open(CACHE),cached=await cache.match(request);const network=fetch(request).then(response=>{{if(response&&response.ok)cache.put(request,response.clone());return response}}).catch(()=>null);return cached||(await network)||Response.error()}})())}});\n'''
+SW=f'''const CACHE={cache_name!r};\nconst CORE=[{core_js}];\nself.addEventListener('install',event=>{{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()))}});\nself.addEventListener('activate',event=>{{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('mf-shell-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))}});\nasync function networkFirst(request){{const cache=await caches.open(CACHE);try{{const response=await fetch(request);if(response&&response.ok)cache.put(request,response.clone());return response}}catch{{return (await cache.match(request))||Response.error()}}}}\nfunction navigationKey(request){{const url=new URL(request.url);url.search='';url.hash='';return new Request(url.toString(),{{method:'GET'}})}}\nasync function navigationNetworkFirst(request){{const cache=await caches.open(CACHE),key=navigationKey(request);try{{const response=await fetch(request);if(response&&response.ok)cache.put(key,response.clone());return response}}catch{{return (await cache.match(key))||(await cache.match('./offline.html'))||Response.error()}}}}\nself.addEventListener('fetch',event=>{{const request=event.request;if(request.method!=='GET')return;const url=new URL(request.url);if(url.origin!==self.location.origin)return;if(request.mode==='navigate'){{event.respondWith(navigationNetworkFirst(request));return}}if(url.pathname.includes('/data/')&&url.pathname.endsWith('.json')){{event.respondWith(networkFirst(request));return}}event.respondWith((async()=>{{const cache=await caches.open(CACHE),cached=await cache.match(request);const network=fetch(request).then(response=>{{if(response&&response.ok)cache.put(request,response.clone());return response}}).catch(()=>null);return cached||(await network)||Response.error()}})())}});\n'''
 Path('sw.js').write_text(SW,encoding='utf-8')
 
 reduced='''<style id="mf-reduced-motion">@media (prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}</style>'''
@@ -64,7 +64,7 @@ def prefix_for(path):
 
 count=0
 for path in ROOT.rglob('*.html'):
-    if path.name=='offline.html' or '.git' in path.parts:
+    if path.name=='offline.html' or '.git' in path.parts or '_site' in path.parts:
         continue
     text=path.read_text(encoding='utf-8')
     prefix=prefix_for(path)
@@ -81,4 +81,4 @@ for path in ROOT.rglob('*.html'):
         text=text.replace('</body>',banner+install+runtime+'</body>',1)
     path.write_text(text,encoding='utf-8')
     count+=1
-print(f'PWA shell built: version={version}; cache={cache_name}; html_pages={count}; core={len(core)}; png_icons=192/512')
+print(f'PWA shell built: version={version}; cache={cache_name}; html_pages={count}; core={len(core)}; png_icons=192/512; navigation_query_cache=false')
