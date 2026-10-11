@@ -141,6 +141,8 @@ jobs:
         run: python scripts/inject_data_provenance.py
       - name: Add real-change update beacon
         run: python scripts/inject_update_beacon.py
+      - name: Add local recent activity resume
+        run: python scripts/inject_recent_activity.py
       - name: Refine product design and navigation
         run: python scripts/refine_product_design.py
       - name: Build PWA offline shell
@@ -177,6 +179,8 @@ jobs:
         run: python scripts/validate_status_page.py
       - name: Validate real-change update beacon
         run: python scripts/validate_update_beacon.py
+      - name: Validate recent activity resume
+        run: python scripts/validate_recent_activity.py
       - name: Validate PWA offline shell
         run: python scripts/validate_pwa.py
       - name: Validate SEO and social metadata
