@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "release_id": "2026-10-11-foundation",
-  "title": "Meta Forge Foundation",
+  "release_id": "2026-10-11-explorer",
+  "title": "Meta Explorer",
   "published": "2026-10-11",
   "highlights": [
-    "Roster live de 133 héroes con Meta Score estadístico y navegación comparativa",
-    "Hero Compare, Mi Meta, Watchlist compartible y respaldo local de preferencias",
-    "PWA, SEO social, estado público, integridad SHA-256 y pipeline de despliegue endurecido"
+    "Nuevo mapa interactivo de los 133 héroes con ejes WR, pick, ban y Meta Score",
+    "Vista compartible por URL, búsqueda, cuadrantes descriptivos y tabla accesible completa",
+    "Explorer integrado en navegación, portada, PWA offline, SEO, beacon de novedades e integridad SHA-256"
   ]
 }
