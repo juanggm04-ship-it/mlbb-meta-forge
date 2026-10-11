@@ -19,12 +19,13 @@ changed=0
 for path,(current,root) in TARGETS.items():
     if not path.exists():
         raise RuntimeError(f'Missing product navigation target: {path}')
-    html=path.read_text(encoding='utf-8')
-    if 'id="productShellNav"' in html:
+    page=path.read_text(encoding='utf-8')
+    if 'id="productShellNav"' in page:
         continue
-    def link(slug,label,url,extra=''):
+    def link(slug,label,url,klass=''):
         cur=' aria-current="page"' if current==slug else ''
-        return f'<a {extra} href="{url}"{cur}>{label}</a>'
+        cls=f' class="{klass}"' if klass else ''
+        return f'<a{cls} href="{url}"{cur}>{label}</a>'
     nav=(f'<nav id="productShellNav" class="product-shell-nav" aria-label="Navegación de Meta Forge">'
          f'<a class="ps-brand" href="{root}"><span class="ps-mark">M</span><span class="ps-brand-text">MLBB FORGE</span></a>'
          f'<div class="ps-links">'
@@ -32,17 +33,17 @@ for path,(current,root) in TARGETS.items():
          f'{link("trends","Trends",root+"trends/")}'
          f'{link("compare","Comparar",root+"compare/")}'
          f'{link("my-meta","Mi Meta",root+"my-meta/")}'
-         f'{link("methodology","Metodología",root+"methodology.html","class=\"ps-method\"")}'
+         f'{link("methodology","Metodología",root+"methodology.html","ps-method")}'
          f'</div></nav>')
-    if '</head>' not in html:
+    if '</head>' not in page:
         raise RuntimeError(f'No </head> in {path}')
-    html=html.replace('</head>',CSS+'</head>',1)
-    match=re.search(r'<body(?:\s[^>]*)?>',html,re.I)
+    page=page.replace('</head>',CSS+'</head>',1)
+    match=re.search(r'<body(?:\s[^>]*)?>',page,re.I)
     if not match:
         raise RuntimeError(f'No body tag in {path}')
     pos=match.end()
-    html=html[:pos]+nav+html[pos:]
-    path.write_text(html,encoding='utf-8')
+    page=page[:pos]+nav+page[pos:]
+    path.write_text(page,encoding='utf-8')
     changed+=1
 
 if changed not in (0,len(TARGETS)):
