@@ -29,6 +29,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Sync editorial hero catalog
         run: python scripts/sync_editorial_catalog.py
+      - name: Refactor catalog consumers
+        run: python scripts/refactor_catalog_consumers.py
       - name: Apply validated live meta snapshot
         run: python scripts/apply_live_meta.py
       - name: Generate hero pages and sitemap
