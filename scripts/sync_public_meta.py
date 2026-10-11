@@ -1,5 +1,6 @@
 from pathlib import Path
 import json, urllib.request, datetime, shutil
+from hero_identity import hero_key, index_by_hero_key, semantic_rate_rows
 
 RANKINGS_URL='https://mlbbdex.com/api/v1/rankings'
 PATCHES_URL='https://mlbbdex.com/api/v1/patches'
@@ -74,31 +75,22 @@ def load_history():
 
 def semantic_view(snapshot):
     if not isinstance(snapshot,dict):return None
-    heroes=[]
-    for h in snapshot.get('heroes',[]):
-        heroes.append({
-            'name':h.get('name'),
-            'wr':h.get('wr'),
-            'ban':h.get('ban'),
-            'pick':h.get('pick'),
-            'tier':h.get('tier')
-        })
     return {
         'patch':snapshot.get('patch'),
-        'source_updated':snapshot.get('source_updated'),
-        'heroes':heroes
+        'heroes':semantic_rate_rows(snapshot.get('heroes',[]))
     }
 
 def append_history(out):
     hist=load_history()
     snapshots=hist['snapshots'][:]
+    ordered=sorted(out['heroes'],key=lambda h:hero_key(h.get('name')))
     snapshots.append({
         'updated':out.get('updated'),
         'source_updated':out.get('source_updated'),
         'freshness_basis':out.get('freshness_basis'),
         'patch':out.get('patch'),
         'fetched_at':out.get('fetched_at'),
-        'heroes':[{'name':h['name'],'wr':h.get('wr'),'ban':h.get('ban'),'pick':h.get('pick')} for h in out['heroes']]
+        'heroes':[{'name':h['name'],'wr':h.get('wr'),'ban':h.get('ban'),'pick':h.get('pick')} for h in ordered]
     })
     hist={'snapshots':snapshots[-MAX_POINTS:]}
     HISTORY.write_text(json.dumps(hist,ensure_ascii=False,indent=2),encoding='utf-8')
@@ -126,13 +118,15 @@ def main():
         if pick is not None and not 0<=pick<=100:continue
         heroes.append({'name':name,'wr':wr,'ban':ban,'pick':pick,'tier':str(tier) if tier else None,'date':str(date) if date else None})
     if len(heroes)<100:raise RuntimeError(f'Validation failed: only {len(heroes)} valid hero records')
+    identity=index_by_hero_key(heroes)
+    if len(identity)!=len(heroes):
+        raise RuntimeError('Normalized hero identity count differs from validated hero count')
 
     patch=latest_patch(patches)
     dates=[h['date'] for h in heroes if h.get('date')]
     source_updated=max(dates) if dates else None
     fetched_at=datetime.datetime.now(datetime.timezone.utc).isoformat()
     fetched_date=fetched_at[:10]
-    # `updated` stays for backwards compatibility. `freshness_basis` makes its meaning explicit.
     updated=source_updated or fetched_date
     freshness_basis='source' if source_updated else 'fetched'
     source=rankings.get('source') if isinstance(rankings,dict) else None
@@ -163,6 +157,6 @@ def main():
         points=append_history(out)
     else:
         points=len(load_history()['snapshots'])
-    print(f'Wrote {len(heroes)} validated heroes; patch={patch}; source_updated={source_updated}; freshness={freshness_basis}; semantic_changed={semantic_changed}; previous={PREV.exists()}; history_points={points}')
+    print(f'Wrote {len(heroes)} validated heroes; patch={patch}; source_updated={source_updated}; freshness={freshness_basis}; semantic_changed={semantic_changed}; previous={PREV.exists()}; history_points={points}; identity_keys={len(identity)}')
 
 if __name__=='__main__':main()
