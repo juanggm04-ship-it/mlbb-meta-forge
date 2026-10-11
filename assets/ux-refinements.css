@@ -1,0 +1,105 @@
+/* Focused interaction and responsive refinements layered after product-design.css. */
+body[data-mf-page="roster"] .roster-card,
+body[data-mf-page="explorer"] .panel{contain:layout paint}
+body[data-mf-page="roster"] .roster-card-score strong,
+body[data-mf-page="roster"] .s b,
+body[data-mf-page="explorer"] .detail-stats{font-variant-numeric:tabular-nums}
+body[data-mf-page="explorer"] .explorer-mobile-hint{display:none;margin:10px 0 0;color:#91a8c5;font-size:12px;line-height:1.5}
+
+@media (max-width:760px){
+  body[data-mf-page="roster"] main,
+  body[data-mf-page="explorer"] main{padding-left:12px;padding-right:12px}
+
+  body[data-mf-page="roster"] .hero,
+  body[data-mf-page="explorer"] .hero,
+  body[data-mf-page="explorer"] .panel{border-radius:20px;padding:17px}
+
+  body[data-mf-page="roster"] h1,
+  body[data-mf-page="explorer"] h1{font-size:clamp(36px,12vw,52px);line-height:1.02}
+
+  body[data-mf-page="roster"] .toolbar,
+  body[data-mf-page="explorer"] .toolbar{
+    position:sticky;
+    top:8px;
+    z-index:45;
+    margin:12px -4px 14px;
+    padding:8px;
+    border:1px solid #2b405d;
+    border-radius:15px;
+    background:#091421ee;
+    box-shadow:0 12px 28px #0006;
+    backdrop-filter:blur(14px);
+  }
+
+  body[data-mf-page="roster"] .toolbar input,
+  body[data-mf-page="roster"] .toolbar select,
+  body[data-mf-page="explorer"] .toolbar input,
+  body[data-mf-page="explorer"] .toolbar select,
+  body[data-mf-page="explorer"] .toolbar button{min-height:46px}
+
+  body[data-mf-page="roster"] .roster-filter-buttons,
+  body[data-mf-page="explorer"] .explorer-power{
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    overscroll-behavior-inline:contain;
+    scrollbar-width:none;
+    padding-bottom:5px;
+  }
+  body[data-mf-page="roster"] .roster-filter-buttons::-webkit-scrollbar,
+  body[data-mf-page="explorer"] .explorer-power::-webkit-scrollbar{display:none}
+  body[data-mf-page="roster"] .roster-filter,
+  body[data-mf-page="explorer"] .explorer-scope{flex:0 0 auto;white-space:nowrap}
+
+  body[data-mf-page="roster"] .roster-filters{gap:7px;margin:-2px 0 12px}
+  body[data-mf-page="roster"] .roster-result-count{font-size:12px;color:#a9bdd6}
+  body[data-mf-page="roster"] .roster-power{padding:10px;margin-bottom:12px}
+  body[data-mf-page="roster"] .roster-power-copy b{font-size:11px}
+  body[data-mf-page="roster"] .roster-power-copy span{font-size:10px}
+  body[data-mf-page="roster"] .roster-power-actions{width:100%;display:grid;grid-template-columns:repeat(3,1fr)}
+  body[data-mf-page="roster"] .roster-power-actions button{padding:8px 6px;min-height:42px}
+  body[data-mf-page="roster"] .grid{gap:9px}
+  body[data-mf-page="roster"] .roster-card-score{margin-top:10px;padding:10px}
+  body[data-mf-page="roster"] .roster-card-score strong{font-size:25px}
+  body[data-mf-page="roster"] .roster-card-actions{grid-template-columns:1fr 1fr;gap:7px}
+  body[data-mf-page="roster"] .roster-card-actions .open{display:none}
+  body[data-mf-page="roster"] .roster-card-actions a,
+  body[data-mf-page="roster"] .roster-card-actions button{min-height:42px}
+
+  body[data-mf-page="explorer"] .explorer-power{display:flex;gap:7px;margin-left:-2px;margin-right:-2px}
+  body[data-mf-page="explorer"] .explorer-count{flex:0 0 auto;width:auto;margin-left:4px;align-self:center;white-space:nowrap}
+  body[data-mf-page="explorer"] .plot-wrap{
+    min-height:470px;
+    overflow-x:auto;
+    overflow-y:hidden;
+    overscroll-behavior-inline:contain;
+    scroll-snap-type:x proximity;
+  }
+  body[data-mf-page="explorer"] #metaPlot{width:760px;min-width:760px;max-width:none;min-height:470px;scroll-snap-align:start}
+  body[data-mf-page="explorer"] .explorer-mobile-hint{display:block}
+  body[data-mf-page="explorer"] .legend{overflow-x:auto;white-space:nowrap;padding-bottom:3px}
+  body[data-mf-page="explorer"] .detail{gap:10px}
+  body[data-mf-page="explorer"] .detail-stats{display:grid;grid-template-columns:1fr 1fr;gap:5px 10px}
+  body[data-mf-page="explorer"] .actions{display:grid;grid-template-columns:1fr 1fr;width:100%}
+  body[data-mf-page="explorer"] .actions a{justify-content:center}
+  body[data-mf-page="explorer"] .explorer-pair{
+    bottom:calc(84px + env(safe-area-inset-bottom));
+    padding:10px;
+    border-radius:14px;
+    box-shadow:0 12px 28px #0009;
+  }
+  body[data-mf-page="explorer"] .explorer-pair-slots{flex-wrap:nowrap;overflow-x:auto;padding-bottom:2px}
+  body[data-mf-page="explorer"] .pair-slot{flex:0 0 auto}
+  body[data-mf-page="explorer"] .pair-actions{display:grid;grid-template-columns:1fr 1fr;width:100%}
+  body[data-mf-page="explorer"] .pair-actions a{grid-column:1/-1;justify-content:center}
+  body[data-mf-page="explorer"] .table-wrap{max-height:420px}
+}
+
+@media (max-width:430px){
+  body[data-mf-page="roster"] .roster-power-copy span{display:none}
+  body[data-mf-page="roster"] .roster-card-main{padding:13px 13px 10px}
+  body[data-mf-page="roster"] .roster-card-actions{padding:0 13px 13px}
+  body[data-mf-page="roster"] .roster-card-rank,
+  body[data-mf-page="roster"] .roster-card-coverage{font-size:8px;padding:4px 6px}
+  body[data-mf-page="explorer"] #metaPlot{width:700px;min-width:700px}
+  body[data-mf-page="explorer"] .detail-stats{grid-template-columns:1fr}
+}
