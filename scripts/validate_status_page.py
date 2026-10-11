@@ -1,5 +1,6 @@
 from pathlib import Path
 import json, os, subprocess, sys
+from site_config import load_site_config, canonical_for
 
 PAGE=Path('status/index.html')
 INFO=Path('data/build-info.json')
@@ -8,6 +9,7 @@ CATALOG=Path('data/hero-catalog.json')
 HISTORY=Path('data/meta-history.json')
 SCORE=Path('data/meta-score.json')
 RELEASE=Path('data/product-release.json')
+SITE=load_site_config()
 errors=[]
 def need(cond,msg):
     if not cond: errors.append(msg)
@@ -56,12 +58,13 @@ if not errors:
         ('../repair/','Cache repair entry missing from status page'),
         ('Si la fuente no cambia WR, ban, pick o patch, no se inventa un nuevo punto histórico.','Semantic-history disclosure missing')]:
         need(token in text,msg)
-    need('https://juanggm04-ship-it.github.io/mlbb-meta-forge/status/' in Path('sitemap.xml').read_text(encoding='utf-8'),'Status page missing from sitemap')
+    expected_status_url=canonical_for(PAGE,SITE['base_url'])
+    need(expected_status_url in Path('sitemap.xml').read_text(encoding='utf-8'),f'Status page missing from sitemap for configured origin: {expected_status_url}')
 if errors:
     print('STATUS VALIDATION FAILED')
     for e in errors: print('- '+e)
     sys.exit(1)
-print(f'Status validation passed: build={info.get("build_short")}; release={release.get("release_id")}; live=133; editorial=34; history={info.get("history_points")}; observed={info.get("momentum_observed_heroes")}; ready={info.get("history_ready")}; repair_link=true.')
+print(f'Status validation passed: base={SITE["base_url"]}; build={info.get("build_short")}; release={release.get("release_id")}; live=133; editorial=34; history={info.get("history_points")}; observed={info.get("momentum_observed_heroes")}; ready={info.get("history_ready")}; repair_link=true.')
 
 # Repair is generated after the normal PWA pass and validated alongside status.
 import validate_cache_repair
