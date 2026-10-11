@@ -15,9 +15,10 @@ def digest(p):
 need(SITE.exists(),'_site artifact directory missing')
 for name in ['index.html','privacy.html','terms.html','methodology.html','offline.html','manifest.webmanifest','robots.txt','sitemap.xml','sw.js']:
     need((SITE/name).exists(),f'Public artifact missing {name}')
-for name in ['assets','data','heroes','stats','roster','explore','trends','compare','my-meta','status']:
+for name in ['assets','data','heroes','stats','roster','explore','trends','compare','my-meta','status','repair']:
     need((SITE/name).is_dir(),f'Public artifact missing directory {name}/')
 need((SITE/'explore/index.html').exists(),'Meta Explorer page missing from public artifact')
+need((SITE/'repair/index.html').exists(),'Cache repair page missing from public artifact')
 
 bad=[p for p in SITE.rglob('*') if p.is_file() and (p.suffix.lower()=='.py' or '__pycache__' in p.parts)]
 need(not bad,'Build/source Python leaked into public artifact: '+', '.join(str(p) for p in bad[:10]))
@@ -61,10 +62,14 @@ if integrity_path.exists():
     artifact_files=[p for p in SITE.rglob('*') if p.is_file() and p!=integrity_path]
     need(set(entries)=={p.relative_to(SITE).as_posix() for p in artifact_files},'Integrity manifest does not cover exactly every public artifact file except itself')
 
+repair=(SITE/'repair/index.html').read_text(encoding='utf-8') if (SITE/'repair/index.html').exists() else ''
+need('id="mf-cache-repair-runtime"' in repair,'Repair runtime missing from artifact')
+need('id="mf-pwa-runtime"' not in repair,'Repair utility must remain outside PWA runtime in artifact')
+
 size=sum(p.stat().st_size for p in SITE.rglob('*') if p.is_file())
 need(size<=25*1024*1024,f'Public artifact exceeds 25 MiB guardrail: {size/1024/1024:.2f} MiB')
 if errors:
     print('PUBLIC ARTIFACT VALIDATION FAILED')
     for e in errors: print('- '+e)
     sys.exit(1)
-print(f'Public artifact validation passed: html={len(site_html)}; live=133; editorial=34; Explorer present; product-release present; size={size/1024/1024:.2f}MiB; exact integrity coverage; no Python/workflow build sources served.')
+print(f'Public artifact validation passed: html={len(site_html)}; live=133; editorial=34; Explorer + repair present; product-release present; size={size/1024/1024:.2f}MiB; exact integrity coverage; no Python/workflow build sources served.')
