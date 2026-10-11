@@ -89,6 +89,8 @@ jobs:
         run: python scripts/enhance_roster_product_cards.py
       - name: Add two-click Roster comparison
         run: python scripts/inject_roster_pair_compare.py
+      - name: Add Roster share and CSV tools
+        run: python scripts/enhance_roster_power_tools.py
       - name: Add Meta Score history
         run: python scripts/inject_meta_score_history.py
       - name: Generate methodology page
@@ -103,6 +105,8 @@ jobs:
         run: python scripts/inject_compare_editorial.py
       - name: Add direct Hero Compare matchup context
         run: python scripts/inject_compare_matchup.py
+      - name: Add recent Hero Compare history
+        run: python scripts/inject_compare_history.py
       - name: Add My Meta Compare shortcut
         run: python scripts/inject_my_meta_compare.py
       - name: Add global hero search
@@ -117,12 +121,18 @@ jobs:
         run: python scripts/inject_hero_score_neighbors.py
       - name: Add live versus editorial provenance
         run: python scripts/inject_data_provenance.py
+      - name: Build PWA offline shell
+        run: python scripts/build_pwa.py
       - name: Validate Hero Compare
         run: python scripts/validate_compare.py
+      - name: Validate recent Hero Compare history
+        run: python scripts/validate_compare_history.py
       - name: Validate shared hero identity
         run: python scripts/validate_hero_identity.py
       - name: Validate live data contract
         run: python scripts/validate_live_data_contract.py
+      - name: Validate PWA offline shell
+        run: python scripts/validate_pwa.py
       - name: Validate methodology
         run: python scripts/validate_methodology.py
       - name: Validate homepage product launchpad
@@ -133,6 +143,8 @@ jobs:
         run: python scripts/validate_roster_product_cards.py
       - name: Validate two-click Roster comparison
         run: python scripts/validate_roster_pair_compare.py
+      - name: Validate Roster share and CSV tools
+        run: python scripts/validate_roster_power_tools.py
       - name: Validate live hero product pages
         run: python scripts/validate_live_hero_product_pages.py
       - name: Validate Meta Score neighbor navigation
