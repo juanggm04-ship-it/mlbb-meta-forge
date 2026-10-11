@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "enabled": false,
+  "provider": "none",
+  "publisher_id": "",
+  "personalized_ads": false,
+  "serves_eea_uk_ch": false,
+  "ads_txt": {
+    "enabled": false,
+    "publisher_id": ""
+  },
+  "consent": {
+    "enabled": false,
+    "provider": "",
+    "google_certified": false,
+    "iab_tcf": false
+  },
+  "analytics": {
+    "enabled": false,
+    "provider": "none"
+  },
+  "activation_note": "Keep disabled until a real publisher ID, final ad provider, regional consent plan, and updated privacy disclosure are configured."
+}
