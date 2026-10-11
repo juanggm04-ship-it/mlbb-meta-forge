@@ -1,6 +1,7 @@
 from pathlib import Path
 import re, html, struct, zlib, binascii, json
 from site_config import load_site_config
+import finalize_public_origin
 
 ROOT=Path('.')
 CFG=load_site_config()
