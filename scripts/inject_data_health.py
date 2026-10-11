@@ -39,7 +39,7 @@ const label=document.getElementById('dataHealthLabel'),patch=document.getElement
 function ageText(days){if(days<=0)return 'hoy';if(days===1)return '1 día';return days+' días'}
 function daysFrom(ts){const d=ts?new Date(ts):null;return d&&!Number.isNaN(d.getTime())?Math.max(0,Math.floor((Date.now()-d.getTime())/86400000)):null}
 function sourceName(meta){if(meta.provider)return meta.provider;if(meta.source&&typeof meta.source==='object'&&meta.source.name)return meta.source.name;if(typeof meta.source==='string')return meta.source;return meta.source_name||'Snapshot validado'}
-function historySuffix(){const n=Number(root.dataset.historySnapshots||0);if(n>=2)return ` · ${n} snapshots reales disponibles para tendencia.`;if(n===1)return ' · Solo hay 1 snapshot real; las tendencias esperan un cambio semántico de patch o tasas.';return ' · Historial temporal no disponible.'}
+function historySuffix(){const n=Number(root.dataset.historySnapshots||0);if(n>=2)return ` · ${n} snapshots reales disponibles para tendencia.`;if(n===1)return ' · Solo hay 1 snapshot real; el historial espera un cambio semántico de patch o tasas.';return ' · Historial temporal no disponible.'}
 function apply(meta){
   const sourceTs=meta.source_updated||null;
   const fetchTs=meta.fetched_at||meta.generated_at||meta.updated_at||null;
