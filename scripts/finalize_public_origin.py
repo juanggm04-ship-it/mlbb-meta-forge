@@ -1,6 +1,7 @@
 from pathlib import Path
 import re
 from site_config import load_site_config, canonical_for
+import generate_404
 
 ROOT=Path('.')
 CFG=load_site_config()
@@ -57,4 +58,4 @@ if CFG.get('custom_domain'):
 elif cname.exists():
     cname.unlink()
 
-print(f'Public origin finalized: base={BASE}; custom_domain={CFG.get("custom_domain") or "none"}; indexable={len(urls)}; rewritten_files={rewritten}; noindex={len(NOINDEX)}')
+print(f'Public origin finalized: base={BASE}; custom_domain={CFG.get("custom_domain") or "none"}; indexable={len(urls)}; rewritten_files={rewritten}; noindex={len(NOINDEX)}; branded_404={Path("404.html").exists()}')
