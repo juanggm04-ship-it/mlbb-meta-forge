@@ -1,12 +1,15 @@
 from pathlib import Path
 import re, html, struct, zlib, binascii, json
+from site_config import load_site_config
 
 ROOT=Path('.')
-BASE='https://juanggm04-ship-it.github.io/mlbb-meta-forge/'
+CFG=load_site_config()
+BASE=CFG['base_url']
+SITE_NAME=CFG['site_name']
 CARD=Path('assets/social-card.png')
 W,H=1200,630
 LIVE=Path('data/live-meta.json')
-NOINDEX_PATHS={'offline.html','404.html','repair/index.html'}
+NOINDEX_PATHS=set(CFG['noindex_paths'])
 
 
 def png_chunk(kind,data):
@@ -50,7 +53,7 @@ def canonical_for(path):
 
 def title_of(text):
     m=re.search(r'<title>(.*?)</title>',text,re.I|re.S)
-    return html.unescape(re.sub(r'<[^>]+>','',m.group(1)).strip()) if m else 'MLBB Meta Forge'
+    return html.unescape(re.sub(r'<[^>]+>','',m.group(1)).strip()) if m else SITE_NAME
 
 def description_of(text):
     m=re.search(r'<meta\s+name=["\']description["\']\s+content=["\'](.*?)["\']\s*/?>',text,re.I|re.S)
@@ -90,12 +93,12 @@ def breadcrumb_graph(path,canonical):
 
 def structured_graph(path,title,desc,canonical,modified):
     website={
-        '@type':'WebSite','@id':BASE+'#website','url':BASE,'name':'MLBB Meta Forge','inLanguage':'es',
+        '@type':'WebSite','@id':BASE+'#website','url':BASE,'name':SITE_NAME,'inLanguage':CFG['locale'],
         'description':'Herramientas estadísticas y editoriales para explorar el meta de Mobile Legends: Bang Bang.'
     }
     webpage={
         '@type':'WebPage','@id':canonical+'#webpage','url':canonical,'name':title,'description':desc,
-        'inLanguage':'es','isPartOf':{'@id':BASE+'#website'},
+        'inLanguage':CFG['locale'],'isPartOf':{'@id':BASE+'#website'},
         'about':{'@type':'VideoGame','name':'Mobile Legends: Bang Bang'}
     }
     if modified:webpage['dateModified']=modified
@@ -115,7 +118,7 @@ if LIVE.exists():
         modified=None
 changed=0; indexed=0; noindexed=0; structured=0
 for path in ROOT.rglob('*.html'):
-    if '.git' in path.parts: continue
+    if '.git' in path.parts or '_site' in path.parts: continue
     text=path.read_text(encoding='utf-8')
     if 'id="mf-social-meta"' in text: continue
     rel=path.as_posix()
@@ -127,7 +130,7 @@ for path in ROOT.rglob('*.html'):
     title=title_of(text);desc=description_of(text);canonical=canonical_for(path)
     text=re.sub(r'<link\s+rel=["\']canonical["\'][^>]*>','',text,flags=re.I)
     block=(f'<link id="mf-social-meta" rel="canonical" href="{esc(canonical)}">'
-           f'<meta property="og:site_name" content="MLBB Meta Forge">'
+           f'<meta property="og:site_name" content="{esc(SITE_NAME)}">'
            f'<meta property="og:type" content="website">'
            f'<meta property="og:title" content="{esc(title)}">'
            f'<meta property="og:description" content="{esc(desc)}">'
@@ -144,4 +147,4 @@ for path in ROOT.rglob('*.html'):
     block+=f'<script id="mf-structured-data" type="application/ld+json">{jsonld}</script>'
     text=text.replace('</head>',block+'</head>',1)
     path.write_text(text,encoding='utf-8');changed+=1;indexed+=1;structured+=1
-print(f'Social metadata injected: pages={changed}; indexable={indexed}; noindex={noindexed}; structured={structured}; social_card={CARD.stat().st_size/1024:.1f}KiB')
+print(f'Social metadata injected: pages={changed}; indexable={indexed}; noindex={noindexed}; structured={structured}; base={BASE}; social_card={CARD.stat().st_size/1024:.1f}KiB')
