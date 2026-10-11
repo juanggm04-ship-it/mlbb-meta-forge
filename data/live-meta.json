@@ -1,9 +1,9 @@
 {
-  "updated": "2026-10-06",
+  "updated": "2026-10-11",
   "source_updated": null,
   "freshness_basis": "fetched",
   "patch": "2.2.16",
-  "fetched_at": "2026-10-06T23:55:31.249933+00:00",
+  "fetched_at": "2026-10-11T02:32:33.143881+00:00",
   "provider": "MLBBDex public API",
   "provider_url": "https://mlbbdex.com/api-doc",
   "source": {
