@@ -38,6 +38,16 @@ for token,msg in [
     ('roster-card-score','Roster Meta Score card block missing'),
     ('data-meta-rank','Stable Meta Score rank marker missing'),
     ('El #rank mostrado en cada tarjeta siempre corresponde a Meta Score','Stable-rank explanation missing'),
+    ('id="rosterFilters"','Roster quick-filter group missing'),
+    ('id="rosterResultCount"','Roster dynamic result counter missing'),
+    ('data-roster-filter="all"','All filter missing'),
+    ('data-roster-filter="watch"','Watchlist filter missing'),
+    ('data-roster-filter="editorial"','Editorial filter missing'),
+    ('data-roster-filter="top20"','Top 20 Meta filter missing'),
+    ("scope==='watch'&&watched.has(h.name)",'Watchlist filter does not use current Watchlist state'),
+    ("scope==='editorial'&&h.editorial",'Editorial filter does not use editorial coverage flag'),
+    ("scope==='top20'&&Number(h.rank)<=20",'Top 20 filter is not based on canonical Meta Score rank'),
+    ("resultCount.textContent=rows.length",'Dynamic Roster result count is not updated by render'),
 ]:
     need(token in text,msg)
 need('#${i+1}' not in text,'Legacy filtered-position rank is still present in Roster runtime')
@@ -71,8 +81,10 @@ for r in rows:
     if r.get('editorial'): editorial_count+=1
 need(editorial_count==34,f'Expected 34 editorial Roster cards, got {editorial_count}')
 need(len(seen)==133,f'Expected 133 unique hero identities in Roster payload, got {len(seen)}')
+need(sum(1 for r in rows if isinstance(r.get('rank'),int) and r['rank']<=20)==20,'Top 20 Meta scope does not resolve exactly 20 canonical ranks')
+need('Todos · 133' in text,'All filter does not expose the 133-hero scope')
+need('Editorial · 34' in text,'Editorial filter does not expose the 34-hero scope')
 
-# Score sort must be monotonic when recomputed from the embedded payload.
 ordered=sorted(rows,key=lambda r:(-float(r.get('score',-1)),r.get('name','')))
 source_order=sorted(score_rows,key=lambda r:(int(r.get('rank',9999)),r.get('name','')))
 need([hero_key(r['name']) for r in ordered]==[hero_key(r['name']) for r in source_order], 'Embedded Meta Score ordering does not reproduce canonical ranks')
@@ -81,4 +93,4 @@ if errors:
     print('ROSTER PRODUCT CARD VALIDATION FAILED')
     for e in errors: print('- '+e)
     sys.exit(1)
-print(f'Roster product-card validation passed: heroes={len(rows)}; editorial={editorial_count}; default_sort=Meta Score; quick Compare + Watchlist use shared state.')
+print(f'Roster product-card validation passed: heroes={len(rows)}; editorial={editorial_count}; filters=all/watch/editorial/top20; default_sort=Meta Score; quick Compare + Watchlist use shared state.')
