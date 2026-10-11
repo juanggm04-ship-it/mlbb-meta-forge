@@ -89,6 +89,8 @@ jobs:
         run: python scripts/inject_meta_score.py
       - name: Generate Meta Explorer
         run: python scripts/generate_meta_explorer.py
+      - name: Enhance Meta Explorer tools
+        run: python scripts/enhance_meta_explorer_tools.py
       - name: Enhance Live Roster product cards
         run: python scripts/enhance_roster_product_cards.py
       - name: Add two-click Roster comparison
@@ -145,6 +147,8 @@ jobs:
         run: python scripts/generate_integrity_manifest.py
       - name: Validate Meta Explorer
         run: python scripts/validate_meta_explorer.py
+      - name: Validate Meta Explorer tools
+        run: python scripts/validate_meta_explorer_tools.py
       - name: Validate Hero Compare
         run: python scripts/validate_compare.py
       - name: Validate Hero Compare signal summary
