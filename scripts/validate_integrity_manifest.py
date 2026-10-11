@@ -5,7 +5,7 @@ ROOT=Path('.')
 MANIFEST=ROOT/'data/integrity.json'
 ROOT_FILES=['index.html','privacy.html','terms.html','methodology.html','offline.html','manifest.webmanifest','robots.txt','sitemap.xml','sw.js']
 if Path('404.html').exists(): ROOT_FILES.append('404.html')
-PUBLIC_DIRS=['assets','data','heroes','stats','roster','explore','trends','compare','my-meta','status']
+PUBLIC_DIRS=['assets','data','heroes','stats','roster','explore','trends','compare','my-meta','status','repair']
 errors=[]
 def need(cond,msg):
     if not cond: errors.append(msg)
@@ -45,13 +45,14 @@ for rel,path in expected.items():
     need(item.get('sha256')==sha256(path),f'SHA-256 mismatch for {rel}')
 need(manifest.get('file_count')==len(expected),f'Integrity file_count mismatch: {manifest.get("file_count")} != {len(expected)}')
 need(manifest.get('total_bytes')==actual_total,f'Integrity total_bytes mismatch: {manifest.get("total_bytes")} != {actual_total}')
-for rel in ['index.html','explore/index.html','status/index.html','data/live-meta.json','data/meta-score.json','data/build-info.json','sw.js','assets/social-card.png']:
+for rel in ['index.html','explore/index.html','status/index.html','repair/index.html','data/live-meta.json','data/meta-score.json','data/build-info.json','sw.js','assets/social-card.png']:
     need(rel in files,f'Critical integrity entry missing: {rel}')
 status=Path('status/index.html').read_text(encoding='utf-8') if Path('status/index.html').exists() else ''
 need('../data/integrity.json' in status,'Status page does not link to integrity manifest')
-need(len(expected)>=195,f'Integrity manifest unexpectedly small after Explorer: {len(expected)} files')
+need('../repair/' in status,'Status page does not link to repair utility')
+need(len(expected)>=196,f'Integrity manifest unexpectedly small after repair utility: {len(expected)} files')
 if errors:
     print('INTEGRITY MANIFEST VALIDATION FAILED')
     for e in errors: print('- '+e)
     sys.exit(1)
-print(f'Integrity validation passed: build={head[:12] if head else "unknown"}; files={len(expected)}; Explorer covered; total={actual_total/1024/1024:.2f}MiB; exact SHA-256 coverage.')
+print(f'Integrity validation passed: build={head[:12] if head else "unknown"}; files={len(expected)}; Explorer + repair covered; total={actual_total/1024/1024:.2f}MiB; exact SHA-256 coverage.')
