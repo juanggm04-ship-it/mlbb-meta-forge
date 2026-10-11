@@ -36,8 +36,15 @@ for dest in [p for p in SITE.rglob('*') if p.is_file()]:
     need(src.exists(),f'Artifact file has no source counterpart: {rel}')
     if src.exists(): need(digest(src)==digest(dest),f'Artifact copy differs from validated source: {rel}')
 
-required_data=['live-meta.json','meta-score.json','meta-score-history.json','build-info.json','integrity.json']
+required_data=['live-meta.json','meta-score.json','meta-score-history.json','build-info.json','product-release.json','integrity.json']
 for name in required_data: need((SITE/'data'/name).exists(),f'Runtime data missing from artifact: data/{name}')
+
+if (SITE/'data/build-info.json').exists() and (SITE/'data/product-release.json').exists():
+    try:
+        info=json.loads((SITE/'data/build-info.json').read_text(encoding='utf-8'))
+        release=json.loads((SITE/'data/product-release.json').read_text(encoding='utf-8'))
+        need((info.get('product_release') or {}).get('release_id')==release.get('release_id'),'Artifact build-info/product-release mismatch')
+    except Exception as exc: errors.append(f'Invalid artifact product release metadata: {exc}')
 
 integrity_path=SITE/'data/integrity.json'
 if integrity_path.exists():
@@ -59,4 +66,4 @@ if errors:
     print('PUBLIC ARTIFACT VALIDATION FAILED')
     for e in errors: print('- '+e)
     sys.exit(1)
-print(f'Public artifact validation passed: html={len(site_html)}; live=133; editorial=34; size={size/1024/1024:.2f}MiB; exact integrity coverage; no Python/workflow build sources served.')
+print(f'Public artifact validation passed: html={len(site_html)}; live=133; editorial=34; product-release present; size={size/1024/1024:.2f}MiB; exact integrity coverage; no Python/workflow build sources served.')
