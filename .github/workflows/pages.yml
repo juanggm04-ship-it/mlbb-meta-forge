@@ -87,6 +87,8 @@ jobs:
         run: python scripts/inject_meta_score.py
       - name: Add Meta Score history
         run: python scripts/inject_meta_score_history.py
+      - name: Generate methodology page
+        run: python scripts/generate_methodology.py
       - name: Add per-hero Meta Score breakdown
         run: python scripts/inject_hero_meta_score.py
       - name: Generate Hero Compare
@@ -109,6 +111,8 @@ jobs:
         run: python scripts/validate_hero_identity.py
       - name: Validate live data contract
         run: python scripts/validate_live_data_contract.py
+      - name: Validate methodology
+        run: python scripts/validate_methodology.py
       - name: Validate live roster leaders
         run: python scripts/validate_live_leaders.py
       - name: Validate Meta Score momentum state
