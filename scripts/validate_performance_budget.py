@@ -20,7 +20,7 @@ for p,limit in key_limits.items():
     need(p.exists(),f'Missing key page: {p}')
     if p.exists(): need(kb(p)<=limit,f'{p} exceeds {limit} KiB budget: {kb(p):.1f} KiB')
 
-html_pages=[p for p in ROOT.rglob('*.html') if '.git' not in p.parts]
+html_pages=[p for p in ROOT.rglob('*.html') if '.git' not in p.parts and '_site' not in p.parts]
 need(len(html_pages)>=170,f'Expected at least 170 generated HTML pages, got {len(html_pages)}')
 if html_pages:
     total=sum(p.stat().st_size for p in html_pages)/1024/1024
@@ -41,6 +41,7 @@ asset_limits={
     Path('data/meta-score.json'):1024,
     Path('data/meta-score-history.json'):1536,
     Path('data/build-info.json'):64,
+    Path('data/integrity.json'):128,
     Path('sw.js'):256,
     Path('assets/social-card.png'):500,
 }
@@ -59,5 +60,5 @@ if errors:
     sys.exit(1)
 print('Performance budget passed: '
       + ', '.join(f'{p}={kb(p):.1f}KiB' for p in key_limits if p.exists())
-      + f'; html_pages={len(html_pages)}; total_html={total:.2f}MiB; social_card={kb(Path("assets/social-card.png")):.1f}KiB; build_info={kb(Path("data/build-info.json")):.1f}KiB; '
+      + f'; html_pages={len(html_pages)}; total_html={total:.2f}MiB; social_card={kb(Path("assets/social-card.png")):.1f}KiB; build_info={kb(Path("data/build-info.json")):.1f}KiB; integrity={kb(Path("data/integrity.json")):.1f}KiB; '
       + (f'largest_stat={largest} ({kb(largest):.1f}KiB)' if largest else 'largest_stat=none'))
