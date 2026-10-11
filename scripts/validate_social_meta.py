@@ -3,6 +3,7 @@ import re, struct, sys, json
 
 BASE='https://juanggm04-ship-it.github.io/mlbb-meta-forge/'
 CARD=Path('assets/social-card.png')
+NOINDEX_PATHS={'offline.html','404.html','repair/index.html'}
 errors=[]
 def need(cond,msg):
     if not cond: errors.append(msg)
@@ -20,11 +21,13 @@ if CARD.exists():
     need(CARD.stat().st_size<=500*1024,f'Social card exceeds 500 KiB: {CARD.stat().st_size/1024:.1f} KiB')
 
 pages=[p for p in Path('.').rglob('*.html') if '.git' not in p.parts]
-public=[];structured_ok=0;breadcrumb_ok=0
+public=[];structured_ok=0;breadcrumb_ok=0;canonical_urls=set()
 for p in pages:
-    text=p.read_text(encoding='utf-8')
-    if p.as_posix() in ('offline.html','404.html'):
+    text=p.read_text(encoding='utf-8');rel=p.as_posix()
+    if rel in NOINDEX_PATHS:
         need('content="noindex,nofollow"' in text,f'Noindex missing on {p}')
+        need('id="mf-structured-data"' not in text,f'Noindex utility must not emit JSON-LD on {p}')
+        need('rel="canonical"' not in text,f'Noindex utility must not emit canonical on {p}')
         continue
     public.append(p);expected=expected_url(p)
     need(text.count('id="mf-social-meta"')==1,f'Expected one social-meta marker on {p}')
@@ -37,7 +40,9 @@ for p in pages:
         need(token in text,f'{label} missing on {p}')
     m=re.search(r'<link id="mf-social-meta" rel="canonical" href="([^"]+)"',text)
     need(bool(m),f'Canonical value missing on {p}')
-    if m: need(m.group(1)==expected,f'Canonical mismatch on {p}: {m.group(1)} != {expected}')
+    if m:
+        need(m.group(1)==expected,f'Canonical mismatch on {p}: {m.group(1)} != {expected}')
+        canonical_urls.add(m.group(1))
     og=re.search(r'<meta property="og:url" content="([^"]+)"',text)
     need(bool(og),f'og:url value missing on {p}')
     if og: need(og.group(1)==expected,f'og:url mismatch on {p}: {og.group(1)} != {expected}')
@@ -55,7 +60,7 @@ for p in pages:
                 need(webpage[0].get('url')==expected,f'JSON-LD WebPage URL mismatch on {p}')
                 need(webpage[0].get('isPartOf',{}).get('@id')==BASE+'#website',f'JSON-LD site relation missing on {p}')
                 need(webpage[0].get('about',{}).get('name')=='Mobile Legends: Bang Bang',f'JSON-LD MLBB subject missing on {p}')
-            if p.as_posix()=='index.html':
+            if rel=='index.html':
                 need(len(crumb)==0,'Homepage should not emit a breadcrumb trail')
             else:
                 need(len(crumb)==1,f'Expected one BreadcrumbList on {p}')
@@ -74,8 +79,16 @@ stat_pages=list(Path('stats/heroes').glob('*/index.html')) if Path('stats/heroes
 need(len(stat_pages)==133,f'Expected 133 live hero pages, got {len(stat_pages)}')
 covered=sum(1 for p in stat_pages if 'property="og:title"' in p.read_text(encoding='utf-8') and 'rel="canonical"' in p.read_text(encoding='utf-8') and 'id="mf-structured-data"' in p.read_text(encoding='utf-8'))
 need(covered==133,f'Social/structured metadata covers only {covered}/133 live hero pages')
+
+sitemap=Path('sitemap.xml')
+need(sitemap.exists(),'sitemap.xml missing')
+if sitemap.exists():
+    sitemap_urls=set(re.findall(r'<loc>(.*?)</loc>',sitemap.read_text(encoding='utf-8')))
+    need(sitemap_urls==canonical_urls,f'Sitemap/canonical mismatch: sitemap={len(sitemap_urls)}, indexable={len(canonical_urls)}, missing={sorted(canonical_urls-sitemap_urls)[:3]}, extra={sorted(sitemap_urls-canonical_urls)[:3]}')
+    need(BASE+'repair/' not in sitemap_urls,'Repair utility must not appear in sitemap')
+
 if errors:
     print('SOCIAL META VALIDATION FAILED')
     for e in errors: print('- '+e)
     sys.exit(1)
-print(f'Social metadata validation passed: public_pages={len(public)}; structured={structured_ok}; breadcrumbs={breadcrumb_ok}; live_hero_coverage={covered}/133; exact canonical/og:url paths, schema.org graph and 1200x630 social card are consistent.')
+print(f'Social metadata validation passed: public_pages={len(public)}; structured={structured_ok}; breadcrumbs={breadcrumb_ok}; live_hero_coverage={covered}/133; sitemap_exact={len(canonical_urls)}; repair_noindex=true; exact canonical/og:url paths, schema.org graph and 1200x630 social card are consistent.')
