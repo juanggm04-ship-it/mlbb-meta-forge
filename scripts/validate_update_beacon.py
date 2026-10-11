@@ -1,7 +1,7 @@
 from pathlib import Path
 import json, sys
 
-TARGETS=[Path('index.html'),Path('roster/index.html'),Path('trends/index.html'),Path('compare/index.html'),Path('my-meta/index.html')]
+TARGETS=[Path('index.html'),Path('roster/index.html'),Path('explore/index.html'),Path('trends/index.html'),Path('compare/index.html'),Path('my-meta/index.html')]
 INFO=Path('data/build-info.json')
 RELEASE=Path('data/product-release.json')
 PRIVACY=Path('privacy.html')
@@ -39,4 +39,4 @@ if errors:
     print('UPDATE BEACON VALIDATION FAILED')
     for e in errors:print('- '+e)
     sys.exit(1)
-print('Update beacon validation passed: 5 surfaces, first visit quiet, release/source/patch only, fetched_at ignored, local-only seen state disclosed.')
+print(f'Update beacon validation passed: {len(TARGETS)} surfaces incl Explorer, first visit quiet, release/source/patch only, fetched_at ignored, local-only seen state disclosed.')
