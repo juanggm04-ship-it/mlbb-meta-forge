@@ -105,6 +105,8 @@ jobs:
         run: python scripts/inject_data_provenance.py
       - name: Validate Hero Compare
         run: python scripts/validate_compare.py
+      - name: Validate shared hero identity
+        run: python scripts/validate_hero_identity.py
       - name: Validate editorial catalog
         run: python scripts/validate_editorial_catalog.py
       - name: Validate live onboarding
