@@ -40,6 +40,7 @@ asset_limits={
     Path('data/meta-score.json'):1024,
     Path('data/meta-score-history.json'):1536,
     Path('sw.js'):256,
+    Path('assets/social-card.png'):500,
 }
 for p,limit in asset_limits.items():
     need(p.exists(),f'Missing performance-budget asset: {p}')
@@ -57,5 +58,5 @@ if errors:
     sys.exit(1)
 print('Performance budget passed: '
       + ', '.join(f'{p}={kb(p):.1f}KiB' for p in key_limits if p.exists())
-      + f'; html_pages={len(html_pages)}; total_html={total:.2f}MiB; '
+      + f'; html_pages={len(html_pages)}; total_html={total:.2f}MiB; social_card={kb(Path("assets/social-card.png")):.1f}KiB; '
       + (f'largest_stat={largest} ({kb(largest):.1f}KiB)' if largest else 'largest_stat=none'))
