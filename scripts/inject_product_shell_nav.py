@@ -3,6 +3,7 @@ import re
 
 TARGETS={
     Path('roster/index.html'):('roster','../'),
+    Path('explore/index.html'):('explore','../'),
     Path('trends/index.html'):('trends','../'),
     Path('compare/index.html'):('compare','../'),
     Path('my-meta/index.html'):('my-meta','../'),
@@ -30,6 +31,7 @@ for path,(current,root) in TARGETS.items():
          f'<a class="ps-brand" href="{root}"><span class="ps-mark">M</span><span class="ps-brand-text">MLBB FORGE</span></a>'
          f'<div class="ps-links">'
          f'{link("roster","Roster",root+"roster/")}'
+         f'{link("explore","Explorer",root+"explore/")}'
          f'{link("trends","Trends",root+"trends/")}'
          f'{link("compare","Comparar",root+"compare/")}'
          f'{link("my-meta","Mi Meta",root+"my-meta/")}'
@@ -48,4 +50,4 @@ for path,(current,root) in TARGETS.items():
 
 if changed not in (0,len(TARGETS)):
     raise RuntimeError(f'Product shell navigation injected into only {changed}/{len(TARGETS)} targets')
-print(f'Product shell navigation ready across {len(TARGETS)} pages, including {len(TARGETS)-5} live hero pages')
+print(f'Product shell navigation ready across {len(TARGETS)} pages, including Explorer and {len(TARGETS)-6} live hero pages')
