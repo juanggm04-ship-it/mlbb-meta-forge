@@ -9,7 +9,7 @@ compare=Path('compare/index.html')
 need(compare.exists(),'Hero Compare page missing')
 if compare.exists():
     text=compare.read_text(encoding='utf-8')
-    for token in ['id="a"','id="b"','Meta Score','Momentum','Ranking','URLSearchParams','searchParams.set(\'a\'','searchParams.set(\'b\'','Copiar enlace','id="swapHeroes"','Por qué cambia el Meta Score','Percentil WR','Percentil Pick','Percentil Ban','Percentil Momentum','avoidSame']:
+    for token in ['id="a"','id="b"','Meta Score','Momentum','Ranking','URLSearchParams','searchParams.set(\'a\'','searchParams.set(\'b\'','Copiar enlace','id="swapHeroes"','Por qué cambia el Meta Score','Percentil WR','Percentil Pick','Percentil Ban','Percentil Momentum','avoidSame','id="compareEditorial"','EDITORIAL · SOLO SI AMBOS ESTÁN CURADOS','Frontline','Engage','Sustain','Peel','Waveclear','Scaling','Poke','Contexto editorial no disponible']:
         need(token in text,f'Hero Compare missing: {token}')
 
 stat_pages=list(Path('stats/heroes').glob('*/index.html')) if Path('stats/heroes').exists() else []
@@ -42,8 +42,14 @@ enhance=Path('scripts/enhance_hero_compare.py').read_text(encoding='utf-8')
 need("metric('Percentil WR'" in enhance and "metric('Percentil Pick'" in enhance and "metric('Percentil Ban'" in enhance and "metric('Percentil Momentum'" in enhance,'Compare score component explanation source incomplete')
 need("swapHeroes" in enhance and "avoidSame" in enhance,'Compare swap/distinct-selection logic missing')
 
+editorial=Path('scripts/inject_compare_editorial.py').read_text(encoding='utf-8')
+need("CORE=Path('data/editorial-core.json')" in editorial,'Compare editorial context is not sourced from shared editorial core')
+need('renderEditorial(a,b)' in editorial,'Compare editorial render hook missing')
+need("if(!pa||!pb)" in editorial,'Compare editorial missing-data guard missing')
+need("editorialMetrics=[['front','Frontline']" in editorial,'Compare editorial capability map missing')
+
 if errors:
     print('HERO COMPARE VALIDATION FAILED')
     for e in errors:print('- '+e)
     sys.exit(1)
-print(f'Hero Compare validation passed: page present, {with_cta}/{len(stat_pages)} stat CTAs, component explanation, swap/distinct selection, My Meta Watchlist compare, shareable a/b parameters and sitemap entry present.')
+print(f'Hero Compare validation passed: page present, {with_cta}/{len(stat_pages)} stat CTAs, score components, optional shared-core editorial context, swap/distinct selection, My Meta Watchlist compare, shareable a/b parameters and sitemap entry present.')
