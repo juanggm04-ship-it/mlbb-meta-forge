@@ -53,6 +53,7 @@ if not errors:
         ('Build publicado','Build-time explanation missing'),
         ('../data/build-info.json','Machine-readable build-info link missing'),
         ('../data/product-release.json','Machine-readable product release link missing'),
+        ('../repair/','Cache repair entry missing from status page'),
         ('Si la fuente no cambia WR, ban, pick o patch, no se inventa un nuevo punto histórico.','Semantic-history disclosure missing')]:
         need(token in text,msg)
     need('https://juanggm04-ship-it.github.io/mlbb-meta-forge/status/' in Path('sitemap.xml').read_text(encoding='utf-8'),'Status page missing from sitemap')
@@ -60,4 +61,4 @@ if errors:
     print('STATUS VALIDATION FAILED')
     for e in errors: print('- '+e)
     sys.exit(1)
-print(f'Status validation passed: build={info.get("build_short")}; release={release.get("release_id")}; live=133; editorial=34; history={info.get("history_points")}; observed={info.get("momentum_observed_heroes")}; ready={info.get("history_ready")}.')
+print(f'Status validation passed: build={info.get("build_short")}; release={release.get("release_id")}; live=133; editorial=34; history={info.get("history_points")}; observed={info.get("momentum_observed_heroes")}; ready={info.get("history_ready")}; repair_link=true.')
