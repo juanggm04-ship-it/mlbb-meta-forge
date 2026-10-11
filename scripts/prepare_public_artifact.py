@@ -8,7 +8,7 @@ SITE.mkdir()
 
 root_files=['index.html','privacy.html','terms.html','methodology.html','offline.html','manifest.webmanifest','robots.txt','sitemap.xml','sw.js']
 if Path('404.html').exists(): root_files.append('404.html')
-public_dirs=['assets','data','heroes','stats','roster','trends','compare','my-meta','status']
+public_dirs=['assets','data','heroes','stats','roster','explore','trends','compare','my-meta','status']
 
 for name in root_files:
     src=ROOT/name
@@ -22,4 +22,4 @@ for name in public_dirs:
 files=[p for p in SITE.rglob('*') if p.is_file()]
 html_count=sum(1 for p in files if p.suffix.lower()=='.html')
 size=sum(p.stat().st_size for p in files)
-print(f'Prepared public Pages artifact: files={len(files)}; html={html_count}; size={size/1024/1024:.2f}MiB; dirs={len(public_dirs)}; build_sources_excluded=true')
+print(f'Prepared public Pages artifact: files={len(files)}; html={html_count}; size={size/1024/1024:.2f}MiB; dirs={len(public_dirs)}; explorer=true; build_sources_excluded=true')
