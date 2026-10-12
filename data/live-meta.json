@@ -6,7 +6,7 @@
   "source_updated": "2026-10-05T10:57:12.368Z",
   "freshness_basis": "source",
   "patch": "2.2.16",
-  "fetched_at": "2026-10-11T06:21:04.725244+00:00",
+  "fetched_at": "2026-10-12T02:34:25.092164+00:00",
   "provider": "MLBBDex public API",
   "provider_url": "https://mlbbdex.com/api-doc",
   "source": {
