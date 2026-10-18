@@ -70,4 +70,15 @@ for path in paths:
     assert text.count('id="mf-polish-style"')==1,f'Expected one polish style block on {path}'
 explorer=Path('explore/index.html').read_text(encoding='utf-8')
 assert 'id="explorerMobileHint"' in explorer,'Explorer mobile pan hint missing'
-print(f'Product design validation passed: canonical leaders and human freshness date, explicit favorite state, unique IDs, back-to-top control on {len(paths)} pages, page-aware responsive layers, mobile Explorer/Roster safeguards, offline precache')
+roster=Path('roster/index.html').read_text(encoding='utf-8')
+for token,msg in [
+    ('class="empty roster-empty-state"','Roster actionable empty-state shell missing'),
+    ('id="rosterEmptyTitle"','Roster empty-state title missing'),
+    ('id="rosterEmptyText"','Roster empty-state explanation missing'),
+    ('id="rosterEmptyReset"','Roster empty-state reset action missing'),
+    ('id="roster-empty-state-runtime"','Roster empty-state runtime missing'),
+    ('role="status" aria-live="polite"','Roster empty state must announce changes accessibly'),
+    ("scope==='watch'",'Roster empty state must distinguish an empty Watchlist'),
+    ('Restablecer filtros','Roster empty state must offer recovery'),
+]:assert token in roster,msg
+print(f'Product design validation passed: canonical leaders and human freshness date, explicit favorite state, unique IDs, back-to-top control on {len(paths)} pages, actionable Roster empty states, page-aware responsive layers, mobile Explorer/Roster safeguards, offline precache')
