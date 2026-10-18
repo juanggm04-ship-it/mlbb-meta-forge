@@ -1,4 +1,5 @@
 from pathlib import Path
+import enhance_hero_discovery
 
 TARGETS={
     Path('index.html'):'./',
