@@ -81,4 +81,15 @@ for token,msg in [
     ("scope==='watch'",'Roster empty state must distinguish an empty Watchlist'),
     ('Restablecer filtros','Roster empty state must offer recovery'),
 ]:assert token in roster,msg
-print(f'Product design validation passed: canonical leaders and human freshness date, explicit favorite state, unique IDs, back-to-top control on {len(paths)} pages, actionable Roster empty states, page-aware responsive layers, mobile Explorer/Roster safeguards, offline precache')
+search_surfaces=[Path('index.html'),Path('roster/index.html'),Path('trends/index.html'),Path('my-meta/index.html')]
+for path in search_surfaces:
+    text=path.read_text(encoding='utf-8')
+    for token,msg in [
+        ('id="globalHeroSearch"','Global hero search dialog missing'),
+        ('function renderEmpty(raw)','Global search actionable empty-state renderer missing'),
+        ('Sin resultados para','Global search must repeat the failed query'),
+        ('Limpiar búsqueda','Global search empty state must expose recovery action'),
+        ("title.textContent=`Sin resultados para “${raw}”`",'Global search query must be rendered with textContent'),
+        ("box.setAttribute('role','status')",'Global search empty state must announce status accessibly'),
+    ]:assert token in text,f'{msg}: {path}'
+print(f'Product design validation passed: canonical leaders and human freshness date, explicit favorite state, unique IDs, back-to-top control on {len(paths)} pages, actionable Roster and global-search empty states, page-aware responsive layers, mobile Explorer/Roster safeguards, offline precache')
