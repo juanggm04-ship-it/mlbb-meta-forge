@@ -6,6 +6,24 @@ body[data-mf-page="roster"] .s b,
 body[data-mf-page="explorer"] .detail-stats{font-variant-numeric:tabular-nums}
 body[data-mf-page="explorer"] .explorer-mobile-hint{display:none;margin:10px 0 0;color:#91a8c5;font-size:12px;line-height:1.5}
 
+/* Homepage scan rhythm: make dense data feel intentional, not crowded. */
+body[data-mf-page="home"] .sectionhead{padding:18px 0;border-bottom:1px solid #20364b;align-items:center}
+body[data-mf-page="home"] .sectionhead>div:first-child{position:relative;padding-left:16px}
+body[data-mf-page="home"] .sectionhead>div:first-child:before{content:"";position:absolute;left:0;top:5px;bottom:5px;width:3px;border-radius:99px;background:linear-gradient(180deg,#87eeee,#9b83ff)}
+body[data-mf-page="home"] .sectionhead h2{margin-bottom:0}
+body[data-mf-page="home"] .filters{gap:8px}
+body[data-mf-page="home"] .filters button{min-height:38px;padding:8px 13px;border-color:#30455d;background:#0c1827;color:#a9bdd4;transition:background-color .18s ease,border-color .18s ease,color .18s ease,box-shadow .18s ease}
+body[data-mf-page="home"] .filters button:hover{background:#14283a;border-color:#46647d;color:#e9f7ff}
+body[data-mf-page="home"] .filters button.active{background:linear-gradient(135deg,#8cf2ef,#78dcf0);border-color:#9bf8f4;color:#07131c;box-shadow:0 0 0 3px #6defff17,0 8px 24px #4eddea1a;font-weight:900}
+body[data-mf-page="home"] .searchbar{padding:10px;border:1px solid #263b52;border-radius:16px;background:#091522b8;box-shadow:0 12px 32px #0002}
+body[data-mf-page="home"] .searchbar input,
+body[data-mf-page="home"] .searchbar select,
+body[data-mf-page="home"] .favorite-filter{border-color:#334a62;background:#0c1928}
+body[data-mf-page="home"] .insight-strip,
+body[data-mf-page="home"] .pulse-grid{gap:12px}
+body[data-mf-page="home"] .insight{border-color:#2a4058;background:linear-gradient(150deg,#0f1c2b,#0a1522)}
+body[data-mf-page="home"] .forge-more-signals{margin-top:30px}
+
 @media (max-width:760px){
   body[data-mf-page="roster"] main,
   body[data-mf-page="explorer"] main{padding-left:12px;padding-right:12px}
@@ -92,6 +110,12 @@ body[data-mf-page="explorer"] .explorer-mobile-hint{display:none;margin:10px 0 0
   body[data-mf-page="explorer"] .pair-actions{display:grid;grid-template-columns:1fr 1fr;width:100%}
   body[data-mf-page="explorer"] .pair-actions a{grid-column:1/-1;justify-content:center}
   body[data-mf-page="explorer"] .table-wrap{max-height:420px}
+
+  body[data-mf-page="home"] .sectionhead{align-items:flex-start;padding-top:12px}
+  body[data-mf-page="home"] .filters{width:100%;flex-wrap:nowrap;overflow-x:auto;padding:3px 0 6px;scrollbar-width:none}
+  body[data-mf-page="home"] .filters::-webkit-scrollbar{display:none}
+  body[data-mf-page="home"] .filters button{flex:0 0 auto}
+  body[data-mf-page="home"] .searchbar{padding:8px}
 }
 
 @media (max-width:430px){
