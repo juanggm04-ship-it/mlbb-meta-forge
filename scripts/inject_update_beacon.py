@@ -58,9 +58,14 @@ for path,prefix in TARGETS.items():
 privacy=Path('privacy.html')
 if not privacy.exists(): raise RuntimeError('privacy.html missing')
 p=privacy.read_text(encoding='utf-8')
-old='La web puede usar almacenamiento local del navegador para funciones como Watchlist, preferencias de perfil, historial local de drafts y comparaciones recientes. Esa información permanece en tu dispositivo y no se envía a un servidor propio de Meta Forge.'
-new='La web puede usar almacenamiento local del navegador para funciones como Watchlist, preferencias de perfil, historial local de drafts, comparaciones recientes y el estado de novedades que ya marcaste como vistas. Esa información permanece en tu dispositivo y no se envía a un servidor propio de Meta Forge.'
-if old in p:p=p.replace(old,new,1)
-elif 'estado de novedades que ya marcaste como vistas' not in p:raise RuntimeError('Privacy local-storage disclosure anchor missing')
+disclosure='estado de novedades que ya marcaste como vistas'
+if disclosure not in p:
+    marker='<h2>Datos guardados en tu dispositivo</h2><p>'
+    start=p.find(marker)
+    if start<0: raise RuntimeError('Privacy local-storage section missing')
+    close=p.find('</p>',start+len(marker))
+    if close<0: raise RuntimeError('Privacy local-storage paragraph is malformed')
+    sentence=' Meta Forge también guarda localmente el estado de novedades que ya marcaste como vistas.'
+    p=p[:close]+sentence+p[close:]
 privacy.write_text(p,encoding='utf-8')
 print(f'Update beacon injected: surfaces={changed}/{len(TARGETS)}; key=mf_seen_updates_v1; compares=release_id/source_updated/patch; fetched_at_ignored=true; local_only=true')
