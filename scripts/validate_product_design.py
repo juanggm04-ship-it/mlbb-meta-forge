@@ -31,6 +31,9 @@ for metric,signal in home.signals.items():
     assert f'{row[metric]:.2f}%' in signal['text'],f'Stale {metric} display'
     assert Path(signal['href'],'index.html').exists(),f'Broken {metric} hero link'
 assert live['source_updated'] in page, 'Homepage must disclose source measurement time'
+assert 'Actualizado <b>' in page and 'UTC</b>' in page, 'Homepage must show a human-readable freshness label'
+assert 'id="favoriteFilter"' in page and 'aria-pressed="false"' in page, 'Favorite-only filter must expose its pressed state'
+assert 'Solo favoritos' in page, 'Favorite-only filter must have an explicit label'
 assert 'setTimeout(openProfile,650)' not in page, 'Personalization must not block a first visit'
 sw=Path('sw.js').read_text()
 assert './assets/product-design.css' in sw, 'Design stylesheet must be precached for offline use'
@@ -62,6 +65,9 @@ for path in paths:
     assert (path.parent/parser.ux_styles[0]).resolve()==Path('assets/ux-refinements.css').resolve(),f'Wrong UX stylesheet URL on {path}'
     expected=expected_pages.get(path,'hero')
     assert parser.body.get('data-mf-page')==expected,f'Wrong page identity on {path}: {parser.body.get("data-mf-page")}'
+    assert text.count('id="mfBackToTop"')==1,f'Expected one back-to-top control on {path}'
+    assert text.count('id="mf-polish-runtime"')==1,f'Expected one polish runtime on {path}'
+    assert text.count('id="mf-polish-style"')==1,f'Expected one polish style block on {path}'
 explorer=Path('explore/index.html').read_text(encoding='utf-8')
 assert 'id="explorerMobileHint"' in explorer,'Explorer mobile pan hint missing'
-print(f'Product design validation passed: canonical leaders and measurement date, unique IDs, page-aware responsive layers on {len(paths)} pages, mobile Explorer/Roster safeguards, offline precache')
+print(f'Product design validation passed: canonical leaders and human freshness date, explicit favorite state, unique IDs, back-to-top control on {len(paths)} pages, page-aware responsive layers, mobile Explorer/Roster safeguards, offline precache')
