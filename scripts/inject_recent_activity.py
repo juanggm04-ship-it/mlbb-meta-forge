@@ -75,12 +75,15 @@ for path in editorial:
 privacy=Path('privacy.html')
 if not privacy.exists(): raise RuntimeError('privacy.html missing')
 p=privacy.read_text(encoding='utf-8')
-if 'historial reciente para “Continuar donde lo dejaste”' not in p:
-    old='La web puede usar almacenamiento local del navegador para funciones como Watchlist, preferencias de perfil, historial local de drafts, comparaciones recientes y el estado de novedades que ya marcaste como vistas. Esa información permanece en tu dispositivo y no se envía a un servidor propio de Meta Forge.'
-    new='La web puede usar almacenamiento local del navegador para funciones como Watchlist, preferencias de perfil, historial local de drafts, comparaciones recientes, historial reciente para “Continuar donde lo dejaste” y el estado de novedades que ya marcaste como vistas. Esa información permanece en tu dispositivo y no se envía a un servidor propio de Meta Forge.'
-    if old not in p:
-        raise RuntimeError('Privacy disclosure anchor missing after update-beacon injection')
-    p=p.replace(old,new,1)
+disclosure='historial reciente para “Continuar donde lo dejaste”'
+if disclosure not in p:
+    marker='<h2>Datos guardados en tu dispositivo</h2><p>'
+    start=p.find(marker)
+    if start<0: raise RuntimeError('Privacy local-storage section missing')
+    close=p.find('</p>',start+len(marker))
+    if close<0: raise RuntimeError('Privacy local-storage paragraph is malformed')
+    sentence=' Meta Forge también guarda localmente un historial reciente para “Continuar donde lo dejaste”.'
+    p=p[:close]+sentence+p[close:]
     privacy.write_text(p,encoding='utf-8')
 
 print(f'Recent activity injected: targets={changed}; core={len(CORE)}; live_heroes={len(stats)}; editorial_heroes={len(editorial)}; local_only=true; max_history=8; homepage_cards=3')
