@@ -47,6 +47,8 @@ jobs:
         run: python scripts/inject_draft_coach.py
       - name: Enhance Draft Coach interactions
         run: python scripts/enhance_draft_coach.py
+      - name: Compact Draft Coach on mobile
+        run: python scripts/enhance_draft_coach_mobile.py
       - name: Inject turn-based draft mode
         run: python scripts/inject_turn_draft.py
       - name: Style competitive turn draft
@@ -189,6 +191,8 @@ jobs:
         run: python scripts/validate_accessibility.py
       - name: Validate product design
         run: python scripts/validate_product_design.py
+      - name: Validate mobile Draft Coach
+        run: python scripts/validate_draft_coach_mobile.py
       - name: Validate internal navigation links
         run: python scripts/validate_internal_links.py
       - name: Validate public integrity manifest
