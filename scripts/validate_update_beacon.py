@@ -1,5 +1,6 @@
 from pathlib import Path
 import json, sys
+import validate_hero_discovery
 
 TARGETS=[Path('index.html'),Path('roster/index.html'),Path('explore/index.html'),Path('trends/index.html'),Path('compare/index.html'),Path('my-meta/index.html')]
 INFO=Path('data/build-info.json')
