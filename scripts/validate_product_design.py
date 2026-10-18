@@ -31,7 +31,17 @@ for metric,signal in home.signals.items():
     assert f'{row[metric]:.2f}%' in signal['text'],f'Stale {metric} display'
     assert Path(signal['href'],'index.html').exists(),f'Broken {metric} hero link'
 assert live['source_updated'] in page, 'Homepage must disclose source measurement time'
-assert 'Actualizado <b>' in page and 'UTC</b>' in page, 'Homepage must show a human-readable freshness label'
+assert 'UTC</time>' in page, 'Homepage snapshot source must retain an absolute UTC measurement label'
+for token,msg in [
+    ('id="snapshotFreshness"','Homepage must expose the snapshot freshness control'),
+    (f'data-source-updated="{live["source_updated"]}"','Freshness control must use the canonical source timestamp'),
+    ('id="snapshotFreshnessLabel"','Freshness control must expose a replaceable human label'),
+    ('id="snapshotFreshnessNotice"','Homepage must provide a stale-snapshot notice surface'),
+    ("days>=8",'Freshness runtime must reserve the stale state for snapshots at least eight days old'),
+    ("days>=4",'Freshness runtime must distinguish aging snapshots before they are stale'),
+    ("state==='stale'",'Freshness runtime must reveal the stale snapshot warning'),
+    ('Confirma el patch y la fuente','Stale warning must give a concrete verification action'),
+]:assert token in page,msg
 assert 'id="favoriteFilter"' in page and 'aria-pressed="false"' in page, 'Favorite-only filter must expose its pressed state'
 assert 'Solo favoritos' in page, 'Favorite-only filter must have an explicit label'
 assert 'setTimeout(openProfile,650)' not in page, 'Personalization must not block a first visit'
@@ -92,4 +102,4 @@ for path in search_surfaces:
         ("title.textContent=`Sin resultados para “${raw}”`",'Global search query must be rendered with textContent'),
         ("box.setAttribute('role','status')",'Global search empty state must announce status accessibly'),
     ]:assert token in text,f'{msg}: {path}'
-print(f'Product design validation passed: canonical leaders and human freshness date, explicit favorite state, unique IDs, back-to-top control on {len(paths)} pages, actionable Roster and global-search empty states, page-aware responsive layers, mobile Explorer/Roster safeguards, offline precache')
+print(f'Product design validation passed: canonical leaders, absolute UTC source time and dynamic freshness state, explicit favorite state, unique IDs, back-to-top control on {len(paths)} pages, actionable Roster and global-search empty states, page-aware responsive layers, mobile Explorer/Roster safeguards, offline precache')
